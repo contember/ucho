@@ -1,0 +1,49 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - 'deploy/prod'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # this can be removed when you will manually generate yarn.lock file
+      - name: Yarn allow immutable installs for fresh repos
+        run: echo "YARN_ENABLE_IMMUTABLE_INSTALLS=$([ -f yarn.lock ] && echo true || echo false)" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: yarn install
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: ${{ env.YARN_ENABLE_IMMUTABLE_INSTALLS }}
+
+      - name: Build and deploy Contember to production
+        run: yarn run deploy ${{ secrets.CONTEMBER_DEPLOY_DSN }} --yes
+
+#     Uncomment this block if you are using Cloudflare Workers for Contember actions
+
+#      - name: Setup Contember actions variables
+#        run: bash .github/scripts/setup-actions-variables.sh
+#        env:
+#          CONTEMBER_DEPLOY_DSN: ${{ secrets.CONTEMBER_DEPLOY_DSN }}
+#          CONTEMBER_ACTIONS_VARIABLES: ${{ secrets.CONTEMBER_ACTIONS_VARIABLES }} # [{ name: "apiKey", value: "new-api-key-value" }, { name: "baseUrl", value: "http://localhost/foo-bar" }]
+#
+#      - name: Deploy action worker
+#        uses: cloudflare/wrangler-action@v3.4.0
+#        with:
+#          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+#          workingDirectory: "worker"
+#          secrets: |
+#            CONTEMBER_API_TOKEN
+#            CONTEMBER_ACTIONS_SECRET_KEY
+#        env:
+#          CONTEMBER_API_TOKEN: ${{ secrets.CONTEMBER_API_TOKEN }}
+#          CONTEMBER_ACTIONS_SECRET_KEY: ${{ secrets.CONTEMBER_ACTIONS_SECRET_KEY }}
