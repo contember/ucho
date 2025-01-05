@@ -11,22 +11,16 @@ export default () => {
 			<Binding>
 				<Slots.Actions>
 					<Link to="feedbackEdit(id: $entity.id)">
-						<AnchorButton>
-							Edit
-						</AnchorButton>
+						<AnchorButton>Edit</AnchorButton>
 					</Link>
 				</Slots.Actions>
-				<Slots.Title>
-					Feedback detail
-				</Slots.Title>
+				<Slots.Title>Feedback detail</Slots.Title>
 				<Slots.Back>
 					<BackButton />
 				</Slots.Back>
 				<EntitySubTree entity="FeedbackItem(id = $id)" />
 				<div className="flex flex-col gap-4">
-					<div className="text-lg font-bold">
-						Comment
-					</div>
+					<div className="text-lg font-bold">Comment</div>
 					<DefaultDataGrid entities="Comment" toolbar={<DataGridQueryFilter />}>
 						<DataGridColumn>
 							<div className="flex gap-4" />

@@ -8,9 +8,7 @@ export default () => {
 	return (
 		<>
 			<Binding>
-				<Slots.Title>
-					Tag edit
-				</Slots.Title>
+				<Slots.Title>Tag edit</Slots.Title>
 				<Slots.Back>
 					<BackButton />
 				</Slots.Back>

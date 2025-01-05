@@ -11,14 +11,10 @@ export default () => {
 			<Binding>
 				<Slots.Actions>
 					<Link to="tagCreate">
-						<AnchorButton>
-							Create tag
-						</AnchorButton>
+						<AnchorButton>Create tag</AnchorButton>
 					</Link>
 				</Slots.Actions>
-				<Slots.Title>
-					Tag list
-				</Slots.Title>
+				<Slots.Title>Tag list</Slots.Title>
 				<Slots.Back>
 					<BackButton />
 				</Slots.Back>

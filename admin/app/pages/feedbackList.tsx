@@ -11,14 +11,10 @@ export default () => {
 			<Binding>
 				<Slots.Actions>
 					<Link to="feedbackCreate">
-						<AnchorButton>
-							Create feedback
-						</AnchorButton>
+						<AnchorButton>Create feedback</AnchorButton>
 					</Link>
 				</Slots.Actions>
-				<Slots.Title>
-					Feedback list
-				</Slots.Title>
+				<Slots.Title>Feedback list</Slots.Title>
 				<Slots.Back>
 					<BackButton />
 				</Slots.Back>
@@ -27,11 +23,7 @@ export default () => {
 						<DataGridColumn>
 							<div className="flex gap-4" />
 						</DataGridColumn>
-						<DataGridEnumColumn
-							field="status"
-							header="Status"
-							options={{ open: 'open', inProgress: 'inProgress', resolved: 'resolved' }}
-						/>
+						<DataGridEnumColumn field="status" header="Status" options={{ open: 'open', inProgress: 'inProgress', resolved: 'resolved' }} />
 						<DataGridEnumColumn field="priority" header="Priority" options={{ low: 'low', medium: 'medium', high: 'high' }} />
 						<DataGridHasOneColumn field="project" header="Project">
 							<Field field="name" />

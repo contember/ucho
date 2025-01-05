@@ -10,14 +10,10 @@ export default () => {
 			<Binding>
 				<Slots.Actions>
 					<Link to="groupingEdit(id: $entity.id)">
-						<AnchorButton>
-							Edit
-						</AnchorButton>
+						<AnchorButton>Edit</AnchorButton>
 					</Link>
 				</Slots.Actions>
-				<Slots.Title>
-					Grouping detail
-				</Slots.Title>
+				<Slots.Title>Grouping detail</Slots.Title>
 				<Slots.Back>
 					<BackButton />
 				</Slots.Back>

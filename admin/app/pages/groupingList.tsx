@@ -11,14 +11,10 @@ export default () => {
 			<Binding>
 				<Slots.Actions>
 					<Link to="groupingCreate">
-						<AnchorButton>
-							Create grouping
-						</AnchorButton>
+						<AnchorButton>Create grouping</AnchorButton>
 					</Link>
 				</Slots.Actions>
-				<Slots.Title>
-					Grouping list
-				</Slots.Title>
+				<Slots.Title>Grouping list</Slots.Title>
 				<Slots.Back>
 					<BackButton />
 				</Slots.Back>

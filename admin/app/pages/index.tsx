@@ -5,8 +5,7 @@ export default () => {
 	const redirect = useRedirect()
 	const roles = useProjectUserRoles()
 
-	useEffect(() => {
-		}, [redirect])
+	useEffect(() => {}, [redirect])
 
 	return null
 }

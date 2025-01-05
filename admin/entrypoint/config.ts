@@ -17,10 +17,9 @@ export const entrypointConfig = (() => {
 		appUrl: '/app',
 		hasTokenFromEnv: import.meta.env.VITE_CONTEMBER_ADMIN_SESSION_TOKEN !== '__SESSION_TOKEN__',
 		idps: {
-		// You can add more IDPs here
-		// 	google: 'Login with Google',
+			// You can add more IDPs here
+			// 	google: 'Login with Google',
 		} satisfies Record<string, string>,
 		magicLink: false,
 	}
 })()
-

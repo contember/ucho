@@ -31,9 +31,7 @@ export default () => {
 					<Card className="w-72">
 						<CardContent className="flex flex-col items-center gap-2">
 							<CircleAlert className="h-12 w-12 text-destructive" />
-							<p className="text-center text-lg text-gray-600">
-								{dict.identityLoader.fail}
-							</p>
+							<p className="text-center text-lg text-gray-600">{dict.identityLoader.fail}</p>
 							<LogoutTrigger>
 								<Button>Login again</Button>
 							</LogoutTrigger>
@@ -57,14 +55,9 @@ const LoggedIn = () => {
 		<Card className="w-96 relative">
 			<CardHeader>
 				<CardTitle className="text-2xl">Logged in </CardTitle>
-				<CardDescription>
-					as {identity?.person?.email ?? 'unknown'}
-				</CardDescription>
+				<CardDescription>as {identity?.person?.email ?? 'unknown'}</CardDescription>
 			</CardHeader>
 			<Loader position="static" />
 		</Card>
 	)
-
 }
-
-

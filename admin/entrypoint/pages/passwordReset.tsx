@@ -14,17 +14,16 @@ export default () => {
 		<Card className="w-96">
 			<CardHeader>
 				<CardTitle className="text-2xl">{dict.tenant.passwordReset.title}</CardTitle>
-				<CardDescription>
-					{dict.tenant.passwordReset.description}
-				</CardDescription>
+				<CardDescription>{dict.tenant.passwordReset.description}</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<PasswordResetForm onSuccess={() => {
-					showToast(<ToastContent>
-						Password has been reset
-					</ToastContent>, { type: 'success' })
-					redirect('index')
-				}} token={token}>
+				<PasswordResetForm
+					onSuccess={() => {
+						showToast(<ToastContent>Password has been reset</ToastContent>, { type: 'success' })
+						redirect('index')
+					}}
+					token={token}
+				>
 					<form>
 						<PasswordResetFormFields hasToken={!!token} />
 					</form>

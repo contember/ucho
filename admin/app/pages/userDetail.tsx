@@ -10,14 +10,10 @@ export default () => {
 			<Binding>
 				<Slots.Actions>
 					<Link to="userEdit(id: $entity.id)">
-						<AnchorButton>
-							Edit
-						</AnchorButton>
+						<AnchorButton>Edit</AnchorButton>
 					</Link>
 				</Slots.Actions>
-				<Slots.Title>
-					User detail
-				</Slots.Title>
+				<Slots.Title>User detail</Slots.Title>
 				<Slots.Back>
 					<BackButton />
 				</Slots.Back>

@@ -4,16 +4,13 @@ import { PasswordResetRequestFormFields } from '~/lib/tenant'
 import { AnchorButton } from '~/lib/ui/button'
 import { Link, PasswordResetRequestForm, useRedirect } from '@contember/interface'
 
-
 export default () => {
 	const redirect = useRedirect()
 	return (
 		<Card className="w-96">
 			<CardHeader>
 				<CardTitle className="text-2xl">{dict.tenant.passwordResetRequest.title}</CardTitle>
-				<CardDescription>
-					{dict.tenant.passwordResetRequest.description}
-				</CardDescription>
+				<CardDescription>{dict.tenant.passwordResetRequest.description}</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<PasswordResetRequestForm onSuccess={() => redirect('resetRequestSuccess')}>
