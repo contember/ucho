@@ -1,0 +1,332 @@
+{
+	"formatVersion": 5,
+	"modifications": [
+		{
+			"modification": "patchAclSchema",
+			"patch": [
+				{
+					"op": "add",
+					"path": "/roles/admin",
+					"value": {
+						"entities": {
+							"Comment": {
+								"predicates": {},
+								"operations": {
+									"read": {
+										"id": true,
+										"createdAt": true,
+										"content": true,
+										"date": true,
+										"feedbackItem": true,
+										"user": true
+									},
+									"create": {
+										"id": true,
+										"createdAt": true,
+										"content": true,
+										"date": true,
+										"feedbackItem": true,
+										"user": true
+									},
+									"update": {
+										"id": true,
+										"createdAt": true,
+										"content": true,
+										"date": true,
+										"feedbackItem": true,
+										"user": true
+									},
+									"delete": true,
+									"customPrimary": true
+								}
+							},
+							"FeedbackItem": {
+								"predicates": {},
+								"operations": {
+									"read": {
+										"id": true,
+										"createdAt": true,
+										"title": true,
+										"description": true,
+										"attachments": true,
+										"status": true,
+										"priority": true,
+										"date": true,
+										"project": true,
+										"group": true,
+										"reporter": true,
+										"comments": true,
+										"tags": true
+									},
+									"create": {
+										"id": true,
+										"createdAt": true,
+										"title": true,
+										"description": true,
+										"attachments": true,
+										"status": true,
+										"priority": true,
+										"date": true,
+										"project": true,
+										"group": true,
+										"reporter": true,
+										"comments": true,
+										"tags": true
+									},
+									"update": {
+										"id": true,
+										"createdAt": true,
+										"title": true,
+										"description": true,
+										"attachments": true,
+										"status": true,
+										"priority": true,
+										"date": true,
+										"project": true,
+										"group": true,
+										"reporter": true,
+										"comments": true,
+										"tags": true
+									},
+									"delete": true,
+									"customPrimary": true
+								}
+							},
+							"Grouping": {
+								"predicates": {},
+								"operations": {
+									"read": {
+										"id": true,
+										"createdAt": true,
+										"feedbackItems": true,
+										"name": true,
+										"description": true,
+										"project": true
+									},
+									"create": {
+										"id": true,
+										"createdAt": true,
+										"feedbackItems": true,
+										"name": true,
+										"description": true,
+										"project": true
+									},
+									"update": {
+										"id": true,
+										"createdAt": true,
+										"feedbackItems": true,
+										"name": true,
+										"description": true,
+										"project": true
+									},
+									"delete": true,
+									"customPrimary": true
+								}
+							},
+							"Person": {
+								"predicates": {},
+								"operations": {
+									"read": {
+										"id": true,
+										"createdAt": true,
+										"personId": true,
+										"updatedAt": true,
+										"tenantPerson": true,
+										"userPerson": true
+									},
+									"create": {
+										"id": true,
+										"createdAt": true,
+										"personId": true,
+										"updatedAt": true,
+										"tenantPerson": true,
+										"userPerson": true
+									},
+									"update": {
+										"id": true,
+										"createdAt": true,
+										"personId": true,
+										"updatedAt": true,
+										"tenantPerson": true,
+										"userPerson": true
+									},
+									"delete": true,
+									"customPrimary": true
+								}
+							},
+							"Project": {
+								"predicates": {},
+								"operations": {
+									"read": {
+										"id": true,
+										"createdAt": true,
+										"name": true,
+										"description": true,
+										"feedbackItems": true,
+										"groupings": true
+									},
+									"create": {
+										"id": true,
+										"createdAt": true,
+										"name": true,
+										"description": true,
+										"feedbackItems": true,
+										"groupings": true
+									},
+									"update": {
+										"id": true,
+										"createdAt": true,
+										"name": true,
+										"description": true,
+										"feedbackItems": true,
+										"groupings": true
+									},
+									"delete": true,
+									"customPrimary": true
+								}
+							},
+							"Tag": {
+								"predicates": {},
+								"operations": {
+									"read": {
+										"id": true,
+										"createdAt": true,
+										"name": true,
+										"color": true,
+										"feedbackItems": true
+									},
+									"create": {
+										"id": true,
+										"createdAt": true,
+										"name": true,
+										"color": true,
+										"feedbackItems": true
+									},
+									"update": {
+										"id": true,
+										"createdAt": true,
+										"name": true,
+										"color": true,
+										"feedbackItems": true
+									},
+									"delete": true,
+									"customPrimary": true
+								}
+							},
+							"TenantPerson": {
+								"predicates": {},
+								"operations": {
+									"read": {
+										"id": true,
+										"createdAt": true,
+										"identityId": true,
+										"email": true,
+										"name": true,
+										"otpUri": true,
+										"otpActivatedAt": true,
+										"idpOnly": true,
+										"roles": true,
+										"person": true
+									},
+									"create": {
+										"id": true,
+										"createdAt": true,
+										"identityId": true,
+										"email": true,
+										"name": true,
+										"otpUri": true,
+										"otpActivatedAt": true,
+										"idpOnly": true,
+										"roles": true,
+										"person": true
+									},
+									"update": {
+										"id": true,
+										"createdAt": true,
+										"identityId": true,
+										"email": true,
+										"name": true,
+										"otpUri": true,
+										"otpActivatedAt": true,
+										"idpOnly": true,
+										"roles": true,
+										"person": true
+									},
+									"delete": true,
+									"customPrimary": true
+								}
+							},
+							"User": {
+								"predicates": {},
+								"operations": {
+									"read": {
+										"id": true,
+										"createdAt": true,
+										"reportedFeedback": true,
+										"name": true,
+										"email": true,
+										"comments": true,
+										"person": true
+									},
+									"create": {
+										"id": true,
+										"createdAt": true,
+										"reportedFeedback": true,
+										"name": true,
+										"email": true,
+										"comments": true,
+										"person": true
+									},
+									"update": {
+										"id": true,
+										"createdAt": true,
+										"reportedFeedback": true,
+										"name": true,
+										"email": true,
+										"comments": true,
+										"person": true
+									},
+									"delete": true,
+									"customPrimary": true
+								}
+							}
+						},
+						"variables": {}
+					}
+				},
+				{
+					"op": "remove",
+					"path": "/roles/projectManager/entities/Person"
+				},
+				{
+					"op": "remove",
+					"path": "/roles/projectManager/entities/TenantPerson"
+				},
+				{
+					"op": "remove",
+					"path": "/roles/stakeholder/entities/Person"
+				},
+				{
+					"op": "remove",
+					"path": "/roles/stakeholder/entities/TenantPerson"
+				},
+				{
+					"op": "remove",
+					"path": "/roles/viewer/entities/Person"
+				},
+				{
+					"op": "remove",
+					"path": "/roles/viewer/entities/TenantPerson"
+				},
+				{
+					"op": "remove",
+					"path": "/roles/developer/entities/Person"
+				},
+				{
+					"op": "remove",
+					"path": "/roles/developer/entities/TenantPerson"
+				}
+			]
+		}
+	]
+}
