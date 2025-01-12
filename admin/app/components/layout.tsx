@@ -1,9 +1,9 @@
-import { Logo } from './logo'
-import { Navigation } from './navigation'
 import { Component, Link } from '@contember/interface'
+import { PropsWithChildren } from 'react'
 import { IdentityLoader } from '~/lib/binding'
 import { LayoutComponent, Slots } from '~/lib/layout'
-import { PropsWithChildren } from 'react'
+import { Logo } from './logo'
+import { Navigation } from './navigation'
 
 export const Layout = Component(({ children }: PropsWithChildren) => (
 	<IdentityLoader>
@@ -19,7 +19,7 @@ export const Layout = Component(({ children }: PropsWithChildren) => (
 			<Slots.Footer>
 				<p>
 					<small>
-						Created with
+						Created with{' '}
 						<a href="https://www.contember.com/" className="content-link">
 							AI-assisted Contember Studio
 						</a>
