@@ -1,16 +1,59 @@
-import { EntitySubTree, Link } from '@contember/interface'
+import { EntitySubTree, Field, Link, RedirectOnPersist } from '@contember/interface'
+import { ProjectForm } from '~/app/components/forms/project-form'
 import { Binding } from '~/lib/binding'
 import { BackButton } from '~/lib/buttons'
 import { DataGridColumn, DataGridEnumColumn, DataGridQueryFilter, DataGridTextColumn, DefaultDataGrid } from '~/lib/datagrid'
 import { Slots } from '~/lib/layout'
 import { AnchorButton } from '~/lib/ui/button'
 
-export default () => {
+export const List = () => {
 	return (
 		<>
 			<Binding>
 				<Slots.Actions>
-					<Link to="projectEdit(id: $entity.id)">
+					<Link to="project/create">
+						<AnchorButton>Create project</AnchorButton>
+					</Link>
+				</Slots.Actions>
+				<Slots.Title>Project list</Slots.Title>
+				<Slots.Back>
+					<BackButton />
+				</Slots.Back>
+				<DefaultDataGrid entities="Project" toolbar={<DataGridQueryFilter />}>
+					<DataGridColumn>
+						<div className="flex gap-4" />
+					</DataGridColumn>
+					<DataGridTextColumn field="name" header="Name" />
+					<DataGridTextColumn field="description" header="Description" />
+				</DefaultDataGrid>
+			</Binding>
+		</>
+	)
+}
+
+export const Create = () => {
+	return (
+		<>
+			<Binding>
+				<Slots.Title>Project create</Slots.Title>
+				<Slots.Back>
+					<BackButton />
+				</Slots.Back>
+				<EntitySubTree entity="Project" isCreating>
+					<RedirectOnPersist to="project/detail(id: $entity.id)" />
+					<ProjectForm />
+				</EntitySubTree>
+			</Binding>
+		</>
+	)
+}
+
+export const Detail = () => {
+	return (
+		<>
+			<Binding>
+				<Slots.Actions>
+					<Link to="project/edit(id: $entity.id)">
 						<AnchorButton>Edit</AnchorButton>
 					</Link>
 				</Slots.Actions>
@@ -24,7 +67,7 @@ export default () => {
 					<DefaultDataGrid entities="FeedbackItem" toolbar={<DataGridQueryFilter />}>
 						<DataGridColumn>
 							<div className="flex gap-4">
-								<Link to="feedbackDetail(id: $entity.id)">
+								<Link to="feedback/detail(id: $entity.id)">
 									<AnchorButton>View Feedback</AnchorButton>
 								</Link>
 							</div>
@@ -39,7 +82,7 @@ export default () => {
 					<DefaultDataGrid entities="Grouping" toolbar={<DataGridQueryFilter />}>
 						<DataGridColumn>
 							<div className="flex gap-4">
-								<Link to="groupingDetail(id: $entity.id)">
+								<Link to="grouping/detail(id: $entity.id)">
 									<AnchorButton>View Grouping</AnchorButton>
 								</Link>
 							</div>
@@ -47,6 +90,23 @@ export default () => {
 						<DataGridTextColumn field="name" header="Name" />
 					</DefaultDataGrid>
 				</div>
+			</Binding>
+		</>
+	)
+}
+
+export const Edit = () => {
+	return (
+		<>
+			<Binding>
+				<Slots.Title>Project edit</Slots.Title>
+				<Slots.Back>
+					<BackButton />
+				</Slots.Back>
+				<EntitySubTree entity="Project(id = $id)">
+					<RedirectOnPersist to="project/detail(id: $entity.id)" />
+					<ProjectForm />
+				</EntitySubTree>
 			</Binding>
 		</>
 	)
