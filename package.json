@@ -21,9 +21,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@contember/client-content": "2.0.0-alpha.30",
-    "@contember/client-content-generator": "2.0.0-alpha.30",
-    "@contember/graphql-builder": "2.0.0-alpha.30",
+    "@contember/client-content": "2.0.0-alpha.36",
+    "@contember/client-content-generator": "2.0.0-alpha.36",
+    "@contember/graphql-builder": "2.0.0-alpha.36",
     "typescript": "^5",
     "vite": "^6",
     "vite-tsconfig-paths": "^4"

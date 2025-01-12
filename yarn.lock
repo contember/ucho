@@ -511,16 +511,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contember/client-content-generator@npm:2.0.0-alpha.30":
-  version: 2.0.0-alpha.30
-  resolution: "@contember/client-content-generator@npm:2.0.0-alpha.30"
+"@contember/client-content-generator@npm:2.0.0-alpha.36":
+  version: 2.0.0-alpha.36
+  resolution: "@contember/client-content-generator@npm:2.0.0-alpha.36"
   dependencies:
-    "@contember/client-content": "npm:2.0.0-alpha.30"
-    "@contember/schema": "npm:2.0.0-alpha.30"
-    "@contember/schema-utils": "npm:2.0.0-alpha.30"
+    "@contember/client-content": "npm:2.0.0-alpha.36"
+    "@contember/schema": "npm:2.0.0-alpha.36"
+    "@contember/schema-utils": "npm:2.0.0-alpha.36"
   bin:
-    contember-client-generator: ./dist/production/generate.cjs
-  checksum: 10/9f2c3478eb7c8a7b8fea6ad8393123d234073fbd8843011090c4e61547f5e32f11f580fcc71bd244077e7410c601ddc8e8b517a9e1046377f69dec0b0192e0b3
+    contember-client-generator: dist/production/generate.cjs
+  checksum: 10/7fbafaaf9775b8a864d803b6d1973fdff0096c71400a1bec37bcd9508157bcb817d1c287d1debd9597bb8f5c60264567f7f3f23c0b491eb6b323f90f9865c138
   languageName: node
   linkType: hard
 
@@ -980,13 +980,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contember/schema-utils@npm:2.0.0-alpha.30":
-  version: 2.0.0-alpha.30
-  resolution: "@contember/schema-utils@npm:2.0.0-alpha.30"
+"@contember/schema-utils@npm:2.0.0-alpha.36":
+  version: 2.0.0-alpha.36
+  resolution: "@contember/schema-utils@npm:2.0.0-alpha.36"
   dependencies:
-    "@contember/schema": "npm:2.0.0-alpha.30"
-    "@contember/typesafe": "npm:2.0.0-alpha.30"
-  checksum: 10/ea60337217f81d9fcd2dc07cf94d6bea1e58eecb36549d6aea4ed6c8c3567b0ac44cb50633c45deaae580633aeb858e9496d4cfb03774bb253f2f1bb69b84fe0
+    "@contember/schema": "npm:2.0.0-alpha.36"
+    "@contember/typesafe": "npm:2.0.0-alpha.36"
+  checksum: 10/79a27141acd126045f9147b1cea14cd09fc3620e5a58d6ffc642babbe25e3457f14ad9e2498c64a4c01701bb2c5e4805756bd3fb309ba5041a30a6ce47f94ea1
   languageName: node
   linkType: hard
 
@@ -1018,10 +1018,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contember/typesafe@npm:2.0.0-alpha.30":
-  version: 2.0.0-alpha.30
-  resolution: "@contember/typesafe@npm:2.0.0-alpha.30"
-  checksum: 10/18ebf9180c52ffb3b908efae6b76f5da5bd9692aa3e551ac66e5506a8ccdd01a250b5338716bfa377be5729a1f707350d529ce3c5df0fe4254a9ce6ea6b8f8c9
+"@contember/typesafe@npm:2.0.0-alpha.36":
+  version: 2.0.0-alpha.36
+  resolution: "@contember/typesafe@npm:2.0.0-alpha.36"
+  checksum: 10/b856c698ff53015d7bd8ef48e9622b217d2f4ae6fdc9680351d6849e0470dde9b47d883b64d38c9a31458e30f9fc2c5f4fd8f8636f8695b0dc60d3c9bfa79486
   languageName: node
   linkType: hard
 
@@ -4716,9 +4716,9 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@biomejs/biome": "npm:^1.9.4"
-    "@contember/client-content": "npm:2.0.0-alpha.30"
-    "@contember/client-content-generator": "npm:2.0.0-alpha.30"
-    "@contember/graphql-builder": "npm:2.0.0-alpha.30"
+    "@contember/client-content": "npm:2.0.0-alpha.36"
+    "@contember/client-content-generator": "npm:2.0.0-alpha.36"
+    "@contember/graphql-builder": "npm:2.0.0-alpha.36"
     "@contember/schema": "npm:1.4.6"
     "@contember/schema-definition": "npm:1.4.6"
     "@contember/schema-utils": "npm:1.4.6"
