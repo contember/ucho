@@ -1,20 +1,25 @@
-import { Component } from 'solid-js'
-import { createSignal } from 'solid-js'
-import { FeedbackData } from '../types'
+import { Component, Show } from 'solid-js'
+import { useDrawing } from '../contexts/DrawingContext'
+import { useFeedback } from '../contexts/FeedbackContext'
+import { useWidget } from '../contexts/WidgetContext'
+import { MessageIcon } from './icons'
 
-interface FeedbackFormProps {
-	onClose: () => void
-	onSubmit: (data: FeedbackData) => void | Promise<void>
-	primaryColor: string
-}
+export const FeedbackForm: Component = () => {
+	const { primaryColor, onSubmit, toggleWidget, isOverlayVisible } = useWidget()
+	const { comment, setComment, screenshot, isMinimized, setIsMinimized } = useFeedback()
+	const {
+		state: { isSelecting },
+	} = useDrawing()
 
-export const FeedbackForm: Component<FeedbackFormProps> = props => {
-	const [comment, setComment] = createSignal('')
+	const transitionStyle = {
+		transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+	}
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
-		const data: FeedbackData = {
+		const data = {
 			comment: comment(),
+			screenshot: screenshot(),
 			metadata: {
 				url: window.location.href,
 				userAgent: navigator.userAgent,
@@ -27,55 +32,158 @@ export const FeedbackForm: Component<FeedbackFormProps> = props => {
 				},
 			},
 		}
-		await props.onSubmit(data)
-		props.onClose()
+		await onSubmit(data)
+		toggleWidget()
 	}
 
 	return (
-		<div
-			style={{
-				background: 'white',
-				'border-radius': '8px',
-				'box-shadow': '0 4px 12px rgba(0,0,0,0.15)',
-				padding: '16px',
-				width: '320px',
-			}}
-		>
-			<div style={{ display: 'flex', 'justify-content': 'space-between', 'margin-bottom': '16px' }}>
-				<h3 style={{ margin: 0 }}>Send Feedback</h3>
-			</div>
-
-			<form onSubmit={handleSubmit}>
-				<textarea
-					value={comment()}
-					onInput={e => setComment(e.currentTarget.value)}
-					placeholder="What's on your mind?"
+		<>
+			<div
+				class={`echo-feedback-form ${isOverlayVisible() ? 'visible' : ''} ${isMinimized() ? 'minimized' : ''}`}
+				style={{
+					'pointer-events': isSelecting() ? 'none' : 'auto',
+					'user-select': isSelecting() ? 'none' : 'auto',
+					...transitionStyle,
+					transform: isMinimized() ? 'translateX(calc(100% + 20px))' : 'translateX(0)',
+					position: 'fixed',
+					bottom: '60px',
+					right: '0px',
+					width: '20rem',
+					'transform-origin': 'right center',
+				}}
+			>
+				<div
 					style={{
+						background: 'white',
+						'border-radius': '8px 0 0 8px',
+						'box-shadow': '0 4px 12px rgba(0,0,0,0.15)',
+						padding: '16px',
 						width: '100%',
-						height: '100px',
-						padding: '8px',
-						'margin-bottom': '16px',
-						'border-radius': '4px',
-						border: '1px solid #ddd',
-						resize: 'vertical',
-					}}
-				/>
-
-				<button
-					type="submit"
-					style={{
-						background: props.primaryColor,
-						color: 'white',
-						border: 'none',
-						padding: '8px 16px',
-						'border-radius': '4px',
-						cursor: 'pointer',
-						width: '100%',
+						position: 'relative',
 					}}
 				>
-					Send Feedback
-				</button>
-			</form>
-		</div>
+					<div style={{ display: 'flex', 'justify-content': 'space-between', 'align-items': 'center', 'margin-bottom': '16px' }}>
+						<h3 style={{ margin: 0 }}>Send Feedback</h3>
+						<button
+							onClick={() => setIsMinimized(!isMinimized())}
+							style={{
+								background: 'transparent',
+								border: 'none',
+								padding: '8px',
+								cursor: 'pointer',
+								'border-radius': '4px',
+								display: 'flex',
+								'align-items': 'center',
+								'justify-content': 'center',
+								'margin-right': '-8px',
+								'margin-top': '-8px',
+								transition: 'background-color 0.2s ease',
+							}}
+						>
+							<svg
+								width="20"
+								height="20"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								style={{
+									transition: 'transform 0.3s ease',
+									transform: 'rotate(90deg)',
+								}}
+							>
+								<polyline points="18 15 12 9 6 15" />
+							</svg>
+						</button>
+					</div>
+
+					<form onSubmit={handleSubmit}>
+						<textarea
+							value={comment()}
+							onInput={e => setComment(e.currentTarget.value)}
+							placeholder="What's on your mind?"
+							style={{
+								width: '100%',
+								height: '100px',
+								padding: '8px',
+								'margin-bottom': '16px',
+								'border-radius': '4px',
+								border: '1px solid #ddd',
+								resize: 'vertical',
+							}}
+						/>
+
+						<div style={{ 'margin-bottom': '16px' }}>
+							<Show when={screenshot()}>
+								<div
+									style={{
+										'margin-top': '8px',
+										'max-height': '500px',
+										'overflow-y': 'auto',
+										border: '1px solid #ddd',
+										'border-radius': '4px',
+										padding: '4px',
+										'background-color': '#f5f5f5',
+									}}
+								>
+									<img
+										src={screenshot()}
+										alt="Screenshot Preview"
+										style={{
+											display: 'block',
+											width: '100%',
+											height: 'auto',
+											'object-fit': 'contain',
+											'border-radius': '2px',
+										}}
+									/>
+								</div>
+							</Show>
+						</div>
+
+						<button
+							type="submit"
+							style={{
+								background: primaryColor,
+								color: 'white',
+								border: 'none',
+								padding: '8px 16px',
+								'border-radius': '4px',
+								cursor: 'pointer',
+								width: '100%',
+							}}
+						>
+							Send Feedback
+						</button>
+					</form>
+
+					<button
+						class="minimized-preview echo-maximize-feedback-button"
+						onClick={() => setIsMinimized(false)}
+						style={{
+							position: 'absolute',
+							top: '0px',
+							left: '-40px',
+							width: '40px',
+							height: '40px',
+							background: primaryColor,
+							'border-radius': '8px 0 0 8px',
+							'box-shadow': '0 4px 12px rgba(0,0,0,0.15)',
+							display: 'flex',
+							'align-items': 'center',
+							'justify-content': 'center',
+							cursor: 'pointer',
+							...transitionStyle,
+							opacity: isMinimized() ? '1' : '0',
+							'pointer-events': isMinimized() ? 'auto' : 'none',
+						}}
+					>
+						<MessageIcon stroke="white" />
+					</button>
+				</div>
+			</div>
+		</>
 	)
 }
