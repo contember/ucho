@@ -2,31 +2,35 @@ import { Component, Link } from '@contember/interface'
 import { PropsWithChildren } from 'react'
 import { IdentityLoader } from '~/lib/binding'
 import { LayoutComponent, Slots } from '~/lib/layout'
+import { FeedbackWidget } from './feedback'
 import { Logo } from './logo'
 import { Navigation } from './navigation'
 
 export const Layout = Component(({ children }: PropsWithChildren) => (
 	<IdentityLoader>
-		<LayoutComponent>
-			<Slots.Logo>
-				<Link to="index">
-					<Logo />
-				</Link>
-			</Slots.Logo>
-			<Slots.Navigation>
-				<Navigation />
-			</Slots.Navigation>
-			<Slots.Footer>
-				<p>
-					<small>
-						Created with{' '}
-						<a href="https://www.contember.com/" className="content-link">
-							AI-assisted Contember Studio
-						</a>
-					</small>
-				</p>
-			</Slots.Footer>
-			{children}
-		</LayoutComponent>
+		<>
+			<LayoutComponent>
+				<Slots.Logo>
+					<Link to="index">
+						<Logo />
+					</Link>
+				</Slots.Logo>
+				<Slots.Navigation>
+					<Navigation />
+				</Slots.Navigation>
+				<Slots.Footer>
+					<p>
+						<small>
+							Created with{' '}
+							<a href="https://www.contember.com/" className="content-link">
+								AI-assisted Contember Studio
+							</a>
+						</small>
+					</p>
+				</Slots.Footer>
+				{children}
+			</LayoutComponent>
+			<FeedbackWidget />
+		</>
 	</IdentityLoader>
 ))

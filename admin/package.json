@@ -19,6 +19,7 @@
     "vite": "^6"
   },
   "dependencies": {
+    "@app/echo": "workspace:^",
     "@contember/graphql-client-tenant": "2.0.0-alpha.36",
     "@contember/interface": "2.0.0-alpha.36",
     "@contember/react-block-repeater": "2.0.0-alpha.36",
