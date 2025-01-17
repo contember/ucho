@@ -1,26 +1,8 @@
 import html2canvas from 'html2canvas'
-import { Point, Screenshot } from '../types'
-
-interface AnnotationBase {
-	color: string
-	strokeWidth?: number
-}
-
-interface PathAnnotation extends AnnotationBase {
-	type: 'path'
-	path: string
-}
-
-interface RectAnnotation extends AnnotationBase {
-	type: 'rect'
-	startPoint: Point
-	endPoint: Point
-}
-
-type Annotation = PathAnnotation | RectAnnotation
+import { Screenshot, Shape } from '../types'
 
 interface CaptureScreenshotConfig {
-	annotations: Annotation[]
+	annotations: Shape[]
 }
 
 const DEFAULT_CONFIG = {
@@ -38,17 +20,21 @@ const shouldIgnoreElement = (element: Element): boolean => {
 	return element.classList.contains('echo-widget') || element.classList.contains('echo-feedback-form')
 }
 
-const drawAnnotations = (ctx: CanvasRenderingContext2D, annotations: Annotation[]): void => {
+const drawAnnotations = (ctx: CanvasRenderingContext2D, annotations: Shape[]): void => {
 	for (const annotation of annotations) {
 		ctx.strokeStyle = annotation.color
-		ctx.lineWidth = annotation.strokeWidth || DEFAULT_CONFIG.strokeWidth
+		ctx.lineWidth = DEFAULT_CONFIG.strokeWidth
 		ctx.lineCap = 'round'
 
-		if (annotation.type === 'path') {
-			const path = new Path2D(annotation.path)
+		if (annotation.type === 'path' && annotation.points.length > 1) {
+			const pathData = `M ${annotation.points[0].x} ${annotation.points[0].y} ${annotation.points
+				.slice(1)
+				.map(point => `L ${point.x} ${point.y}`)
+				.join(' ')}`
+			const path = new Path2D(pathData)
 			ctx.stroke(path)
-		} else if (annotation.type === 'rect') {
-			const { startPoint, endPoint } = annotation
+		} else if (annotation.type === 'rectangle' && annotation.points.length === 2) {
+			const [startPoint, endPoint] = annotation.points
 			const width = Math.abs(endPoint.x - startPoint.x)
 			const height = Math.abs(endPoint.y - startPoint.y)
 			ctx.strokeRect(Math.min(startPoint.x, endPoint.x), Math.min(startPoint.y, endPoint.y), width, height)

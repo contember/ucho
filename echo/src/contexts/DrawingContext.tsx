@@ -10,6 +10,7 @@ interface DrawingContextValue {
 		handleMouseDown: (e: MouseEvent) => void
 		handleMouseMove: (e: MouseEvent) => void
 		handleMouseUp: () => void
+		handleShapeClick: (shapeId: string) => void
 	}
 }
 

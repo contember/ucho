@@ -1,5 +1,4 @@
-import html2canvas from 'html2canvas'
-import { Screenshot } from '../types'
+import { Screenshot, Shape, ShapeType } from '../types'
 import { DrawingState } from './useDrawingState'
 
 interface UseDrawingHandlersProps extends DrawingState {
@@ -13,64 +12,82 @@ export const useDrawingHandlers = ({
 	setIsSelecting,
 	isDrawing,
 	setIsDrawing,
-	startPoint,
-	setStartPoint,
-	endPoint,
-	setEndPoint,
-	drawingPoints,
-	setDrawingPoints,
-	paths,
-	setPaths,
-	currentPath,
+	currentPoints,
+	setCurrentPoints,
+	shapes,
+	setShapes,
 	setCurrentPath,
+	selectedShapeId,
+	setSelectedShapeId,
 	primaryColor,
-	setScreenshot,
-	setIsCapturing,
 }: UseDrawingHandlersProps) => {
+	const generateId = () => Math.random().toString(36).substring(2, 15)
+
 	const handleMouseDown = (e: MouseEvent) => {
+		if (e.button === 2) {
+			// Right click
+			if (selectedShapeId()) {
+				setShapes(shapes().filter(shape => shape.id !== selectedShapeId()))
+				setSelectedShapeId(null)
+			}
+			return
+		}
+
+		const point = { x: e.clientX, y: e.clientY }
+
+		/* start drawing */
 		if (!isSelecting()) {
 			setIsSelecting(true)
-			setStartPoint({ x: e.clientX, y: e.clientY })
-			setEndPoint({ x: e.clientX, y: e.clientY })
-		} else if (startPoint() && endPoint()) {
+			setCurrentPoints([point])
+		} else {
 			setIsDrawing(true)
-			const point = { x: e.clientX, y: e.clientY }
-			setDrawingPoints([point])
+			setCurrentPoints([point])
 			setCurrentPath(`M ${point.x} ${point.y}`)
 		}
 	}
 
 	const handleMouseMove = (e: MouseEvent) => {
+		const point = { x: e.clientX, y: e.clientY }
+
 		if (isSelecting() && !isDrawing()) {
-			setEndPoint({ x: e.clientX, y: e.clientY })
+			setCurrentPoints([currentPoints()[0], point])
 		} else if (isDrawing()) {
-			const newPoint = { x: e.clientX, y: e.clientY }
-			setDrawingPoints([...drawingPoints(), newPoint])
-			setCurrentPath((prev: string) => `${prev} L ${newPoint.x} ${newPoint.y}`)
+			setCurrentPoints([...currentPoints(), point])
+			setCurrentPath((prev: string) => `${prev} L ${point.x} ${point.y}`)
 		}
 	}
 
 	const handleMouseUp = async () => {
-		if (isDrawing()) {
-			setIsDrawing(false)
-			if (currentPath()) {
-				setPaths([...paths(), currentPath()])
-				setCurrentPath('')
-			}
-		} else {
+		if (currentPoints().length < 2) {
 			setIsSelecting(false)
-			if (startPoint() && endPoint()) {
-				const width = Math.abs(endPoint()!.x - startPoint()!.x)
-				const height = Math.abs(endPoint()!.y - startPoint()!.y)
-
-				setIsCapturing(false)
-			}
+			setIsDrawing(false)
+			setCurrentPoints([])
+			setCurrentPath('')
+			return
 		}
+
+		const newShape: Shape = {
+			id: generateId(),
+			type: isDrawing() ? ('path' as ShapeType) : ('rectangle' as ShapeType),
+			color: primaryColor,
+			points: currentPoints(),
+		}
+
+		setShapes([...shapes(), newShape])
+		setIsDrawing(false)
+		setIsSelecting(false)
+		setCurrentPoints([])
+		setCurrentPath('')
+	}
+
+	const handleShapeClick = (shapeId: string) => {
+		setSelectedShapeId(selectedShapeId() === shapeId ? null : shapeId)
 	}
 
 	return {
 		handleMouseDown,
 		handleMouseMove,
 		handleMouseUp,
+		handleShapeClick,
 	}
 }

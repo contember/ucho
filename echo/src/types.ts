@@ -54,6 +54,15 @@ export interface Point {
 	y: number
 }
 
+export type ShapeType = 'rectangle' | 'path'
+
+export interface Shape {
+	id: string
+	type: ShapeType
+	color: string
+	points: Point[]
+}
+
 export interface IconProps {
 	size?: number
 	stroke?: string

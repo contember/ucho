@@ -3,13 +3,13 @@ import { useDrawing } from '../contexts/DrawingContext'
 import { useFeedback } from '../contexts/FeedbackContext'
 import { useWidget } from '../contexts/WidgetContext'
 import { captureScreenshot } from '../utils/screenshot'
-import { MessageIcon } from './icons'
+import { ChevronRightIcon, MessageIcon } from './icons'
 
 export const FeedbackForm: Component = () => {
 	const { primaryColor, onSubmit, toggleWidget, isOverlayVisible } = useWidget()
 	const { comment, setComment, screenshot, setScreenshot, isMinimized, setIsMinimized } = useFeedback()
 	const {
-		state: { isSelecting, startPoint, endPoint },
+		state: { shapes, isSelecting },
 	} = useDrawing()
 
 	const transitionStyle = {
@@ -19,10 +19,8 @@ export const FeedbackForm: Component = () => {
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 
-		if (startPoint() && endPoint()) {
-			const newScreenshot = await captureScreenshot({
-				annotations: [{ type: 'rect', startPoint: startPoint()!, endPoint: endPoint()!, color: primaryColor }],
-			})
+		if (shapes().length > 0) {
+			const newScreenshot = await captureScreenshot({ annotations: shapes() })
 			if (newScreenshot) {
 				setScreenshot(newScreenshot)
 			}
@@ -91,22 +89,7 @@ export const FeedbackForm: Component = () => {
 								transition: 'background-color 0.2s ease',
 							}}
 						>
-							<svg
-								width="20"
-								height="20"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								style={{
-									transition: 'transform 0.3s ease',
-									transform: 'rotate(90deg)',
-								}}
-							>
-								<polyline points="18 15 12 9 6 15" />
-							</svg>
+							<ChevronRightIcon />
 						</button>
 					</div>
 
@@ -171,7 +154,7 @@ export const FeedbackForm: Component = () => {
 					</form>
 
 					<button
-						class="minimized-preview echo-maximize-feedback-button"
+						class="echo-maximize-feedback-button"
 						onClick={() => setIsMinimized(false)}
 						style={{
 							position: 'absolute',

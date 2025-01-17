@@ -1,46 +1,41 @@
 import { createSignal } from 'solid-js'
-import { Point } from '../types'
+import { Point, Shape } from '../types'
 
 export interface DrawingState {
 	isSelecting: () => boolean
 	setIsSelecting: (value: boolean) => void
 	isDrawing: () => boolean
 	setIsDrawing: (value: boolean) => void
-	startPoint: () => Point | null
-	setStartPoint: (value: Point | null) => void
-	endPoint: () => Point | null
-	setEndPoint: (value: Point | null) => void
-	drawingPoints: () => Point[]
-	setDrawingPoints: (value: Point[]) => void
-	paths: () => string[]
-	setPaths: (value: string[]) => void
+	currentPoints: () => Point[]
+	setCurrentPoints: (value: Point[]) => void
 	currentPath: () => string
 	setCurrentPath: (value: string | ((prev: string) => string)) => void
+	shapes: () => Shape[]
+	setShapes: (value: Shape[]) => void
+	selectedShapeId: () => string | null
+	setSelectedShapeId: (value: string | null) => void
 }
 
 export const useDrawingState = (): DrawingState => {
 	const [isSelecting, setIsSelecting] = createSignal(false)
 	const [isDrawing, setIsDrawing] = createSignal(false)
-	const [startPoint, setStartPoint] = createSignal<Point | null>(null)
-	const [endPoint, setEndPoint] = createSignal<Point | null>(null)
-	const [drawingPoints, setDrawingPoints] = createSignal<Point[]>([])
-	const [paths, setPaths] = createSignal<string[]>([])
+	const [currentPoints, setCurrentPoints] = createSignal<Point[]>([])
+	const [shapes, setShapes] = createSignal<Shape[]>([])
 	const [currentPath, setCurrentPath] = createSignal<string>('')
+	const [selectedShapeId, setSelectedShapeId] = createSignal<string | null>(null)
 
 	return {
 		isSelecting,
 		setIsSelecting,
 		isDrawing,
 		setIsDrawing,
-		startPoint,
-		setStartPoint,
-		endPoint,
-		setEndPoint,
-		drawingPoints,
-		setDrawingPoints,
-		paths,
-		setPaths,
+		currentPoints,
+		setCurrentPoints,
+		shapes,
+		setShapes,
 		currentPath,
 		setCurrentPath,
+		selectedShapeId,
+		setSelectedShapeId,
 	}
 }

@@ -1,12 +1,13 @@
 import { Component, For, onCleanup, onMount } from 'solid-js'
 import { useDrawing } from '../contexts/DrawingContext'
 import { useWidget } from '../contexts/WidgetContext'
+import { renderShape } from '../utils/shape'
 
 export const DrawingLayer: Component = () => {
-	const { primaryColor } = useWidget()
+	const { primaryColor, isOverlayVisible, isOpen } = useWidget()
 	const {
-		state: { startPoint, endPoint, paths, currentPath },
-		handlers: { handleMouseMove, handleMouseUp },
+		state: { currentPoints, shapes, currentPath, selectedShapeId },
+		handlers: { handleMouseMove, handleMouseUp, handleShapeClick },
 	} = useDrawing()
 
 	onMount(() => {
@@ -33,33 +34,47 @@ export const DrawingLayer: Component = () => {
 			<defs>
 				<mask id="selection-mask">
 					<rect width="100%" height="100%" fill="white" />
-					{startPoint() && endPoint() && (
-						<rect
-							x={Math.min(startPoint()!.x, endPoint()!.x)}
-							y={Math.min(startPoint()!.y, endPoint()!.y)}
-							width={Math.abs(endPoint()!.x - startPoint()!.x)}
-							height={Math.abs(endPoint()!.y - startPoint()!.y)}
-							fill="black"
-						/>
-					)}
+					{currentPoints().length === 2 &&
+						renderShape(
+							{
+								id: 'temp',
+								type: 'rectangle',
+								color: primaryColor,
+								points: currentPoints(),
+							},
+							selectedShapeId,
+							handleShapeClick,
+							true,
+						)}
+					<For each={shapes()}>{shape => renderShape(shape, selectedShapeId, handleShapeClick, true)}</For>
 				</mask>
 			</defs>
 
-			<rect width="100%" height="100%" fill="rgba(0, 0, 0, 0.2)" mask="url(#selection-mask)" />
+			<rect
+				width="100%"
+				height="100%"
+				fill="rgba(0, 0, 0, 0.2)"
+				style={{
+					transition: 'opacity 0.3s ease-in-out',
+					opacity: isOverlayVisible() ? 1 : 0,
+				}}
+				mask="url(#selection-mask)"
+			/>
 
-			{startPoint() && endPoint() && (
-				<rect
-					x={Math.min(startPoint()!.x, endPoint()!.x)}
-					y={Math.min(startPoint()!.y, endPoint()!.y)}
-					width={Math.abs(endPoint()!.x - startPoint()!.x)}
-					height={Math.abs(endPoint()!.y - startPoint()!.y)}
-					fill="none"
-					stroke={primaryColor}
-					stroke-width="2"
-				/>
-			)}
+			<For each={shapes()}>{shape => renderShape(shape, selectedShapeId, handleShapeClick, false)}</For>
 
-			<For each={paths()}>{pathData => <path d={pathData} fill="none" stroke={primaryColor} stroke-width="3" stroke-linecap="round" />}</For>
+			{currentPoints().length === 2 &&
+				renderShape(
+					{
+						id: 'temp',
+						type: 'rectangle',
+						color: primaryColor,
+						points: currentPoints(),
+					},
+					selectedShapeId,
+					handleShapeClick,
+					false,
+				)}
 
 			{currentPath() && <path d={currentPath()} fill="none" stroke={primaryColor} stroke-width="3" stroke-linecap="round" />}
 		</svg>

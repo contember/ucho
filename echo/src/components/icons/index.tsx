@@ -1,2 +1,3 @@
-export { MessageIcon } from './MessageIcon'
-export { CloseIcon } from './CloseIcon'
+export * from './ChevronRightIcon'
+export * from './CloseIcon'
+export * from './MessageIcon'
