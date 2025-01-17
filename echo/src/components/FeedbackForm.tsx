@@ -1,14 +1,16 @@
+import html2canvas from 'html2canvas'
 import { Component, Show } from 'solid-js'
 import { useDrawing } from '../contexts/DrawingContext'
 import { useFeedback } from '../contexts/FeedbackContext'
 import { useWidget } from '../contexts/WidgetContext'
+import { Screenshot } from '../types'
 import { MessageIcon } from './icons'
 
 export const FeedbackForm: Component = () => {
 	const { primaryColor, onSubmit, toggleWidget, isOverlayVisible } = useWidget()
-	const { comment, setComment, screenshot, isMinimized, setIsMinimized } = useFeedback()
+	const { comment, setComment, screenshot, setScreenshot, isMinimized, setIsMinimized } = useFeedback()
 	const {
-		state: { isSelecting },
+		state: { isSelecting, startPoint, endPoint, paths },
 	} = useDrawing()
 
 	const transitionStyle = {
@@ -17,6 +19,45 @@ export const FeedbackForm: Component = () => {
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
+
+		if (startPoint() && endPoint()) {
+			const width = Math.abs(endPoint()!.x - startPoint()!.x)
+			const height = Math.abs(endPoint()!.y - startPoint()!.y)
+
+			if (width > 10 && height > 10) {
+				const screenshot = await html2canvas(document.body, {
+					backgroundColor: null,
+					logging: false,
+					useCORS: true,
+					scale: window.devicePixelRatio,
+					allowTaint: true,
+					foreignObjectRendering: true,
+					ignoreElements: element => {
+						return element.classList.contains('echo-widget') || element.classList.contains('echo-feedback-form')
+					},
+				})
+
+				const canvas = document.createElement('canvas')
+				canvas.width = screenshot.width
+				canvas.height = screenshot.height
+				const ctx = canvas.getContext('2d')
+
+				if (ctx) {
+					ctx.drawImage(screenshot, 0, 0)
+					ctx.strokeStyle = primaryColor
+					ctx.lineWidth = 3
+					ctx.lineCap = 'round'
+
+					for (const pathData of paths()) {
+						const path = new Path2D(pathData)
+						ctx.stroke(path)
+					}
+
+					setScreenshot(canvas.toDataURL() as Screenshot)
+				}
+			}
+		}
+
 		const data = {
 			comment: comment(),
 			screenshot: screenshot(),

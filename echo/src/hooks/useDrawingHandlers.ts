@@ -63,39 +63,7 @@ export const useDrawingHandlers = ({
 				const width = Math.abs(endPoint()!.x - startPoint()!.x)
 				const height = Math.abs(endPoint()!.y - startPoint()!.y)
 
-				if (width > 10 && height > 10) {
-					const screenshot = await html2canvas(document.body, {
-						backgroundColor: null,
-						logging: false,
-						useCORS: true,
-						scale: window.devicePixelRatio,
-						allowTaint: true,
-						foreignObjectRendering: true,
-						ignoreElements: element => {
-							return element.classList.contains('echo-widget') || element.classList.contains('echo-feedback-form')
-						},
-					})
-
-					const canvas = document.createElement('canvas')
-					canvas.width = screenshot.width
-					canvas.height = screenshot.height
-					const ctx = canvas.getContext('2d')
-
-					if (ctx) {
-						ctx.drawImage(screenshot, 0, 0)
-						ctx.strokeStyle = primaryColor
-						ctx.lineWidth = 3
-						ctx.lineCap = 'round'
-
-						for (const pathData of paths()) {
-							const path = new Path2D(pathData)
-							ctx.stroke(path)
-						}
-
-						setScreenshot(canvas.toDataURL() as Screenshot)
-						setIsCapturing(false)
-					}
-				}
+				setIsCapturing(false)
 			}
 		}
 	}
