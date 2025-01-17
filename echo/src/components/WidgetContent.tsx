@@ -4,7 +4,7 @@ import { Feedback } from './Feedback'
 import { CloseIcon, MessageIcon } from './icons'
 
 export const WidgetContent: Component = () => {
-	const { isOpen, isOverlayVisible, primaryColor, toggleWidget } = useWidget()
+	const { isOpen, isOpenStaggered, primaryColor, toggleWidget } = useWidget()
 
 	return (
 		<div
@@ -35,14 +35,14 @@ export const WidgetContent: Component = () => {
 					stroke="white"
 					style={{
 						transition: 'opacity 0.2s ease',
-						opacity: isOverlayVisible() ? '0' : '1',
+						opacity: isOpenStaggered() ? '0' : '1',
 					}}
 				/>
 				<CloseIcon
 					stroke="white"
 					style={{
 						transition: 'opacity 0.2s ease',
-						opacity: isOverlayVisible() ? '1' : '0',
+						opacity: isOpenStaggered() ? '1' : '0',
 						position: 'absolute',
 					}}
 				/>

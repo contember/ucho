@@ -3,7 +3,7 @@ import { FeedbackData } from '../types'
 
 interface WidgetContextValue {
 	isOpen: Accessor<boolean>
-	isOverlayVisible: Accessor<boolean>
+	isOpenStaggered: Accessor<boolean>
 	primaryColor: string
 	toggleWidget: () => void
 	onSubmit: (data: FeedbackData) => void | Promise<void>
@@ -16,22 +16,22 @@ export const WidgetProvider: ParentComponent<{
 	onSubmit: (data: FeedbackData) => void | Promise<void>
 }> = props => {
 	const [isOpen, setIsOpen] = createSignal(false)
-	const [isOverlayVisible, setIsOverlayVisible] = createSignal(false)
+	const [isOpenStaggered, setIsOpenStaggered] = createSignal(false)
 	const primaryColor = props.primaryColor
 
 	const toggleWidget = () => {
 		if (!isOpen()) {
 			setIsOpen(true)
-			setTimeout(() => setIsOverlayVisible(true), 0)
+			setTimeout(() => setIsOpenStaggered(true), 0)
 		} else {
-			setIsOverlayVisible(false)
+			setIsOpenStaggered(false)
 			setTimeout(() => setIsOpen(false), 250)
 		}
 	}
 
 	const value: WidgetContextValue = {
 		isOpen,
-		isOverlayVisible,
+		isOpenStaggered,
 		primaryColor,
 		toggleWidget,
 		onSubmit: props.onSubmit,

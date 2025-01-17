@@ -5,7 +5,7 @@ import { useWidget } from '../contexts/WidgetContext'
 import { DrawingLayer } from './DrawingLayer'
 
 export const Overlay: Component = () => {
-	const { primaryColor, isOverlayVisible } = useWidget()
+	const { primaryColor, isOpenStaggered } = useWidget()
 	const {
 		handlers: { handleMouseDown },
 	} = useDrawing()
@@ -24,7 +24,7 @@ export const Overlay: Component = () => {
 					border: `4px solid ${primaryColor}`,
 					cursor: 'crosshair',
 					transition: 'opacity 0.3s ease-in-out',
-					opacity: isOverlayVisible() ? 1 : 0,
+					opacity: isOpenStaggered() ? 1 : 0,
 				}}
 			>
 				<DrawingLayer />

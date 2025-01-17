@@ -6,7 +6,7 @@ import { captureScreenshot } from '../utils/screenshot'
 import { ChevronRightIcon, MessageIcon } from './icons'
 
 export const FeedbackForm: Component = () => {
-	const { primaryColor, onSubmit, toggleWidget, isOverlayVisible } = useWidget()
+	const { primaryColor, onSubmit, toggleWidget, isOpenStaggered } = useWidget()
 	const { comment, setComment, screenshot, setScreenshot, isMinimized, setIsMinimized } = useFeedback()
 	const {
 		state: { shapes, isSelecting },
@@ -48,7 +48,7 @@ export const FeedbackForm: Component = () => {
 	return (
 		<>
 			<div
-				class={`echo-feedback-form ${isOverlayVisible() ? 'visible' : ''} ${isMinimized() ? 'minimized' : ''}`}
+				class={`echo-feedback-form ${isOpenStaggered() ? 'visible' : ''} ${isMinimized() ? 'minimized' : ''}`}
 				style={{
 					'pointer-events': isSelecting() ? 'none' : 'auto',
 					'user-select': isSelecting() ? 'none' : 'auto',

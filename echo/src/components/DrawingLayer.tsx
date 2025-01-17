@@ -4,7 +4,7 @@ import { useWidget } from '../contexts/WidgetContext'
 import { renderShape } from '../utils/shape'
 
 export const DrawingLayer: Component = () => {
-	const { primaryColor, isOverlayVisible, isOpen } = useWidget()
+	const { primaryColor, isOpenStaggered } = useWidget()
 	const {
 		state: { currentPoints, shapes, currentPath, selectedShapeId },
 		handlers: { handleMouseMove, handleMouseUp, handleShapeClick },
@@ -56,7 +56,7 @@ export const DrawingLayer: Component = () => {
 				fill="rgba(0, 0, 0, 0.2)"
 				style={{
 					transition: 'opacity 0.3s ease-in-out',
-					opacity: isOverlayVisible() ? 1 : 0,
+					opacity: isOpenStaggered() ? 1 : 0,
 				}}
 				mask="url(#selection-mask)"
 			/>
