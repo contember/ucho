@@ -19,9 +19,17 @@ export const useDrawingHandlers = ({
 	setCurrentPath,
 	selectedShapeId,
 	setSelectedShapeId,
+	selectedTool,
 	primaryColor,
 }: UseDrawingHandlersProps) => {
 	const generateId = () => Math.random().toString(36).substring(2, 15)
+
+	const getMousePosition = (e: MouseEvent) => {
+		return {
+			x: e.clientX,
+			y: e.clientY,
+		}
+	}
 
 	const handleMouseDown = (e: MouseEvent) => {
 		if (e.button === 2) {
@@ -33,13 +41,19 @@ export const useDrawingHandlers = ({
 			return
 		}
 
-		const point = { x: e.clientX, y: e.clientY }
+		const point = getMousePosition(e)
 
-		/* start drawing */
-		if (!isSelecting()) {
-			setIsSelecting(true)
-			setCurrentPoints([point])
+		if (selectedTool() === 'highlight') {
+			/* start rectangle selection */
+			if (!isSelecting()) {
+				setIsSelecting(true)
+				setCurrentPoints([point])
+			} else {
+				setIsDrawing(true)
+				setCurrentPoints([point])
+			}
 		} else {
+			/* start drawing pen stroke */
 			setIsDrawing(true)
 			setCurrentPoints([point])
 			setCurrentPath(`M ${point.x} ${point.y}`)
@@ -47,10 +61,12 @@ export const useDrawingHandlers = ({
 	}
 
 	const handleMouseMove = (e: MouseEvent) => {
-		const point = { x: e.clientX, y: e.clientY }
+		const point = getMousePosition(e)
 
-		if (isSelecting() && !isDrawing()) {
-			setCurrentPoints([currentPoints()[0], point])
+		if (selectedTool() === 'highlight') {
+			if (isSelecting() && !isDrawing()) {
+				setCurrentPoints([currentPoints()[0], point])
+			}
 		} else if (isDrawing()) {
 			setCurrentPoints([...currentPoints(), point])
 			setCurrentPath((prev: string) => `${prev} L ${point.x} ${point.y}`)
@@ -68,7 +84,7 @@ export const useDrawingHandlers = ({
 
 		const newShape: Shape = {
 			id: generateId(),
-			type: isDrawing() ? ('path' as ShapeType) : ('rectangle' as ShapeType),
+			type: selectedTool() === 'highlight' ? 'rectangle' : 'path',
 			color: primaryColor,
 			points: currentPoints(),
 		}

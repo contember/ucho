@@ -6,7 +6,7 @@ import { renderShape } from '../utils/shape'
 export const DrawingLayer: Component = () => {
 	const { primaryColor, isOpenStaggered } = useWidget()
 	const {
-		state: { currentPoints, shapes, currentPath, selectedShapeId },
+		state: { currentPoints, shapes, currentPath, selectedShapeId, selectedTool, isDrawing },
 		handlers: { handleMouseMove, handleMouseUp, handleShapeClick },
 	} = useDrawing()
 
@@ -28,8 +28,12 @@ export const DrawingLayer: Component = () => {
 				position: 'absolute',
 				top: 0,
 				left: 0,
+				right: 0,
+				bottom: 0,
 				'pointer-events': 'none',
+				'transform-origin': '0 0',
 			}}
+			preserveAspectRatio="none"
 		>
 			<defs>
 				<mask id="selection-mask">
@@ -76,7 +80,16 @@ export const DrawingLayer: Component = () => {
 					false,
 				)}
 
-			{currentPath() && <path d={currentPath()} fill="none" stroke={primaryColor} stroke-width="3" stroke-linecap="round" />}
+			{currentPath() && selectedTool() === 'pen' && (
+				<path
+					d={currentPath()}
+					fill="none"
+					stroke={primaryColor}
+					stroke-width="3"
+					stroke-linecap="round"
+					style={{ opacity: isDrawing() ? '0.8' : '1' }}
+				/>
+			)}
 		</svg>
 	)
 }

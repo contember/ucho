@@ -56,6 +56,8 @@ export interface Point {
 
 export type ShapeType = 'rectangle' | 'path'
 
+export type DrawingTool = 'highlight' | 'pen'
+
 export interface Shape {
 	id: string
 	type: ShapeType

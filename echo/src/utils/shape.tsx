@@ -38,7 +38,7 @@ export const renderShape = (shape: Shape, selectedShapeId: () => string | null, 
 				stroke-linecap="round"
 				stroke-dasharray={isMask ? 'none' : strokeDasharray}
 				onClick={isMask ? undefined : () => handleShapeClick(shape.id)}
-				style={isMask ? undefined : { cursor: 'pointer' }}
+				style={isMask ? undefined : { cursor: 'pointer', opacity: '1' }}
 			/>
 		)
 	}
