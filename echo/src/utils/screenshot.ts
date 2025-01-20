@@ -48,7 +48,7 @@ export const captureScreenshot = async ({ annotations }: CaptureScreenshotConfig
 			backgroundColor: null,
 			logging: false,
 			useCORS: true,
-			scale: window.devicePixelRatio,
+			scale: 1,
 			allowTaint: true,
 			foreignObjectRendering: true,
 			ignoreElements: shouldIgnoreElement,
@@ -63,7 +63,7 @@ export const captureScreenshot = async ({ annotations }: CaptureScreenshotConfig
 
 		ctx.drawImage(screenshot, 0, 0)
 
-		drawAnnotations(ctx, annotations)
+		// drawAnnotations(ctx, annotations)
 
 		return canvas.toDataURL() as Screenshot
 	} catch (error) {

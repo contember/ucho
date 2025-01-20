@@ -1,4 +1,5 @@
 import { Component, For, onCleanup, onMount } from 'solid-js'
+import { config } from '../config'
 import { useDrawing } from '../contexts/DrawingContext'
 import { useWidget } from '../contexts/WidgetContext'
 import { renderShape } from '../utils/shape'
@@ -57,10 +58,10 @@ export const DrawingLayer: Component = () => {
 			<rect
 				width="100%"
 				height="100%"
-				fill="rgba(0, 0, 0, 0.2)"
+				fill={config.overlay.maskBackground}
 				style={{
 					transition: 'opacity 0.3s ease-in-out',
-					opacity: isOpenStaggered() ? 1 : 0,
+					opacity: isOpenStaggered() ? config.overlay.maskOpacity : 0,
 				}}
 				mask="url(#selection-mask)"
 			/>
@@ -85,9 +86,9 @@ export const DrawingLayer: Component = () => {
 					d={currentPath()}
 					fill="none"
 					stroke={primaryColor}
-					stroke-width="3"
+					stroke-width={config.tools.pen.strokeWidth.active}
 					stroke-linecap="round"
-					style={{ opacity: isDrawing() ? '0.8' : '1' }}
+					style={{ opacity: isDrawing() ? config.tools.pen.opacity.active : config.tools.pen.opacity.normal }}
 				/>
 			)}
 		</svg>

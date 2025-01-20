@@ -5,7 +5,7 @@ A lightweight feedback widget built with Solid.js that allows users to capture s
 ## Usage
 
 ```typescript
-import { initEcho } from '@app/echo';
+import { initEcho } from 'contember-echo';
 
 initEcho({
   // Optional: widget position (default: 'bottom-right')

@@ -1,7 +1,7 @@
 import { Component } from 'solid-js'
+import { config } from '../config'
 import { useDrawing } from '../contexts/DrawingContext'
 import { useWidget } from '../contexts/WidgetContext'
-import { DrawingTool } from '../types'
 
 export const DrawingToolbar: Component = () => {
 	const { primaryColor } = useWidget()
@@ -9,38 +9,32 @@ export const DrawingToolbar: Component = () => {
 		state: { selectedTool, setSelectedTool },
 	} = useDrawing()
 
-	const tools: { id: DrawingTool; label: string }[] = [
-		{ id: 'highlight', label: 'Highlight' },
-		{ id: 'pen', label: 'Pen' },
-	]
+	const tools = Object.values(config.tools)
 
 	return (
 		<div
 			style={{
 				position: 'fixed',
-				top: '20px',
-				left: '50%',
-				transform: 'translateX(-50%)',
+				...config.toolbar.position,
 				display: 'flex',
-				gap: '8px',
-				background: 'white',
-				padding: '8px',
-				'border-radius': '8px',
-				'box-shadow': '0 2px 8px rgba(0,0,0,0.15)',
+				gap: config.toolbar.style.gap,
+				background: config.toolbar.style.background,
+				padding: config.toolbar.style.padding,
+				'border-radius': config.toolbar.style.borderRadius,
+				'box-shadow': config.toolbar.style.boxShadow,
 			}}
 		>
 			{tools.map(tool => (
-				// biome-ignore lint/correctness/useJsxKeyInIterable: <explanation>
 				<button
 					onClick={() => setSelectedTool(tool.id)}
 					style={{
 						background: selectedTool() === tool.id ? primaryColor : 'white',
 						color: selectedTool() === tool.id ? 'white' : '#666',
 						border: `1px solid ${selectedTool() === tool.id ? primaryColor : '#ddd'}`,
-						padding: '8px 16px',
-						'border-radius': '4px',
+						padding: config.toolbar.buttonStyle.padding,
+						'border-radius': config.toolbar.buttonStyle.borderRadius,
 						cursor: 'pointer',
-						'font-size': '14px',
+						'font-size': config.toolbar.buttonStyle.fontSize,
 						transition: 'all 0.2s ease',
 					}}
 				>

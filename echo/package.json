@@ -1,5 +1,5 @@
 {
-  "name": "@app/echo",
+  "name": "contember-echo",
   "version": "0.0.1",
   "type": "module",
   "main": "dist/echo-widget.umd.js",

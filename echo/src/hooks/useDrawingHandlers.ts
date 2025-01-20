@@ -1,3 +1,4 @@
+import { config } from '../config'
 import { Screenshot, Shape, ShapeType } from '../types'
 import { DrawingState } from './useDrawingState'
 
@@ -29,6 +30,12 @@ export const useDrawingHandlers = ({
 			x: e.clientX,
 			y: e.clientY,
 		}
+	}
+
+	const getDistance = (p1: { x: number; y: number }, p2: { x: number; y: number }) => {
+		const dx = p2.x - p1.x
+		const dy = p2.y - p1.y
+		return Math.sqrt(dx * dx + dy * dy)
 	}
 
 	const handleMouseDown = (e: MouseEvent) => {
@@ -68,8 +75,17 @@ export const useDrawingHandlers = ({
 				setCurrentPoints([currentPoints()[0], point])
 			}
 		} else if (isDrawing()) {
-			setCurrentPoints([...currentPoints(), point])
+			const lastPoint = currentPoints()[currentPoints().length - 1]
+			const distance = getDistance(lastPoint, point)
+			const hysteresis = config.tools.pen.hysteresis ?? 0
+
+			// Always update the current path for smooth preview
 			setCurrentPath((prev: string) => `${prev} L ${point.x} ${point.y}`)
+
+			// Only add points that are far enough from the last point
+			if (distance >= hysteresis) {
+				setCurrentPoints([...currentPoints(), point])
+			}
 		}
 	}
 
