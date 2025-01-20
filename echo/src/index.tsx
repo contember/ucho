@@ -47,7 +47,7 @@ export function initEcho(options: EchoOptions): () => void {
 	try {
 		validateOptions(options)
 
-		const { position = 'bottom-right', primaryColor = '#6B46C1', onSubmit } = options
+		const { position = 'bottom-right', primaryColor = '#805AD5', onSubmit } = options
 		const mountPoint = createMountPoint(position)
 
 		queueMicrotask(() => {

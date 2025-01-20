@@ -71,4 +71,5 @@ export interface IconProps {
 	strokeWidth?: number
 	class?: string
 	style?: any
+	fill?: string
 }

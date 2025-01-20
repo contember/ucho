@@ -2,6 +2,7 @@ import { Component, Show } from 'solid-js'
 import { useWidget } from '../contexts/WidgetContext'
 import { Feedback } from './Feedback'
 import { CloseIcon, MessageIcon } from './icons'
+import { ContemberIcon } from './icons/ContemberIcon'
 
 export const WidgetContent: Component = () => {
 	const { isOpen, isOpenStaggered, primaryColor, toggleWidget } = useWidget()
@@ -31,8 +32,9 @@ export const WidgetContent: Component = () => {
 					'z-index': '2',
 				}}
 			>
-				<MessageIcon
+				<ContemberIcon
 					stroke="white"
+					fill="#ffffff"
 					style={{
 						transition: 'opacity 0.2s ease',
 						opacity: isOpenStaggered() ? '0' : '1',
