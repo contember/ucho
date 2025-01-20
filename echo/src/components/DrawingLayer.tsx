@@ -22,20 +22,7 @@ export const DrawingLayer: Component = () => {
 	})
 
 	return (
-		<svg
-			width="100%"
-			height="100%"
-			style={{
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				right: 0,
-				bottom: 0,
-				'pointer-events': 'none',
-				'transform-origin': '0 0',
-			}}
-			preserveAspectRatio="none"
-		>
+		<svg width="100%" height="100%" class="echo-drawing-layer" preserveAspectRatio="none">
 			<defs>
 				<mask id="selection-mask">
 					<rect width="100%" height="100%" fill="white" />
@@ -58,10 +45,10 @@ export const DrawingLayer: Component = () => {
 			<rect
 				width="100%"
 				height="100%"
-				fill={config.overlay.maskBackground}
+				fill={'rgba(0,0,0,0.2)'}
 				style={{
 					transition: 'opacity 0.3s ease-in-out',
-					opacity: isOpenStaggered() ? config.overlay.maskOpacity : 0,
+					opacity: isOpenStaggered() ? 1 : 0,
 				}}
 				mask="url(#selection-mask)"
 			/>
@@ -86,9 +73,9 @@ export const DrawingLayer: Component = () => {
 					d={currentPath()}
 					fill="none"
 					stroke={primaryColor}
-					stroke-width={config.tools.pen.strokeWidth.active}
+					stroke-width={config.pen.strokeWidth.active}
 					stroke-linecap="round"
-					style={{ opacity: isDrawing() ? config.tools.pen.opacity.active : config.tools.pen.opacity.normal }}
+					style={{ opacity: isDrawing() ? config.pen.opacity.active : config.pen.opacity.normal }}
 				/>
 			)}
 		</svg>

@@ -4,7 +4,7 @@ import { getRectFromPoints } from './geometry'
 
 export const renderShape = (shape: Shape, selectedShapeId: () => string | null, handleShapeClick: (id: string) => void, isMask?: boolean) => {
 	const isSelected = shape.id === selectedShapeId()
-	const tool = shape.type === 'path' ? config.tools.pen : config.tools.highlight
+	const tool = shape.type === 'path' ? config.pen : config.highlight
 	const strokeWidth = isSelected ? tool.strokeWidth.selected : tool.strokeWidth.normal
 
 	if (shape.type === 'rectangle' && shape.points.length === 2) {

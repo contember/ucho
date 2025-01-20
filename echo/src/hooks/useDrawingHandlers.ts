@@ -77,7 +77,7 @@ export const useDrawingHandlers = ({
 		} else if (isDrawing()) {
 			const lastPoint = currentPoints()[currentPoints().length - 1]
 			const distance = getDistance(lastPoint, point)
-			const hysteresis = config.tools.pen.hysteresis ?? 0
+			const hysteresis = config.pen.hysteresis ?? 0
 
 			// Always update the current path for smooth preview
 			setCurrentPath((prev: string) => `${prev} L ${point.x} ${point.y}`)
