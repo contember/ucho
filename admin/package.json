@@ -19,7 +19,6 @@
     "vite": "^6"
   },
   "dependencies": {
-    "@app/echo": "workspace:^",
     "@contember/graphql-client-tenant": "2.0.0-alpha.36",
     "@contember/interface": "2.0.0-alpha.36",
     "@contember/react-block-repeater": "2.0.0-alpha.36",
@@ -61,6 +60,7 @@
     "@radix-ui/react-tooltip": "^1.1.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "contember-echo": "workspace:^",
     "lucide-react": "^0.453.0",
     "qrcode-generator": "^1.4.4",
     "react": "^18.3.1",
