@@ -1,13 +1,17 @@
 import { Component } from 'solid-js'
+import { useDrawing } from '../contexts/DrawingContext'
 import { useWidget } from '../contexts/WidgetContext'
 import { CloseIcon } from './icons'
 import { ContemberIcon } from './icons/ContemberIcon'
 
 export const WidgetButton: Component = () => {
 	const { isOpenStaggered, toggleWidget } = useWidget()
+	const {
+		state: { isDrawing },
+	} = useDrawing()
 
 	return (
-		<button onClick={toggleWidget} class="echo-widget-button">
+		<button onClick={toggleWidget} class="echo-widget-button" data-hidden={isDrawing()}>
 			<ContemberIcon
 				stroke="white"
 				fill="#ffffff"

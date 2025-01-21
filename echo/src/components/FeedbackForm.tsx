@@ -9,7 +9,7 @@ export const FeedbackForm: Component = () => {
 	const { onSubmit, toggleWidget, isOpenStaggered } = useWidget()
 	const { comment, setComment, screenshot, setScreenshot, isMinimized, setIsMinimized } = useFeedback()
 	const {
-		state: { shapes, isSelecting },
+		state: { shapes, isDrawing },
 	} = useDrawing()
 
 	const handleSubmit = async (e: SubmitEvent) => {
@@ -45,10 +45,8 @@ export const FeedbackForm: Component = () => {
 		<>
 			<div
 				class={`echo-feedback-form ${isOpenStaggered() ? 'visible' : ''} ${isMinimized() ? 'minimized' : ''}`}
-				style={{
-					'pointer-events': isSelecting() ? 'none' : 'auto',
-					'user-select': isSelecting() ? 'none' : 'auto',
-				}}
+				data-hidden={isDrawing()}
+				data-minimized={isMinimized()}
 			>
 				<div class="echo-feedback-container">
 					<div class="echo-feedback-header">

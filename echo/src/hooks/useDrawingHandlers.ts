@@ -9,8 +9,6 @@ interface UseDrawingHandlersProps extends DrawingState {
 }
 
 export const useDrawingHandlers = ({
-	isSelecting,
-	setIsSelecting,
 	isDrawing,
 	setIsDrawing,
 	currentPoints,
@@ -49,32 +47,27 @@ export const useDrawingHandlers = ({
 		}
 
 		const point = getMousePosition(e)
+		setIsDrawing(true)
+		setCurrentPoints([point])
 
 		if (selectedTool() === 'highlight') {
-			/* start rectangle selection */
-			if (!isSelecting()) {
-				setIsSelecting(true)
-				setCurrentPoints([point])
-			} else {
-				setIsDrawing(true)
-				setCurrentPoints([point])
-			}
-		} else {
-			/* start drawing pen stroke */
-			setIsDrawing(true)
+			// For rectangle, we just need the start point
 			setCurrentPoints([point])
+		} else {
+			// For pen strokes, we start the path
 			setCurrentPath(`M ${point.x} ${point.y}`)
 		}
 	}
 
 	const handleMouseMove = (e: MouseEvent) => {
+		if (!isDrawing()) return
+
 		const point = getMousePosition(e)
 
 		if (selectedTool() === 'highlight') {
-			if (isSelecting() && !isDrawing()) {
-				setCurrentPoints([currentPoints()[0], point])
-			}
-		} else if (isDrawing()) {
+			// For rectangle, we just update the end point
+			setCurrentPoints([currentPoints()[0], point])
+		} else {
 			const lastPoint = currentPoints()[currentPoints().length - 1]
 			const distance = getDistance(lastPoint, point)
 			const hysteresis = config.pen.hysteresis ?? 0
@@ -91,7 +84,6 @@ export const useDrawingHandlers = ({
 
 	const handleMouseUp = async () => {
 		if (currentPoints().length < 2) {
-			setIsSelecting(false)
 			setIsDrawing(false)
 			setCurrentPoints([])
 			setCurrentPath('')
@@ -107,7 +99,6 @@ export const useDrawingHandlers = ({
 
 		setShapes([...shapes(), newShape])
 		setIsDrawing(false)
-		setIsSelecting(false)
 		setCurrentPoints([])
 		setCurrentPath('')
 	}

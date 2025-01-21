@@ -36,6 +36,8 @@ const createStyles = (primaryColor: string) => {
 			justify-content: center;
 			position: relative;
 			z-index: 10000;
+			opacity: 1;
+			pointer-events: auto;
 		}
 
 		.echo-widget-button:hover {
@@ -47,6 +49,12 @@ const createStyles = (primaryColor: string) => {
 			transform: scale(0.95);
 		}
 
+		.echo-widget-button[data-hidden="true"] {
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.2s ease-in-out;
+		}
+
 		.echo-feedback-form {
 			position: fixed;
 			bottom: 100px;
@@ -56,7 +64,7 @@ const createStyles = (primaryColor: string) => {
 			opacity: 0;
 			transform: translateY(20px) scale(0.95);
 			transform-origin: right center;
-			transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+			transition: opacity 0.2s ease-in-out, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 		}
 
 		.echo-feedback-form.visible {
@@ -66,6 +74,13 @@ const createStyles = (primaryColor: string) => {
 
 		.echo-feedback-form.minimized {
 			transform: translateX(calc(100% + 20px));
+		}
+
+		.echo-feedback-form[data-hidden="true"] {
+			opacity: 0;
+			pointer-events: none;
+			user-select: none;
+			transition: opacity 0.2s ease-in-out;
 		}
 
 		.echo-feedback-container {
@@ -188,6 +203,14 @@ const createStyles = (primaryColor: string) => {
 			flex-direction: column;
 			gap: 10px;
 			z-index: 1000;
+			opacity: 1;
+			transition: opacity 0.2s ease-in-out;
+			pointer-events: auto;
+		}
+
+		.echo-drawing-toolbar[data-hidden="true"] {
+			opacity: 0;
+			pointer-events: none;
 		}
 
 		.echo-drawing-toolbar-button {

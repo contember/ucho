@@ -4,7 +4,6 @@ import { useDrawing } from '../contexts/DrawingContext'
 import { IconProps } from '../types'
 import { HighlightIcon, PenIcon } from './icons'
 
-// Map of tool IDs to their respective icon components
 const ToolIcon: Record<string, Component<IconProps>> = {
 	highlight: HighlightIcon,
 	pen: PenIcon,
@@ -12,13 +11,13 @@ const ToolIcon: Record<string, Component<IconProps>> = {
 
 export const DrawingToolbar: Component = () => {
 	const {
-		state: { selectedTool, setSelectedTool },
+		state: { selectedTool, setSelectedTool, isDrawing },
 	} = useDrawing()
 
 	const tools = Object.values(config)
 
 	return (
-		<div class="echo-drawing-toolbar">
+		<div class="echo-drawing-toolbar" data-hidden={isDrawing()}>
 			<For each={tools}>
 				{tool => {
 					const Icon = ToolIcon[tool.id]

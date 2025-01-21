@@ -2,8 +2,6 @@ import { createSignal } from 'solid-js'
 import { DrawingTool, Point, Shape } from '../types'
 
 export interface DrawingState {
-	isSelecting: () => boolean
-	setIsSelecting: (value: boolean) => void
 	isDrawing: () => boolean
 	setIsDrawing: (value: boolean) => void
 	currentPoints: () => Point[]
@@ -25,7 +23,6 @@ export interface DrawingState {
 }
 
 export const useDrawingState = (): DrawingState => {
-	const [isSelecting, setIsSelecting] = createSignal(false)
 	const [isDrawing, setIsDrawing] = createSignal(false)
 	const [currentPoints, setCurrentPoints] = createSignal<Point[]>([])
 	const [shapes, setShapes] = createSignal<Shape[]>([])
@@ -37,8 +34,6 @@ export const useDrawingState = (): DrawingState => {
 	const [hasDrawn, setHasDrawn] = createSignal(false)
 
 	return {
-		isSelecting,
-		setIsSelecting,
 		isDrawing,
 		setIsDrawing,
 		currentPoints,
