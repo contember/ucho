@@ -2,7 +2,7 @@ import { config } from '../config'
 import { Shape } from '../types'
 import { getRectFromPoints } from './geometry'
 
-export const renderShape = (shape: Shape, selectedShapeId: () => string | null, handleShapeClick: (id: string) => void, isMask?: boolean) => {
+export const renderShape = (shape: Shape, selectedShapeId: () => string | null, handleShapeClick: (id: string) => void | null, isMask?: boolean) => {
 	const isSelected = shape.id === selectedShapeId()
 	const tool = shape.type === 'path' ? config.pen : config.highlight
 	const strokeWidth = isSelected ? tool.strokeWidth.selected : tool.strokeWidth.normal
@@ -21,7 +21,7 @@ export const renderShape = (shape: Shape, selectedShapeId: () => string | null, 
 				stroke-width={isMask ? 0 : strokeWidth}
 				stroke-dasharray={isSelected ? '5,5' : 'none'}
 				onClick={isMask ? undefined : () => handleShapeClick(shape.id)}
-				style={isMask ? undefined : { cursor: 'pointer' }}
+				style={isMask ? undefined : handleShapeClick !== null ? { cursor: 'pointer' } : undefined}
 			/>
 		)
 	}
@@ -41,7 +41,7 @@ export const renderShape = (shape: Shape, selectedShapeId: () => string | null, 
 				stroke-linecap="round"
 				stroke-dasharray={isSelected ? '5,5' : 'none'}
 				onClick={() => handleShapeClick(shape.id)}
-				style={{ cursor: 'pointer', opacity: tool.opacity.normal }}
+				style={isMask ? undefined : handleShapeClick !== null ? { cursor: 'pointer', opacity: tool.opacity.normal } : undefined}
 			/>
 		)
 	}

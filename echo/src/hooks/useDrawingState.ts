@@ -16,6 +16,12 @@ export interface DrawingState {
 	setSelectedShapeId: (value: string | null) => void
 	selectedTool: () => DrawingTool
 	setSelectedTool: (value: DrawingTool) => void
+	showTooltip: () => boolean
+	setShowTooltip: (value: boolean) => void
+	mousePosition: () => Point
+	setMousePosition: (value: Point) => void
+	hasDrawn: () => boolean
+	setHasDrawn: (value: boolean) => void
 }
 
 export const useDrawingState = (): DrawingState => {
@@ -26,6 +32,9 @@ export const useDrawingState = (): DrawingState => {
 	const [currentPath, setCurrentPath] = createSignal<string>('')
 	const [selectedShapeId, setSelectedShapeId] = createSignal<string | null>(null)
 	const [selectedTool, setSelectedTool] = createSignal<DrawingTool>('highlight')
+	const [showTooltip, setShowTooltip] = createSignal(true)
+	const [mousePosition, setMousePosition] = createSignal<Point>({ x: 0, y: 0 })
+	const [hasDrawn, setHasDrawn] = createSignal(false)
 
 	return {
 		isSelecting,
@@ -42,5 +51,11 @@ export const useDrawingState = (): DrawingState => {
 		setSelectedShapeId,
 		selectedTool,
 		setSelectedTool,
+		showTooltip,
+		setShowTooltip,
+		mousePosition,
+		setMousePosition,
+		hasDrawn,
+		setHasDrawn,
 	}
 }

@@ -3,12 +3,13 @@ import { config } from '../config'
 import { useDrawing } from '../contexts/DrawingContext'
 import { useWidget } from '../contexts/WidgetContext'
 import { renderShape } from '../utils/shape'
+import { DrawingTooltip } from './DrawingTooltip'
 
 export const DrawingLayer: Component = () => {
 	const { primaryColor, isOpenStaggered } = useWidget()
 	const {
-		state: { currentPoints, shapes, currentPath, selectedShapeId, selectedTool, isDrawing },
-		handlers: { handleMouseMove, handleMouseUp, handleShapeClick },
+		state: { currentPoints, shapes, currentPath, selectedShapeId, selectedTool, isDrawing, setShowTooltip, setMousePosition, setHasDrawn, hasDrawn },
+		handlers: { handleMouseMove, handleMouseUp, handleShapeClick, handleMouseDown },
 	} = useDrawing()
 
 	const [viewportWidth, setViewportWidth] = createSignal(window.innerWidth)
@@ -49,44 +50,92 @@ export const DrawingLayer: Component = () => {
 		return path
 	}
 
+	const handleMouseMoveWithTooltip = (e: MouseEvent) => {
+		handleMouseMove(e)
+		setMousePosition({ x: e.clientX, y: e.clientY })
+	}
+
+	const handleMouseEnter = (e: MouseEvent) => {
+		if (e.target === e.currentTarget && !hasDrawn()) {
+			setShowTooltip(true)
+		}
+	}
+
+	const handleMouseLeave = (e: MouseEvent) => {
+		if (e.target === e.currentTarget) {
+			setShowTooltip(false)
+		}
+	}
+
+	const penCursor = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${primaryColor.replace('#', '%23')}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="8"/></svg>`
+
+	const getCursor = () => {
+		const tool = config[selectedTool()]
+		if (tool.id === 'pen') {
+			return `url('${penCursor}') 24 24, auto`
+		}
+		return tool.cursor
+	}
+
 	return (
-		<svg width="100%" height="100%" class="echo-drawing-layer" preserveAspectRatio="none">
-			<path
-				d={generateCutoutPath()}
-				fill="rgba(33, 43, 55, 1)"
-				fill-opacity="0.2"
-				fill-rule="evenodd"
-				style={{
-					transition: 'opacity 0.3s ease-in-out',
-					opacity: isOpenStaggered() ? 1 : 0,
+		<div
+			class="echo-drawing-layer-container"
+			style={{
+				cursor: getCursor(),
+			}}
+		>
+			<DrawingTooltip />
+			<svg
+				width="100%"
+				height="100%"
+				class="echo-drawing-layer"
+				preserveAspectRatio="none"
+				onMouseDown={e => {
+					handleMouseDown(e)
+					setShowTooltip(false)
+					setHasDrawn(true)
 				}}
-			/>
-
-			<For each={shapes()}>{shape => renderShape(shape, selectedShapeId, handleShapeClick, false)}</For>
-
-			{currentPoints().length === 2 &&
-				renderShape(
-					{
-						id: 'temp',
-						type: 'rectangle',
-						color: primaryColor,
-						points: currentPoints(),
-					},
-					selectedShapeId,
-					handleShapeClick,
-					false,
-				)}
-
-			{currentPath() && selectedTool() === 'pen' && (
+				onMouseMove={handleMouseMoveWithTooltip}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
+			>
 				<path
-					d={currentPath()}
-					fill="none"
-					stroke={primaryColor}
-					stroke-width={config.pen.strokeWidth.active}
-					stroke-linecap="round"
-					style={{ opacity: isDrawing() ? config.pen.opacity.active : config.pen.opacity.normal }}
+					d={generateCutoutPath()}
+					fill="rgba(33, 43, 55, 1)"
+					fill-opacity="0.2"
+					fill-rule="evenodd"
+					style={{
+						transition: 'opacity 0.3s ease-in-out',
+						opacity: isOpenStaggered() ? 1 : 0,
+					}}
 				/>
-			)}
-		</svg>
+
+				<For each={shapes()}>{shape => renderShape(shape, selectedShapeId, handleShapeClick, false)}</For>
+
+				{currentPoints().length === 2 &&
+					renderShape(
+						{
+							id: 'temp',
+							type: 'rectangle',
+							color: primaryColor,
+							points: currentPoints(),
+						},
+						selectedShapeId,
+						null,
+						false,
+					)}
+
+				{currentPath() && selectedTool() === 'pen' && (
+					<path
+						d={currentPath()}
+						fill="none"
+						stroke={primaryColor}
+						stroke-width={config.pen.strokeWidth.active}
+						stroke-linecap="round"
+						style={{ opacity: isDrawing() ? config.pen.opacity.active : config.pen.opacity.normal }}
+					/>
+				)}
+			</svg>
+		</div>
 	)
 }
