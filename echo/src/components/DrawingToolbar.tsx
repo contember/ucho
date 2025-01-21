@@ -1,7 +1,7 @@
 import { Component, For } from 'solid-js'
-import { config } from '../config'
 import { useDrawing } from '../contexts/DrawingContext'
 import { IconProps } from '../types'
+import { drawingConfig } from '../utils/drawingConfig'
 import { HighlightIcon, PenIcon } from './icons'
 
 const ToolIcon: Record<string, Component<IconProps>> = {
@@ -14,7 +14,7 @@ export const DrawingToolbar: Component = () => {
 		state: { selectedTool, setSelectedTool, isDrawing },
 	} = useDrawing()
 
-	const tools = Object.values(config)
+	const tools = Object.values(drawingConfig)
 
 	return (
 		<div class="echo-drawing-toolbar" data-hidden={isDrawing()}>

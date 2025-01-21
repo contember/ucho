@@ -1,5 +1,5 @@
-import { config } from '../config'
-import { Screenshot, Shape, ShapeType } from '../types'
+import { Screenshot, Shape } from '../types'
+import { drawingConfig } from '../utils/drawingConfig'
 import { DrawingState } from './useDrawingState'
 
 interface UseDrawingHandlersProps extends DrawingState {
@@ -70,7 +70,7 @@ export const useDrawingHandlers = ({
 		} else {
 			const lastPoint = currentPoints()[currentPoints().length - 1]
 			const distance = getDistance(lastPoint, point)
-			const hysteresis = config.pen.hysteresis ?? 0
+			const hysteresis = drawingConfig.pen.hysteresis ?? 0
 
 			// Always update the current path for smooth preview
 			setCurrentPath((prev: string) => `${prev} L ${point.x} ${point.y}`)

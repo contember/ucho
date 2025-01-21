@@ -1,4 +1,4 @@
-import { DrawingTool } from './types'
+import { DrawingTool } from '../types'
 
 interface ToolConfig {
 	id: DrawingTool
@@ -13,10 +13,10 @@ interface ToolConfig {
 		active: number
 		normal: number
 	}
-	hysteresis?: number // Minimum distance in pixels between points
+	hysteresis?: number
 }
 
-export const config: Record<DrawingTool, ToolConfig> = {
+export const drawingConfig: Record<DrawingTool, ToolConfig> = {
 	highlight: {
 		id: 'highlight',
 		label: 'Highlight',
@@ -41,9 +41,9 @@ export const config: Record<DrawingTool, ToolConfig> = {
 			selected: 7,
 		},
 		opacity: {
-			active: 0.8,
+			active: 0.6,
 			normal: 1,
 		},
-		hysteresis: 10, // Only record points that are at least 5px away from the last point
+		hysteresis: 10, // Only record points that are at least Xpx away from the last point
 	},
 }

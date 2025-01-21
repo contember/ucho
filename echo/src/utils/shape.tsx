@@ -1,5 +1,5 @@
-import { config } from '../config'
 import { Shape } from '../types'
+import { drawingConfig } from './drawingConfig'
 import { getRectFromPoints } from './geometry'
 
 export const renderShape = (
@@ -9,7 +9,7 @@ export const renderShape = (
 	isMask?: boolean,
 ) => {
 	const isSelected = shape.id === selectedShapeId()
-	const tool = shape.type === 'path' ? config.pen : config.highlight
+	const tool = shape.type === 'path' ? drawingConfig.pen : drawingConfig.highlight
 	const strokeWidth = isSelected ? tool.strokeWidth.selected : tool.strokeWidth.normal
 
 	if (shape.type === 'rectangle' && shape.points.length === 2) {

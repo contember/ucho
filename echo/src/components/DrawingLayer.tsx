@@ -1,7 +1,7 @@
 import { Component, For, createSignal, onCleanup, onMount } from 'solid-js'
-import { config } from '../config'
 import { useDrawing } from '../contexts/DrawingContext'
 import { useWidget } from '../contexts/WidgetContext'
+import { drawingConfig } from '../utils/drawingConfig'
 import { renderShape } from '../utils/shape'
 import { DrawingTooltip } from './DrawingTooltip'
 
@@ -70,7 +70,7 @@ export const DrawingLayer: Component = () => {
 	const penCursor = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${primaryColor.replace('#', '%23')}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="8"/></svg>`
 
 	const getCursor = () => {
-		const tool = config[selectedTool()]
+		const tool = drawingConfig[selectedTool()]
 		if (tool.id === 'pen') {
 			return `url('${penCursor}') 24 24, auto`
 		}
@@ -130,9 +130,9 @@ export const DrawingLayer: Component = () => {
 						d={currentPath()}
 						fill="none"
 						stroke={primaryColor}
-						stroke-width={config.pen.strokeWidth.active}
+						stroke-width={drawingConfig.pen.strokeWidth.active}
 						stroke-linecap="round"
-						style={{ opacity: isDrawing() ? config.pen.opacity.active : config.pen.opacity.normal }}
+						style={{ opacity: isDrawing() ? drawingConfig.pen.opacity.active : drawingConfig.pen.opacity.normal }}
 					/>
 				)}
 			</svg>
