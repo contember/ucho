@@ -32,16 +32,13 @@ export const DrawingLayer: Component = () => {
 	})
 
 	const generateCutoutPath = () => {
-		// Outer rectangle (clockwise)
 		let path = `M0 0 H${viewportWidth()} V${viewportHeight()} H0 Z`
 
-		// Add cutouts for current drawing (counter-clockwise)
 		if (currentPoints().length === 2) {
 			const [start, end] = currentPoints()
 			path += ` M${start.x} ${start.y} h${end.x - start.x} v${end.y - start.y} h${start.x - end.x} v${start.y - end.y}`
 		}
 
-		// Add cutouts for existing shapes (counter-clockwise)
 		for (const shape of shapes()) {
 			if (shape.type === 'rectangle') {
 				const [start, end] = shape.points
@@ -53,51 +50,43 @@ export const DrawingLayer: Component = () => {
 	}
 
 	return (
-		<>
-			{/* Highlight layer */}
-			<div style={{ position: 'absolute', inset: 0, 'pointer-events': 'none' }}>
-				<svg width="100%" height="100%" style={{ position: 'absolute', inset: 0 }} viewBox={`0 0 ${viewportWidth()} ${viewportHeight()}`}>
-					<path
-						d={generateCutoutPath()}
-						fill="rgba(33, 43, 55, 1)"
-						fill-opacity="0.2"
-						fill-rule="evenodd"
-						style={{
-							transition: 'opacity 0.3s ease-in-out',
-							opacity: isOpenStaggered() ? 1 : 0,
-						}}
-					/>
-				</svg>
-			</div>
+		<svg width="100%" height="100%" class="echo-drawing-layer" preserveAspectRatio="none">
+			<path
+				d={generateCutoutPath()}
+				fill="rgba(33, 43, 55, 1)"
+				fill-opacity="0.2"
+				fill-rule="evenodd"
+				style={{
+					transition: 'opacity 0.3s ease-in-out',
+					opacity: isOpenStaggered() ? 1 : 0,
+				}}
+			/>
 
-			{/* Drawing layer for actual shapes */}
-			<svg width="100%" height="100%" class="echo-drawing-layer" preserveAspectRatio="none">
-				<For each={shapes()}>{shape => renderShape(shape, selectedShapeId, handleShapeClick, false)}</For>
+			<For each={shapes()}>{shape => renderShape(shape, selectedShapeId, handleShapeClick, false)}</For>
 
-				{currentPoints().length === 2 &&
-					renderShape(
-						{
-							id: 'temp',
-							type: 'rectangle',
-							color: primaryColor,
-							points: currentPoints(),
-						},
-						selectedShapeId,
-						handleShapeClick,
-						false,
-					)}
-
-				{currentPath() && selectedTool() === 'pen' && (
-					<path
-						d={currentPath()}
-						fill="none"
-						stroke={primaryColor}
-						stroke-width={config.pen.strokeWidth.active}
-						stroke-linecap="round"
-						style={{ opacity: isDrawing() ? config.pen.opacity.active : config.pen.opacity.normal }}
-					/>
+			{currentPoints().length === 2 &&
+				renderShape(
+					{
+						id: 'temp',
+						type: 'rectangle',
+						color: primaryColor,
+						points: currentPoints(),
+					},
+					selectedShapeId,
+					handleShapeClick,
+					false,
 				)}
-			</svg>
-		</>
+
+			{currentPath() && selectedTool() === 'pen' && (
+				<path
+					d={currentPath()}
+					fill="none"
+					stroke={primaryColor}
+					stroke-width={config.pen.strokeWidth.active}
+					stroke-linecap="round"
+					style={{ opacity: isDrawing() ? config.pen.opacity.active : config.pen.opacity.normal }}
+				/>
+			)}
+		</svg>
 	)
 }

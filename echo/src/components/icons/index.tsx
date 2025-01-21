@@ -1,3 +1,6 @@
-export * from './ChevronRightIcon'
 export * from './CloseIcon'
 export * from './MessageIcon'
+export * from './ChevronRightIcon'
+export * from './ContemberIcon'
+export * from './HighlightIcon'
+export * from './PenIcon'
