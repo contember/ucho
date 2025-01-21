@@ -73,3 +73,7 @@ export interface IconProps {
 	style?: any
 	fill?: string
 }
+
+export interface StylesConfig {
+	primaryColor: string
+}

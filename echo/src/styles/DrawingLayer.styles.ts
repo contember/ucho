@@ -1,0 +1,26 @@
+import { StylesConfig } from '../types'
+
+export const drawingLayerStyles = (config: StylesConfig) => `
+    .echo-drawing-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        transform-origin: 0 0;
+    }
+
+    .echo-drawing-layer-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+    }
+
+    .echo-drawing-layer-container svg {
+        pointer-events: auto;
+    }
+`
