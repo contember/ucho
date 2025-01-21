@@ -2,13 +2,8 @@ import { Shape } from '../types'
 import { drawingConfig } from './drawingConfig'
 import { getRectFromPoints } from './geometry'
 
-export const renderShape = (
-	shape: Shape,
-	selectedShapeId: () => string | null,
-	handleShapeClick: ((id: string) => void) | null,
-	isMask?: boolean,
-) => {
-	const isSelected = shape.id === selectedShapeId()
+export const renderShape = (shape: Shape, selectedShapeId: string | null, handleShapeClick: ((id: string) => void) | null, isMask?: boolean) => {
+	const isSelected = shape.id === selectedShapeId
 	const tool = shape.type === 'path' ? drawingConfig.pen : drawingConfig.highlight
 	const strokeWidth = isSelected ? tool.strokeWidth.selected : tool.strokeWidth.normal
 

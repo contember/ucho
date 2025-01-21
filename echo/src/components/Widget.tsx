@@ -1,8 +1,6 @@
 import { Component } from 'solid-js'
 import { Portal } from 'solid-js/web'
-import { DrawingProvider } from '../contexts/DrawingContext'
-import { FeedbackProvider } from '../contexts/FeedbackContext'
-import { WidgetProvider } from '../contexts/WidgetContext'
+import { RootProvider } from '../contexts/RootContext'
 import { EchoWidgetProps } from '../types'
 import { WidgetContent } from './WidgetContent'
 
@@ -291,13 +289,9 @@ export const Widget: Component<EchoWidgetProps> = props => {
 	return (
 		<Portal useShadow mount={document.body}>
 			<style>{createStyles(props.primaryColor!)}</style>
-			<WidgetProvider primaryColor={props.primaryColor!} onSubmit={props.onSubmit}>
-				<FeedbackProvider>
-					<DrawingProvider>
-						<WidgetContent />
-					</DrawingProvider>
-				</FeedbackProvider>
-			</WidgetProvider>
+			<RootProvider primaryColor={props.primaryColor!} onSubmit={props.onSubmit}>
+				<WidgetContent />
+			</RootProvider>
 		</Portal>
 	)
 }

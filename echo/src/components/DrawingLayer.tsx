@@ -1,16 +1,12 @@
 import { Component, For, createSignal, onCleanup, onMount } from 'solid-js'
-import { useDrawing } from '../contexts/DrawingContext'
-import { useWidget } from '../contexts/WidgetContext'
+import { useRootStore } from '../contexts/RootContext'
+import { Shape, ShapeType } from '../types'
 import { drawingConfig } from '../utils/drawingConfig'
 import { renderShape } from '../utils/shape'
 import { DrawingTooltip } from './DrawingTooltip'
 
 export const DrawingLayer: Component = () => {
-	const { primaryColor, isOpenStaggered } = useWidget()
-	const {
-		state: { currentPoints, shapes, currentPath, selectedShapeId, selectedTool, isDrawing, setShowTooltip, setMousePosition, setHasDrawn, hasDrawn },
-		handlers: { handleMouseMove, handleMouseUp, handleShapeClick, handleMouseDown },
-	} = useDrawing()
+	const store = useRootStore()
 
 	const [viewportWidth, setViewportWidth] = createSignal(window.innerWidth)
 	const [viewportHeight, setViewportHeight] = createSignal(window.innerHeight)
@@ -18,6 +14,66 @@ export const DrawingLayer: Component = () => {
 	const handleResize = () => {
 		setViewportWidth(window.innerWidth)
 		setViewportHeight(window.innerHeight)
+	}
+
+	const handleMouseDown = (e: MouseEvent) => {
+		if (e.button === 2) {
+			// Right click
+			if (store.drawing.selectedShapeId) {
+				store.setDrawing({ shapes: store.drawing.shapes.filter(shape => shape.id !== store.drawing.selectedShapeId) })
+				store.setDrawing({ selectedShapeId: null })
+			}
+			return
+		}
+
+		const point = {
+			x: e.clientX,
+			y: e.clientY,
+		}
+
+		store.setDrawing({ isDrawing: true })
+		store.setDrawing({ currentPoints: [point] })
+
+		if (store.drawing.selectedTool === 'pen') {
+			store.setDrawing({ currentPath: `M${point.x},${point.y}` })
+		}
+	}
+
+	const handleMouseMove = (e: MouseEvent) => {
+		if (!store.drawing.isDrawing) return
+
+		const point = {
+			x: e.clientX,
+			y: e.clientY,
+		}
+
+		if (store.drawing.selectedTool === 'highlight') {
+			store.setDrawing({ currentPoints: [store.drawing.currentPoints[0], point] })
+		} else if (store.drawing.selectedTool === 'pen') {
+			store.setDrawing({ currentPath: `${store.drawing.currentPath} L${point.x},${point.y}` })
+			store.setDrawing({ currentPoints: [...store.drawing.currentPoints, point] })
+		}
+	}
+
+	const handleMouseUp = () => {
+		if (store.drawing.currentPoints.length < 2) {
+			store.setDrawing({ isDrawing: false })
+			store.setDrawing({ currentPoints: [] })
+			store.setDrawing({ currentPath: '' })
+			return
+		}
+
+		const newShape: Shape = {
+			id: Math.random().toString(36).substring(2),
+			type: store.drawing.selectedTool === 'highlight' ? ('rectangle' as ShapeType) : ('path' as ShapeType),
+			color: store.widget.primaryColor,
+			points: store.drawing.currentPoints,
+		}
+
+		store.setDrawing({ shapes: [...store.drawing.shapes, newShape] })
+		store.setDrawing({ isDrawing: false })
+		store.setDrawing({ currentPoints: [] })
+		store.setDrawing({ currentPath: '' })
 	}
 
 	onMount(() => {
@@ -35,12 +91,12 @@ export const DrawingLayer: Component = () => {
 	const generateCutoutPath = () => {
 		let path = `M0 0 H${viewportWidth()} V${viewportHeight()} H0 Z`
 
-		if (currentPoints().length === 2) {
-			const [start, end] = currentPoints()
+		if (store.drawing.currentPoints.length === 2) {
+			const [start, end] = store.drawing.currentPoints
 			path += ` M${start.x} ${start.y} h${end.x - start.x} v${end.y - start.y} h${start.x - end.x} v${start.y - end.y}`
 		}
 
-		for (const shape of shapes()) {
+		for (const shape of store.drawing.shapes) {
 			if (shape.type === 'rectangle') {
 				const [start, end] = shape.points
 				path += ` M${start.x} ${start.y} h${end.x - start.x} v${end.y - start.y} h${start.x - end.x} v${start.y - end.y}`
@@ -52,29 +108,33 @@ export const DrawingLayer: Component = () => {
 
 	const handleMouseMoveWithTooltip = (e: MouseEvent) => {
 		handleMouseMove(e)
-		setMousePosition({ x: e.clientX, y: e.clientY })
+		store.setDrawing({ mousePosition: { x: e.clientX, y: e.clientY } })
 	}
 
 	const handleMouseEnter = (e: MouseEvent) => {
-		if (e.target === e.currentTarget && !hasDrawn()) {
-			setShowTooltip(true)
+		if (e.target === e.currentTarget && !store.drawing.hasDrawn) {
+			store.setDrawing({ showTooltip: true })
 		}
 	}
 
 	const handleMouseLeave = (e: MouseEvent) => {
 		if (e.target === e.currentTarget) {
-			setShowTooltip(false)
+			store.setDrawing({ showTooltip: false })
 		}
 	}
 
-	const penCursor = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${primaryColor.replace('#', '%23')}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="8"/></svg>`
+	const penCursor = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${store.widget.primaryColor.replace('#', '%23')}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="8"/></svg>`
 
 	const getCursor = () => {
-		const tool = drawingConfig[selectedTool()]
+		const tool = drawingConfig[store.drawing.selectedTool]
 		if (tool.id === 'pen') {
 			return `url('${penCursor}') 24 24, auto`
 		}
 		return tool.cursor
+	}
+
+	const handleShapeClick = (shapeId: string) => {
+		store.setDrawing({ selectedShapeId: store.drawing.selectedShapeId === shapeId ? null : shapeId })
 	}
 
 	return (
@@ -92,8 +152,8 @@ export const DrawingLayer: Component = () => {
 				preserveAspectRatio="none"
 				onMouseDown={e => {
 					handleMouseDown(e)
-					setShowTooltip(false)
-					setHasDrawn(true)
+					store.setDrawing({ showTooltip: false })
+					store.setDrawing({ hasDrawn: true })
 				}}
 				onMouseMove={handleMouseMoveWithTooltip}
 				onMouseEnter={handleMouseEnter}
@@ -106,33 +166,33 @@ export const DrawingLayer: Component = () => {
 					fill-rule="evenodd"
 					style={{
 						transition: 'opacity 0.3s ease-in-out',
-						opacity: isOpenStaggered() ? 1 : 0,
+						opacity: store.widget.isOpen ? 1 : 0,
 					}}
 				/>
 
-				<For each={shapes()}>{shape => renderShape(shape, selectedShapeId, handleShapeClick, false)}</For>
+				<For each={store.drawing.shapes}>{shape => renderShape(shape, store.drawing.selectedShapeId, handleShapeClick, false)}</For>
 
-				{currentPoints().length === 2 &&
+				{store.drawing.currentPoints.length === 2 &&
 					renderShape(
 						{
 							id: 'temp',
-							type: 'rectangle',
-							color: primaryColor,
-							points: currentPoints(),
+							type: 'rectangle' as ShapeType,
+							color: store.widget.primaryColor,
+							points: store.drawing.currentPoints,
 						},
-						selectedShapeId,
+						store.drawing.selectedShapeId,
 						null,
 						false,
 					)}
 
-				{currentPath() && selectedTool() === 'pen' && (
+				{store.drawing.currentPath && store.drawing.selectedTool === 'pen' && (
 					<path
-						d={currentPath()}
+						d={store.drawing.currentPath}
 						fill="none"
-						stroke={primaryColor}
+						stroke={store.widget.primaryColor}
 						stroke-width={drawingConfig.pen.strokeWidth.active}
 						stroke-linecap="round"
-						style={{ opacity: isDrawing() ? drawingConfig.pen.opacity.active : drawingConfig.pen.opacity.normal }}
+						style={{ opacity: store.drawing.isDrawing ? drawingConfig.pen.opacity.active : drawingConfig.pen.opacity.normal }}
 					/>
 				)}
 			</svg>

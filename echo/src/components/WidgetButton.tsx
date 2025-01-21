@@ -1,30 +1,26 @@
 import { Component } from 'solid-js'
-import { useDrawing } from '../contexts/DrawingContext'
-import { useWidget } from '../contexts/WidgetContext'
+import { useRootStore } from '../contexts/RootContext'
 import { CloseIcon } from './icons'
 import { ContemberIcon } from './icons/ContemberIcon'
 
 export const WidgetButton: Component = () => {
-	const { isOpenStaggered, toggleWidget } = useWidget()
-	const {
-		state: { isDrawing },
-	} = useDrawing()
+	const store = useRootStore()
 
 	return (
-		<button onClick={toggleWidget} class="echo-widget-button" data-hidden={isDrawing()}>
+		<button onClick={() => store.setWidget({ isOpen: !store.widget.isOpen })} class="echo-widget-button" data-hidden={store.drawing.isDrawing}>
 			<ContemberIcon
 				stroke="white"
 				fill="#ffffff"
 				style={{
 					transition: 'opacity 0.2s ease',
-					opacity: isOpenStaggered() ? '0' : '1',
+					opacity: store.widget.isOpen ? '0' : '1',
 				}}
 			/>
 			<CloseIcon
 				stroke="white"
 				style={{
 					transition: 'opacity 0.2s ease',
-					opacity: isOpenStaggered() ? '1' : '0',
+					opacity: store.widget.isOpen ? '1' : '0',
 					position: 'absolute',
 				}}
 			/>

@@ -1,17 +1,17 @@
 import { Component, Show } from 'solid-js'
-import { useWidget } from '../contexts/WidgetContext'
+import { useRootStore } from '../contexts/RootContext'
 import { FeedbackForm } from './FeedbackForm'
 import { Overlay } from './Overlay'
 import { WidgetButton } from './WidgetButton'
 
 export const WidgetContent: Component = () => {
-	const { isOpen } = useWidget()
+	const store = useRootStore()
 
 	return (
 		<div class="echo-widget">
 			<WidgetButton />
 
-			<Show when={isOpen()}>
+			<Show when={store.widget.isOpen}>
 				<FeedbackForm />
 				<Overlay />
 			</Show>

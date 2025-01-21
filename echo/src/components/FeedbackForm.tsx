@@ -1,30 +1,24 @@
 import { Component } from 'solid-js'
-import { useDrawing } from '../contexts/DrawingContext'
-import { useFeedback } from '../contexts/FeedbackContext'
-import { useWidget } from '../contexts/WidgetContext'
+import { useRootStore } from '../contexts/RootContext'
 import { captureScreenshot } from '../utils/screenshot'
 import { ChevronRightIcon, MessageIcon } from './icons'
 
 export const FeedbackForm: Component = () => {
-	const { onSubmit, toggleWidget, isOpenStaggered } = useWidget()
-	const { comment, setComment, screenshot, setScreenshot, isMinimized, setIsMinimized } = useFeedback()
-	const {
-		state: { shapes, isDrawing },
-	} = useDrawing()
+	const store = useRootStore()
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 
-		if (shapes().length > 0) {
-			const newScreenshot = await captureScreenshot({ annotations: shapes() })
+		if (store.drawing.shapes.length > 0) {
+			const newScreenshot = await captureScreenshot({ annotations: store.drawing.shapes })
 			if (newScreenshot) {
-				setScreenshot(newScreenshot)
+				store.setFeedback({ screenshot: newScreenshot })
 			}
 		}
 
 		const data = {
-			comment: comment(),
-			screenshot: screenshot(),
+			comment: store.feedback.comment,
+			screenshot: store.feedback.screenshot,
 			metadata: {
 				url: window.location.href,
 				userAgent: navigator.userAgent,
@@ -37,29 +31,29 @@ export const FeedbackForm: Component = () => {
 				},
 			},
 		}
-		await onSubmit(data)
-		toggleWidget()
+		await store.widget.onSubmit(data)
+		store.setWidget({ isOpen: false })
 	}
 
 	return (
 		<>
 			<div
-				class={`echo-feedback-form ${isOpenStaggered() ? 'visible' : ''} ${isMinimized() ? 'minimized' : ''}`}
-				data-hidden={isDrawing()}
-				data-minimized={isMinimized()}
+				class={`echo-feedback-form ${store.widget.isOpen ? 'visible' : ''} ${store.feedback.isMinimized ? 'minimized' : ''}`}
+				data-hidden={store.drawing.isDrawing}
+				data-minimized={store.feedback.isMinimized}
 			>
 				<div class="echo-feedback-container">
 					<div class="echo-feedback-header">
 						<h3 class="echo-feedback-title">Send Feedback</h3>
-						<button onClick={() => setIsMinimized(!isMinimized())} class="echo-minimize-button">
+						<button onClick={() => store.setFeedback({ isMinimized: !store.feedback.isMinimized })} class="echo-minimize-button">
 							<ChevronRightIcon />
 						</button>
 					</div>
 
 					<form onSubmit={handleSubmit}>
 						<textarea
-							value={comment()}
-							onInput={e => setComment(e.currentTarget.value)}
+							value={store.feedback.comment}
+							onInput={e => store.setFeedback({ comment: e.currentTarget.value })}
 							placeholder="What's on your mind?"
 							class="echo-feedback-textarea"
 						/>
@@ -71,10 +65,10 @@ export const FeedbackForm: Component = () => {
 
 					<button
 						class="echo-maximize-feedback-button"
-						onClick={() => setIsMinimized(false)}
+						onClick={() => store.setFeedback({ isMinimized: false })}
 						style={{
-							opacity: isMinimized() ? '1' : '0',
-							'pointer-events': isMinimized() ? 'auto' : 'none',
+							opacity: store.feedback.isMinimized ? '1' : '0',
+							'pointer-events': store.feedback.isMinimized ? 'auto' : 'none',
 						}}
 					>
 						<MessageIcon stroke="white" />

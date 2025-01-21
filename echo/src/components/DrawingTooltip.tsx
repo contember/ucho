@@ -1,20 +1,16 @@
 import { Component, Show } from 'solid-js'
-import { useDrawing } from '../contexts/DrawingContext'
-import { useWidget } from '../contexts/WidgetContext'
+import { useRootStore } from '../contexts/RootContext'
 
 export const DrawingTooltip: Component = () => {
-	const { isOpenStaggered } = useWidget()
-	const {
-		state: { showTooltip, mousePosition },
-	} = useDrawing()
+	const store = useRootStore()
 
 	return (
-		<Show when={showTooltip() && isOpenStaggered()}>
+		<Show when={store.drawing.showTooltip && store.widget.isOpen}>
 			<div
 				class="echo-tooltip"
 				style={{
-					top: `${mousePosition().y + 20}px`,
-					left: `${mousePosition().x + 10}px`,
+					top: `${store.drawing.mousePosition.y + 20}px`,
+					left: `${store.drawing.mousePosition.x + 10}px`,
 					transform: 'none',
 				}}
 			>
