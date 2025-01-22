@@ -1,6 +1,6 @@
 import { ParentComponent, createContext, useContext } from 'solid-js'
-import { RootStore } from '../stores/RootStore'
-import { createRootStore } from '../stores/RootStore'
+import { RootStore } from '../stores/rootStore'
+import { createRootStore } from '../stores/rootStore'
 import { EchoWidgetProps } from '../types'
 
 const RootContext = createContext<RootStore>()

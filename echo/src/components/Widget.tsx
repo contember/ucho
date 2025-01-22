@@ -6,6 +6,7 @@ import { drawingToolbarStyles } from '../styles/DrawingToolbar.styles'
 import { feedbackFormStyles } from '../styles/FeedbackForm.styles'
 import { overlayStyles } from '../styles/Overlay.styles'
 import { tooltipStyles } from '../styles/Tooltip.styles'
+import { welcomeMessageStyles } from '../styles/WelcomeMessage.styles'
 import { widgetStyles } from '../styles/Widget.styles'
 import { widgetButtonStyles } from '../styles/WidgetButton.styles'
 import { EchoWidgetProps, StylesConfig } from '../types'
@@ -20,6 +21,7 @@ const createStyles = (config: StylesConfig) => {
 		${drawingToolbarStyles(config)}
 		${tooltipStyles(config)}
 		${overlayStyles(config)}
+		${welcomeMessageStyles(config)}
 	`
 }
 
