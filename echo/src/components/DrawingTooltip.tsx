@@ -1,11 +1,12 @@
 import { Component, Show } from 'solid-js'
 import { useRootStore } from '../contexts/RootContext'
+import { isMobileDevice } from '../utils/device'
 
 export const DrawingTooltip: Component = () => {
 	const store = useRootStore()
 
 	return (
-		<Show when={store.drawing.showTooltip && store.widget.isOpen}>
+		<Show when={store.drawing.showTooltip && store.widget.isOpen && !isMobileDevice()}>
 			<div
 				class="echo-tooltip"
 				style={{

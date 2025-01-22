@@ -45,9 +45,12 @@ export const DrawingLayer: Component = () => {
 	}
 
 	const handleMove = (e: MouseEvent | TouchEvent) => {
-		if (!store.drawing.isDrawing) return
-
 		const point = getPointFromEvent(e)
+
+		// Update mouse position for tooltip regardless of drawing state
+		store.setDrawing({ mousePosition: point })
+
+		if (!store.drawing.isDrawing) return
 
 		if (store.drawing.selectedTool === 'highlight') {
 			store.setDrawing({ currentPoints: [store.drawing.currentPoints[0], point] })
@@ -55,9 +58,6 @@ export const DrawingLayer: Component = () => {
 			store.setDrawing({ currentPath: `${store.drawing.currentPath} L${point.x},${point.y}` })
 			store.setDrawing({ currentPoints: [...store.drawing.currentPoints, point] })
 		}
-
-		// Update mouse position for tooltip
-		store.setDrawing({ mousePosition: point })
 	}
 
 	const handleEnd = () => {
