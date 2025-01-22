@@ -9,6 +9,8 @@ export const drawingLayerStyles = (config: StylesConfig) => `
         bottom: 0;
         pointer-events: none;
         transform-origin: 0 0;
+        user-select: none;
+        -webkit-user-select: none;
     }
 
     .echo-drawing-layer-container {
@@ -18,6 +20,8 @@ export const drawingLayerStyles = (config: StylesConfig) => `
         right: 0;
         bottom: 0;
         pointer-events: none;
+        user-select: none;
+        -webkit-user-select: none;
     }
 
     .echo-drawing-layer-container svg {

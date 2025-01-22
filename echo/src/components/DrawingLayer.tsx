@@ -27,6 +27,14 @@ export const DrawingLayer: Component = () => {
 	}
 
 	const handleStart = (e: MouseEvent | TouchEvent) => {
+		// Accept events only on the drawing layer
+		if (e instanceof MouseEvent) {
+			const target = e.target as HTMLElement
+			if (!target.classList.contains('echo-drawing-layer-mask')) {
+				return
+			}
+		}
+
 		if (e instanceof MouseEvent && e.button === 2) {
 			// Right click
 			if (store.drawing.selectedShapeId) {
@@ -182,6 +190,7 @@ export const DrawingLayer: Component = () => {
 				onTouchEnd={handleLeave}
 			>
 				<path
+					class="echo-drawing-layer-mask"
 					d={generateCutoutPath()}
 					fill="rgba(33, 43, 55, 1)"
 					fill-opacity="0.2"
