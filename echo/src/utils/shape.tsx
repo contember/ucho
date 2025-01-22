@@ -1,11 +1,10 @@
 import { Shape } from '../types'
-import { drawingConfig } from './drawingConfig'
-import { getRectFromPoints } from './geometry'
+import { drawingConfig } from '../utils/drawingConfig'
+import { getRectFromPoints } from '../utils/geometry'
 
-export const renderShape = (shape: Shape, selectedShapeId: string | null, handleShapeClick: ((id: string) => void) | null, isMask?: boolean) => {
-	const isSelected = shape.id === selectedShapeId
+export const renderShape = (shape: Shape, isMask?: boolean) => {
 	const tool = shape.type === 'path' ? drawingConfig.pen : drawingConfig.highlight
-	const strokeWidth = isSelected ? tool.strokeWidth.selected : tool.strokeWidth.normal
+	const strokeWidth = tool.strokeWidth.active
 
 	if (shape.type === 'rectangle' && shape.points.length === 2) {
 		const rect = getRectFromPoints(shape.points)
@@ -16,12 +15,10 @@ export const renderShape = (shape: Shape, selectedShapeId: string | null, handle
 				y={rect.y}
 				width={rect.width}
 				height={rect.height}
-				fill={isMask ? 'black' : 'none'}
+				fill={isMask ? 'black' : 'transparent'}
 				stroke={isMask ? 'none' : shape.color}
-				stroke-width={isMask ? 0 : strokeWidth}
-				stroke-dasharray={isSelected ? '5,5' : 'none'}
-				onClick={isMask ? undefined : () => handleShapeClick?.(shape.id)}
-				style={isMask ? undefined : handleShapeClick !== null ? { cursor: 'pointer' } : undefined}
+				stroke-width={strokeWidth}
+				vector-effect="non-scaling-stroke"
 			/>
 		)
 	}
@@ -38,10 +35,9 @@ export const renderShape = (shape: Shape, selectedShapeId: string | null, handle
 				fill="none"
 				stroke={shape.color}
 				stroke-width={strokeWidth}
+				vector-effect="non-scaling-stroke"
 				stroke-linecap="round"
-				stroke-dasharray={isSelected ? '5,5' : 'none'}
-				onClick={() => handleShapeClick?.(shape.id)}
-				style={isMask ? undefined : handleShapeClick !== null ? { cursor: 'pointer', opacity: tool.opacity.normal } : undefined}
+				style={isMask ? undefined : { opacity: tool.opacity.active }}
 			/>
 		)
 	}

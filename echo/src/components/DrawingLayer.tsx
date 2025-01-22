@@ -1,9 +1,11 @@
 import { Component, For, createSignal, onCleanup, onMount } from 'solid-js'
 import { useRootStore } from '../contexts/RootContext'
-import { Shape, ShapeType } from '../types'
+import { Shape as ShapeType } from '../types'
 import { drawingConfig } from '../utils/drawingConfig'
 import { renderShape } from '../utils/shape'
 import { DrawingTooltip } from './DrawingTooltip'
+import { Shape } from './Shape'
+import { ShapeActions } from './ShapeActions'
 
 export const DrawingLayer: Component = () => {
 	const store = useRootStore()
@@ -68,9 +70,9 @@ export const DrawingLayer: Component = () => {
 			return
 		}
 
-		const newShape: Shape = {
+		const newShape: ShapeType = {
 			id: Math.random().toString(36).substring(2),
-			type: store.drawing.selectedTool === 'highlight' ? ('rectangle' as ShapeType) : ('path' as ShapeType),
+			type: store.drawing.selectedTool === 'highlight' ? 'rectangle' : 'path',
 			color: store.widget.primaryColor,
 			points: store.drawing.currentPoints,
 		}
@@ -138,7 +140,9 @@ export const DrawingLayer: Component = () => {
 	}
 
 	const handleShapeClick = (shapeId: string) => {
-		store.setDrawing({ selectedShapeId: store.drawing.selectedShapeId === shapeId ? null : shapeId })
+		store.setDrawing({
+			selectedShapeId: store.drawing.selectedShapeId === shapeId ? null : shapeId,
+		})
 	}
 
 	return (
@@ -149,6 +153,8 @@ export const DrawingLayer: Component = () => {
 			}}
 		>
 			<DrawingTooltip />
+			<ShapeActions />
+
 			<svg
 				width="100%"
 				height="100%"
@@ -186,18 +192,18 @@ export const DrawingLayer: Component = () => {
 					}}
 				/>
 
-				<For each={store.drawing.shapes}>{shape => renderShape(shape, store.drawing.selectedShapeId, handleShapeClick, false)}</For>
+				<For each={store.drawing.shapes}>
+					{shape => <Shape shape={shape} selectedShapeId={store.drawing.selectedShapeId} onShapeClick={handleShapeClick} isMask={false} />}
+				</For>
 
 				{store.drawing.currentPoints.length === 2 &&
 					renderShape(
 						{
 							id: 'temp',
-							type: 'rectangle' as ShapeType,
+							type: 'rectangle',
 							color: store.widget.primaryColor,
 							points: store.drawing.currentPoints,
 						},
-						store.drawing.selectedShapeId,
-						null,
 						false,
 					)}
 
