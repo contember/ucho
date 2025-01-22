@@ -16,8 +16,16 @@ export const DrawingLayer: Component = () => {
 		setViewportHeight(window.innerHeight)
 	}
 
-	const handleMouseDown = (e: MouseEvent) => {
-		if (e.button === 2) {
+	const getPointFromEvent = (e: MouseEvent | TouchEvent) => {
+		const touch = e instanceof TouchEvent ? e.touches[0] : null
+		return {
+			x: touch ? touch.clientX : (e as MouseEvent).clientX,
+			y: touch ? touch.clientY : (e as MouseEvent).clientY,
+		}
+	}
+
+	const handleStart = (e: MouseEvent | TouchEvent) => {
+		if (e instanceof MouseEvent && e.button === 2) {
 			// Right click
 			if (store.drawing.selectedShapeId) {
 				store.setDrawing({ shapes: store.drawing.shapes.filter(shape => shape.id !== store.drawing.selectedShapeId) })
@@ -26,10 +34,7 @@ export const DrawingLayer: Component = () => {
 			return
 		}
 
-		const point = {
-			x: e.clientX,
-			y: e.clientY,
-		}
+		const point = getPointFromEvent(e)
 
 		store.setDrawing({ isDrawing: true })
 		store.setDrawing({ currentPoints: [point] })
@@ -39,13 +44,10 @@ export const DrawingLayer: Component = () => {
 		}
 	}
 
-	const handleMouseMove = (e: MouseEvent) => {
+	const handleMove = (e: MouseEvent | TouchEvent) => {
 		if (!store.drawing.isDrawing) return
 
-		const point = {
-			x: e.clientX,
-			y: e.clientY,
-		}
+		const point = getPointFromEvent(e)
 
 		if (store.drawing.selectedTool === 'highlight') {
 			store.setDrawing({ currentPoints: [store.drawing.currentPoints[0], point] })
@@ -53,9 +55,12 @@ export const DrawingLayer: Component = () => {
 			store.setDrawing({ currentPath: `${store.drawing.currentPath} L${point.x},${point.y}` })
 			store.setDrawing({ currentPoints: [...store.drawing.currentPoints, point] })
 		}
+
+		// Update mouse position for tooltip
+		store.setDrawing({ mousePosition: point })
 	}
 
-	const handleMouseUp = () => {
+	const handleEnd = () => {
 		if (store.drawing.currentPoints.length < 2) {
 			store.setDrawing({ isDrawing: false })
 			store.setDrawing({ currentPoints: [] })
@@ -77,14 +82,18 @@ export const DrawingLayer: Component = () => {
 	}
 
 	onMount(() => {
-		document.addEventListener('mousemove', handleMouseMove)
-		document.addEventListener('mouseup', handleMouseUp)
+		document.addEventListener('mousemove', handleMove)
+		document.addEventListener('mouseup', handleEnd)
+		document.addEventListener('touchmove', handleMove, { passive: false })
+		document.addEventListener('touchend', handleEnd)
 		window.addEventListener('resize', handleResize)
 	})
 
 	onCleanup(() => {
-		document.removeEventListener('mousemove', handleMouseMove)
-		document.removeEventListener('mouseup', handleMouseUp)
+		document.removeEventListener('mousemove', handleMove)
+		document.removeEventListener('mouseup', handleEnd)
+		document.removeEventListener('touchmove', handleMove)
+		document.removeEventListener('touchend', handleEnd)
 		window.removeEventListener('resize', handleResize)
 	})
 
@@ -106,18 +115,13 @@ export const DrawingLayer: Component = () => {
 		return path
 	}
 
-	const handleMouseMoveWithTooltip = (e: MouseEvent) => {
-		handleMouseMove(e)
-		store.setDrawing({ mousePosition: { x: e.clientX, y: e.clientY } })
-	}
-
-	const handleMouseEnter = (e: MouseEvent) => {
+	const handleEnter = (e: MouseEvent | TouchEvent) => {
 		if (e.target === e.currentTarget && !store.drawing.hasDrawn) {
 			store.setDrawing({ showTooltip: true })
 		}
 	}
 
-	const handleMouseLeave = (e: MouseEvent) => {
+	const handleLeave = (e: MouseEvent | TouchEvent) => {
 		if (e.target === e.currentTarget) {
 			store.setDrawing({ showTooltip: false })
 		}
@@ -151,13 +155,25 @@ export const DrawingLayer: Component = () => {
 				class="echo-drawing-layer"
 				preserveAspectRatio="none"
 				onMouseDown={e => {
-					handleMouseDown(e)
+					handleStart(e)
 					store.setDrawing({ showTooltip: false })
 					store.setDrawing({ hasDrawn: true })
 				}}
-				onMouseMove={handleMouseMoveWithTooltip}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
+				onTouchStart={e => {
+					e.preventDefault() // Prevent scrolling while drawing
+					handleStart(e)
+					handleEnter(e)
+					store.setDrawing({ showTooltip: false })
+					store.setDrawing({ hasDrawn: true })
+				}}
+				onMouseMove={handleMove}
+				onTouchMove={e => {
+					e.preventDefault() // Prevent scrolling while drawing
+					handleMove(e)
+				}}
+				onMouseEnter={handleEnter}
+				onMouseLeave={handleLeave}
+				onTouchEnd={handleLeave}
 			>
 				<path
 					d={generateCutoutPath()}
