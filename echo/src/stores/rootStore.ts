@@ -1,6 +1,5 @@
 import { createStore } from 'solid-js/store'
 import { DrawingTool, FeedbackData, Point, Screenshot, Shape } from '../types'
-import { getFromStorage, setToStorage } from '../utils/storage'
 
 export interface FeedbackState {
 	comment: string

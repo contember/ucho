@@ -21,17 +21,3 @@ export const useRootStore = () => {
 	}
 	return context
 }
-export const useFeedbackStore = () => {
-	const store = useRootStore()
-	return [store.feedback, store.setFeedback]
-}
-
-export const useDrawingStore = () => {
-	const store = useRootStore()
-	return [store.drawing, store.setDrawing]
-}
-
-export const useWidgetStore = () => {
-	const store = useRootStore()
-	return [store.widget, store.setWidget]
-}
