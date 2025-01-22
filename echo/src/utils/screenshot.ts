@@ -5,10 +5,6 @@ interface CaptureScreenshotConfig {
 	annotations: Shape[]
 }
 
-const DEFAULT_CONFIG = {
-	strokeWidth: 3,
-}
-
 const createCanvas = (width: number, height: number): HTMLCanvasElement => {
 	const canvas = document.createElement('canvas')
 	canvas.width = width
@@ -24,27 +20,27 @@ const shouldIgnoreElement = (element: Element): boolean => {
 	)
 }
 
-const drawAnnotations = (ctx: CanvasRenderingContext2D, annotations: Shape[]): void => {
-	for (const annotation of annotations) {
-		ctx.strokeStyle = annotation.color
-		ctx.lineWidth = DEFAULT_CONFIG.strokeWidth
-		ctx.lineCap = 'round'
+// const drawAnnotations = (ctx: CanvasRenderingContext2D, annotations: Shape[]): void => {
+// 	for (const annotation of annotations) {
+// 		ctx.strokeStyle = annotation.color
+// 		ctx.lineWidth = DEFAULT_CONFIG.strokeWidth
+// 		ctx.lineCap = 'round'
 
-		if (annotation.type === 'path' && annotation.points.length > 1) {
-			const pathData = `M ${annotation.points[0].x} ${annotation.points[0].y} ${annotation.points
-				.slice(1)
-				.map(point => `L ${point.x} ${point.y}`)
-				.join(' ')}`
-			const path = new Path2D(pathData)
-			ctx.stroke(path)
-		} else if (annotation.type === 'rectangle' && annotation.points.length === 2) {
-			const [startPoint, endPoint] = annotation.points
-			const width = Math.abs(endPoint.x - startPoint.x)
-			const height = Math.abs(endPoint.y - startPoint.y)
-			ctx.strokeRect(Math.min(startPoint.x, endPoint.x), Math.min(startPoint.y, endPoint.y), width, height)
-		}
-	}
-}
+// 		if (annotation.type === 'path' && annotation.points.length > 1) {
+// 			const pathData = `M ${annotation.points[0].x} ${annotation.points[0].y} ${annotation.points
+// 				.slice(1)
+// 				.map(point => `L ${point.x} ${point.y}`)
+// 				.join(' ')}`
+// 			const path = new Path2D(pathData)
+// 			ctx.stroke(path)
+// 		} else if (annotation.type === 'rectangle' && annotation.points.length === 2) {
+// 			const [startPoint, endPoint] = annotation.points
+// 			const width = Math.abs(endPoint.x - startPoint.x)
+// 			const height = Math.abs(endPoint.y - startPoint.y)
+// 			ctx.strokeRect(Math.min(startPoint.x, endPoint.x), Math.min(startPoint.y, endPoint.y), width, height)
+// 		}
+// 	}
+// }
 
 export const captureScreenshot = async ({ annotations }: CaptureScreenshotConfig): Promise<Screenshot | undefined> => {
 	try {
