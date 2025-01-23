@@ -11,16 +11,11 @@ export const FeedbackForm: Component = () => {
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 
-		if (store.drawing.shapes.length > 0) {
-			const newScreenshot = await captureScreenshot({ annotations: store.drawing.shapes })
-			if (newScreenshot) {
-				store.setFeedback({ screenshot: newScreenshot })
-			}
-		}
+		const screenshot = await captureScreenshot({ annotations: store.drawing.shapes })
 
 		const data = {
 			comment: store.feedback.comment,
-			screenshot: store.feedback.screenshot,
+			screenshot: screenshot,
 			metadata: {
 				url: window.location.href,
 				userAgent: navigator.userAgent,

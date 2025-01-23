@@ -1,17 +1,16 @@
 {
   "name": "contember-echo",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "type": "module",
   "main": "dist/echo-widget.umd.js",
   "module": "dist/echo-widget.es.js",
-  "types": "src/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src/index.d.ts"
+    "dist"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && tsc --emitDeclarationOnly",
     "preview": "vite preview",
     "watch": "vite build --watch"
   },
