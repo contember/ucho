@@ -1,11 +1,11 @@
 import { Component } from '@contember/interface'
-import { type FeedbackData, initEcho } from 'contember-echo'
+import { initEcho } from 'contember-echo'
 import { useEffect } from 'react'
 
 export const FeedbackWidget = Component(() => {
 	useEffect(() => {
 		const cleanup = initEcho({
-			onSubmit: async (data: FeedbackData) => {
+			onSubmit: async data => {
 				// TODO: Send feedback data to your backend
 				console.info('Feedback received:', data)
 
