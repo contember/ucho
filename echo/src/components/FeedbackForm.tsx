@@ -29,8 +29,13 @@ export const FeedbackForm: Component = () => {
 				},
 			},
 		}
-		await store.widget.onSubmit(data)
-		store.reset()
+
+		try {
+			await store.widget.onSubmit(data)
+			store.methods.postSubmit({ show: true, type: 'success', message: '' })
+		} catch (error) {
+			store.methods.postSubmit({ show: true, type: 'error', message: 'Failed to send feedback. Please try again.' })
+		}
 	}
 
 	const toggleWidget = () => {
@@ -80,22 +85,22 @@ export const FeedbackForm: Component = () => {
 							Send Feedback
 						</button>
 					</form>
-
-					{!isMobile && (
-						<button
-							class="echo-maximize-feedback-button"
-							onClick={() => store.setFeedback({ isMinimized: false })}
-							style={{
-								opacity: store.feedback.isMinimized ? '1' : '0',
-								'pointer-events': store.feedback.isMinimized ? 'auto' : 'none',
-							}}
-							title="Show Feedback Form"
-						>
-							<MessageIcon stroke="white" />
-						</button>
-					)}
 				</div>
 			</div>
+
+			{!isMobile && (
+				<button
+					class="echo-maximize-feedback-button"
+					onClick={() => store.setFeedback({ isMinimized: false })}
+					style={{
+						opacity: store.feedback.isMinimized ? '1' : '0',
+						'pointer-events': store.feedback.isMinimized ? 'auto' : 'none',
+					}}
+					title="Show Feedback Form"
+				>
+					<MessageIcon stroke="white" />
+				</button>
+			)}
 
 			{isMobile && (
 				<button

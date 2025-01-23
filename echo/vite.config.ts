@@ -1,9 +1,8 @@
 import { defineConfig } from 'vite'
-import vitePluginDts from 'vite-plugin-dts'
 import solid from 'vite-plugin-solid'
 
 export default defineConfig({
-	plugins: [solid(), vitePluginDts()],
+	plugins: [solid()],
 	build: {
 		lib: {
 			entry: 'src/index.tsx',

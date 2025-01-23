@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store'
-import { DrawingTool, FeedbackData, Point, Screenshot, Shape } from '../types'
+import { DrawingTool, FeedbackData, Notification, Point, Screenshot, Shape } from '../types'
 
 export interface FeedbackState {
 	comment: string
@@ -24,6 +24,7 @@ export interface WidgetState {
 	isOpen: boolean
 	primaryColor: string
 	onSubmit: (data: FeedbackData) => void | Promise<void>
+	notification: Notification
 }
 
 export interface RootStore {
@@ -33,7 +34,10 @@ export interface RootStore {
 	setDrawing: (state: Partial<DrawingState>) => void
 	widget: WidgetState
 	setWidget: (state: Partial<WidgetState>) => void
-	reset: () => void
+	methods: {
+		reset: () => void
+		postSubmit: (result: Notification) => void
+	}
 }
 
 export const createRootStore = (props: {
@@ -63,6 +67,11 @@ export const createRootStore = (props: {
 		isOpen: false,
 		primaryColor: props.primaryColor,
 		onSubmit: props.onSubmit,
+		notification: {
+			show: false,
+			type: null,
+			message: null,
+		},
 	})
 
 	const reset = () => {
@@ -91,6 +100,17 @@ export const createRootStore = (props: {
 		})
 	}
 
+	const postSubmit = (result: Notification) => {
+		if (result.type === 'success') reset()
+		else if (result.type === 'error') setWidget({ isOpen: false })
+
+		setWidget({ notification: { show: true, type: result.type, message: result.message } })
+
+		setTimeout(() => {
+			setWidget({ notification: { show: false, type: result.type, message: result.message } })
+		}, 5000)
+	}
+
 	return {
 		feedback,
 		setFeedback,
@@ -98,6 +118,9 @@ export const createRootStore = (props: {
 		setDrawing,
 		widget,
 		setWidget,
-		reset,
+		methods: {
+			reset,
+			postSubmit,
+		},
 	}
 }

@@ -77,3 +77,9 @@ export interface IconProps {
 export interface StylesConfig {
 	primaryColor: string
 }
+
+export interface Notification {
+	show: boolean
+	type: 'success' | 'error' | null
+	message: string | null
+}

@@ -6,5 +6,13 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig(() => {
 	return {
 		plugins: [tsconfigPaths(), react(), contember()],
+		optimizeDeps: {
+			force: true,
+		},
+		server: {
+			watch: {
+				ignored: ['!**/node_modules/contember-echo/**'],
+			},
+		},
 	}
 })

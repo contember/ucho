@@ -1,6 +1,7 @@
 import { Component, Show } from 'solid-js'
 import { useRootStore } from '../contexts/RootContext'
 import { FeedbackForm } from './FeedbackForm'
+import { Notification } from './Notification'
 import { Overlay } from './Overlay'
 import { WelcomeMessage } from './WelcomeMessage'
 import { WidgetButton } from './WidgetButton'
@@ -12,6 +13,7 @@ export const WidgetContent: Component = () => {
 		<div class="echo-widget">
 			<WidgetButton />
 			<WelcomeMessage />
+			<Notification />
 
 			<Show when={store.widget.isOpen}>
 				<FeedbackForm />
