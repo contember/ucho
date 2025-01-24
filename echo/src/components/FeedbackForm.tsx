@@ -34,7 +34,7 @@ export const FeedbackForm: Component = () => {
 			await store.widget.onSubmit(data)
 			store.methods.postSubmit({ show: true, type: 'success', message: '' })
 		} catch (error) {
-			store.methods.postSubmit({ show: true, type: 'error', message: 'Failed to send feedback. Please try again.' })
+			store.methods.postSubmit({ show: true, type: 'error', message: store.text.notification.errorMessage })
 		}
 	}
 
@@ -51,16 +51,16 @@ export const FeedbackForm: Component = () => {
 			>
 				<div class="echo-feedback-container">
 					<div class="echo-feedback-header">
-						<h3 class="echo-feedback-title">Send Feedback</h3>
+						<h3 class="echo-feedback-title">{store.text.feedbackForm.title}</h3>
 						<div class="echo-header-buttons">
 							<button
 								onClick={() => store.setFeedback({ isMinimized: !store.feedback.isMinimized })}
 								class="echo-minimize-button"
-								title={store.feedback.isMinimized ? 'Expand' : 'Minimize'}
+								title={store.feedback.isMinimized ? store.text.feedbackForm.expandTitle : store.text.feedbackForm.minimizeTitle}
 							>
 								<ChevronRightIcon />
 							</button>
-							<button onClick={toggleWidget} class="echo-minimize-button" title="Close">
+							<button onClick={toggleWidget} class="echo-minimize-button" title={store.text.feedbackForm.closeTitle}>
 								×
 							</button>
 						</div>
@@ -70,19 +70,19 @@ export const FeedbackForm: Component = () => {
 						<textarea
 							value={store.feedback.comment}
 							onInput={e => store.setFeedback({ comment: e.currentTarget.value })}
-							placeholder="What's on your mind? We'd love to hear your feedback..."
+							placeholder={store.text.feedbackForm.placeholder}
 							class="echo-feedback-textarea"
 							required
 						/>
 
 						<Show when={store.feedback.screenshot}>
 							<div class="echo-screenshot-preview">
-								<img src={store.feedback.screenshot} alt="Screenshot Preview" class="echo-screenshot-image" />
+								<img src={store.feedback.screenshot} alt={store.text.feedbackForm.screenshotAlt} class="echo-screenshot-image" />
 							</div>
 						</Show>
 
 						<button type="submit" class="echo-submit-button">
-							Send Feedback
+							{store.text.feedbackForm.submitButton}
 						</button>
 					</form>
 				</div>
@@ -96,7 +96,7 @@ export const FeedbackForm: Component = () => {
 						opacity: store.feedback.isMinimized ? '1' : '0',
 						'pointer-events': store.feedback.isMinimized ? 'auto' : 'none',
 					}}
-					title="Show Feedback Form"
+					title={store.text.feedbackForm.showFormTitle}
 				>
 					<MessageIcon stroke="white" />
 				</button>
@@ -110,7 +110,7 @@ export const FeedbackForm: Component = () => {
 						opacity: store.feedback.isMinimized && !store.drawing.isDrawing ? '1' : '0',
 						'pointer-events': store.feedback.isMinimized ? 'auto' : 'none',
 					}}
-					title="Show Feedback Form"
+					title={store.text.feedbackForm.showFormTitle}
 				>
 					<MessageIcon stroke="white" />
 				</button>

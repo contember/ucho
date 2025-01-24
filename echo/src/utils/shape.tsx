@@ -1,5 +1,5 @@
+import { drawingConfig } from '../config/drawingConfig'
 import { Shape } from '../types'
-import { drawingConfig } from '../utils/drawingConfig'
 import { getRectFromPoints } from '../utils/geometry'
 
 export const renderShape = (shape: Shape, isMask?: boolean) => {

@@ -1,9 +1,11 @@
 import { Component } from 'solid-js'
+import { useRootStore } from '../contexts/RootContext'
 import { welcomeMessageStore } from '../stores/welcomeMessageStore'
 import { getFromStorage, setToStorage } from '../utils/storage'
 import { CloseIcon } from './icons'
 
 export const WelcomeMessage: Component = () => {
+	const store = useRootStore()
 	const hasSeenMessage = getFromStorage('welcome_message_shown', false)
 
 	const hideMessage = () => {
@@ -24,10 +26,10 @@ export const WelcomeMessage: Component = () => {
 				right: '20px',
 			}}
 		>
-			<button class="echo-welcome-message-close" onClick={hideMessage} aria-label="Close welcome message">
+			<button class="echo-welcome-message-close" onClick={hideMessage} aria-label={store.text.welcomeMessage.closeAriaLabel}>
 				<CloseIcon size={16} stroke="currentColor" />
 			</button>
-			Click here to leave feedback
+			{store.text.welcomeMessage.text}
 		</div>
 	)
 }

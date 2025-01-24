@@ -14,9 +14,9 @@ export const Notification: Component = () => {
 	const getTitle = () => {
 		switch (store.widget.notification.type) {
 			case 'success':
-				return 'Thank you for your feedback!'
+				return store.text.notification.successTitle
 			case 'error':
-				return 'Something went wrong.'
+				return store.text.notification.errorTitle
 			default:
 				return ''
 		}
@@ -29,7 +29,7 @@ export const Notification: Component = () => {
 			data-empty={!store.widget.notification.type}
 			data-hidden={!store.widget.notification.show}
 		>
-			<button class="echo-notification-hide" onClick={hideNotification} title="Hide notification">
+			<button class="echo-notification-hide" onClick={hideNotification} title={store.text.notification.hideTitle}>
 				<CloseIcon size={16} />
 			</button>
 			<div class="echo-notification-icon">

@@ -47,7 +47,7 @@ export function initEcho(options: EchoOptions): () => void {
 	try {
 		validateOptions(options)
 
-		const { position = 'bottom-right', primaryColor = '#805AD5', onSubmit } = options
+		const { position = 'bottom-right', primaryColor = '#805AD5', onSubmit, textConfig } = options
 		const mountPoint = createMountPoint(position)
 
 		queueMicrotask(() => {
@@ -67,6 +67,7 @@ export function initEcho(options: EchoOptions): () => void {
 							throw error
 						}
 					}}
+					textConfig={textConfig}
 				/>
 			),
 			mountPoint,

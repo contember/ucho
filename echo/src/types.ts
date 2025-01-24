@@ -22,10 +22,37 @@ export interface FeedbackData {
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
+export interface TextConfig {
+	welcomeMessage: {
+		text: string
+		closeAriaLabel: string
+	}
+	feedbackForm: {
+		title: string
+		placeholder: string
+		screenshotAlt: string
+		submitButton: string
+		minimizeTitle: string
+		expandTitle: string
+		closeTitle: string
+		showFormTitle: string
+	}
+	notification: {
+		successTitle: string
+		errorTitle: string
+		errorMessage: string
+		hideTitle: string
+	}
+	drawingTooltip: {
+		text: string
+	}
+}
+
 export interface EchoWidgetProps {
-	onSubmit: (data: FeedbackData) => void | Promise<void>
+	onSubmit: (data: FeedbackData) => Promise<void>
 	position?: Position
 	primaryColor?: `#${string}`
+	textConfig?: Partial<TextConfig>
 }
 
 export type EchoOptions = EchoWidgetProps

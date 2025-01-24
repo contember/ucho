@@ -15,7 +15,7 @@ export const DrawingTooltip: Component = () => {
 					transform: 'none',
 				}}
 			>
-				Click & drag to draw
+				{store.text.drawingTooltip.text}
 			</div>
 		</Show>
 	)

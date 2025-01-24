@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store'
-import { DrawingTool, FeedbackData, Notification, Point, Screenshot, Shape } from '../types'
+import { DrawingTool, FeedbackData, Notification, Point, Screenshot, Shape, TextConfig } from '../types'
 
 export interface FeedbackState {
 	comment: string
@@ -27,6 +27,12 @@ export interface WidgetState {
 	notification: Notification
 }
 
+interface RootStoreConfig {
+	primaryColor: string
+	onSubmit: (data: FeedbackData) => Promise<void>
+	text: TextConfig
+}
+
 export interface RootStore {
 	feedback: FeedbackState
 	setFeedback: (state: Partial<FeedbackState>) => void
@@ -34,16 +40,14 @@ export interface RootStore {
 	setDrawing: (state: Partial<DrawingState>) => void
 	widget: WidgetState
 	setWidget: (state: Partial<WidgetState>) => void
+	text: TextConfig
 	methods: {
 		reset: () => void
 		postSubmit: (result: Notification) => void
 	}
 }
 
-export const createRootStore = (props: {
-	primaryColor: string
-	onSubmit: (data: FeedbackData) => void | Promise<void>
-}): RootStore => {
+export const createRootStore = (config: RootStoreConfig): RootStore => {
 	const [feedback, setFeedback] = createStore<FeedbackState>({
 		comment: '',
 		screenshot: undefined,
@@ -65,14 +69,16 @@ export const createRootStore = (props: {
 
 	const [widget, setWidget] = createStore<WidgetState>({
 		isOpen: false,
-		primaryColor: props.primaryColor,
-		onSubmit: props.onSubmit,
+		primaryColor: config.primaryColor,
+		onSubmit: config.onSubmit,
 		notification: {
 			show: false,
 			type: null,
 			message: null,
 		},
 	})
+
+	const [text] = createStore<TextConfig>(config.text)
 
 	const reset = () => {
 		setFeedback({
@@ -118,6 +124,7 @@ export const createRootStore = (props: {
 		setDrawing,
 		widget,
 		setWidget,
+		text,
 		methods: {
 			reset,
 			postSubmit,

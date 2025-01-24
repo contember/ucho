@@ -1,6 +1,6 @@
 import { Component } from 'solid-js'
+import { drawingConfig } from '../config/drawingConfig'
 import { Shape as ShapeType } from '../types'
-import { drawingConfig } from '../utils/drawingConfig'
 import { getRectFromPoints } from '../utils/geometry'
 
 interface ShapeProps {

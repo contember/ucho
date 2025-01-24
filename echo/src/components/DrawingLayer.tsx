@@ -1,7 +1,7 @@
 import { Component, For, createSignal, onCleanup, onMount } from 'solid-js'
+import { drawingConfig } from '../config/drawingConfig'
 import { useRootStore } from '../contexts/RootContext'
 import { Shape as ShapeType } from '../types'
-import { drawingConfig } from '../utils/drawingConfig'
 import { renderShape } from '../utils/shape'
 import { DrawingTooltip } from './DrawingTooltip'
 import { Shape } from './Shape'

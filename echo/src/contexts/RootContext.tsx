@@ -1,23 +1,31 @@
-import { ParentComponent, createContext, useContext } from 'solid-js'
-import { RootStore } from '../stores/rootStore'
-import { createRootStore } from '../stores/rootStore'
-import { EchoWidgetProps } from '../types'
+import { Component, createContext, useContext } from 'solid-js'
+import { defaultText } from '../config/defaultText'
+import { RootStore, createRootStore } from '../stores/rootStore'
+import { FeedbackData, TextConfig } from '../types'
+
+interface RootProviderProps {
+	primaryColor: string
+	onSubmit: (data: FeedbackData) => Promise<void>
+	textConfig?: Partial<TextConfig>
+	children: any
+}
 
 const RootContext = createContext<RootStore>()
 
-export const RootProvider: ParentComponent<EchoWidgetProps> = props => {
+export const RootProvider: Component<RootProviderProps> = props => {
 	const store = createRootStore({
-		primaryColor: props.primaryColor!,
+		primaryColor: props.primaryColor,
 		onSubmit: props.onSubmit,
+		text: { ...defaultText, ...props.textConfig },
 	})
 
 	return <RootContext.Provider value={store}>{props.children}</RootContext.Provider>
 }
 
 export const useRootStore = () => {
-	const context = useContext(RootContext)
-	if (!context) {
-		throw new Error('useStore must be used within WidgetProvider')
+	const store = useContext(RootContext)
+	if (!store) {
+		throw new Error('useRootStore must be used within RootProvider')
 	}
-	return context
+	return store
 }

@@ -35,7 +35,7 @@ export const Widget: Component<EchoWidgetProps> = props => {
 	return (
 		<Portal useShadow mount={document.body}>
 			<style>{createStyles({ primaryColor: props.primaryColor! })}</style>
-			<RootProvider primaryColor={props.primaryColor!} onSubmit={props.onSubmit}>
+			<RootProvider primaryColor={props.primaryColor!} onSubmit={props.onSubmit} textConfig={props.textConfig}>
 				<WidgetContent />
 			</RootProvider>
 		</Portal>
