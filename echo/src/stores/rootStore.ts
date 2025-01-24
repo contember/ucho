@@ -18,6 +18,7 @@ export interface DrawingState {
 	showTooltip: boolean
 	mousePosition: Point
 	hasDrawn: boolean
+	selectedColor: string
 }
 
 export interface WidgetState {
@@ -65,6 +66,7 @@ export const createRootStore = (config: RootStoreConfig): RootStore => {
 		showTooltip: true,
 		mousePosition: { x: 0, y: 0 },
 		hasDrawn: false,
+		selectedColor: config.primaryColor,
 	})
 
 	const [widget, setWidget] = createStore<WidgetState>({
@@ -98,6 +100,7 @@ export const createRootStore = (config: RootStoreConfig): RootStore => {
 			showTooltip: true,
 			mousePosition: { x: 0, y: 0 },
 			hasDrawn: false,
+			selectedColor: config.primaryColor,
 		})
 
 		setWidget({

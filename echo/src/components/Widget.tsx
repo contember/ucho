@@ -2,6 +2,7 @@ import { Component } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { RootProvider } from '../contexts/RootContext'
 import {
+	colorSelectorStyles,
 	drawingLayerStyles,
 	drawingToolbarStyles,
 	feedbackFormStyles,
@@ -28,6 +29,7 @@ const createStyles = (config: StylesConfig) => {
 		${welcomeMessageStyles(config)}
 		${shapeActionsStyles(config)}
 		${notificationStyles(config)}
+		${colorSelectorStyles(config)}
 	`
 }
 

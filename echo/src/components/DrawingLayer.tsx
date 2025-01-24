@@ -81,7 +81,7 @@ export const DrawingLayer: Component = () => {
 		const newShape: ShapeType = {
 			id: Math.random().toString(36).substring(2),
 			type: store.drawing.selectedTool === 'highlight' ? 'rectangle' : 'path',
-			color: store.widget.primaryColor,
+			color: store.drawing.selectedColor,
 			points: store.drawing.currentPoints,
 		}
 
@@ -137,7 +137,7 @@ export const DrawingLayer: Component = () => {
 		}
 	}
 
-	const penCursor = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${store.widget.primaryColor.replace('#', '%23')}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="8"/></svg>`
+	const penCursor = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${store.drawing.selectedColor.replace('#', '%23')}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="8"/></svg>`
 
 	const getCursor = () => {
 		const tool = drawingConfig[store.drawing.selectedTool]
@@ -210,7 +210,7 @@ export const DrawingLayer: Component = () => {
 						{
 							id: 'temp',
 							type: 'rectangle',
-							color: store.widget.primaryColor,
+							color: store.drawing.selectedColor,
 							points: store.drawing.currentPoints,
 						},
 						false,
@@ -220,7 +220,7 @@ export const DrawingLayer: Component = () => {
 					<path
 						d={store.drawing.currentPath}
 						fill="none"
-						stroke={store.widget.primaryColor}
+						stroke={store.drawing.selectedColor}
 						stroke-width={drawingConfig.pen.strokeWidth.active}
 						stroke-linecap="round"
 						style={{ opacity: store.drawing.isDrawing ? drawingConfig.pen.opacity.active : drawingConfig.pen.opacity.normal }}
