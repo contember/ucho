@@ -1,6 +1,8 @@
 import { StylesConfig } from '../types'
 
-export const welcomeMessageStyles = (config: StylesConfig) => `
+export const welcomeMessageStyles = (config: StylesConfig) => {
+	const hoverColor = `color-mix(in srgb, ${config.primaryColor}, black 10%)`
+	return `
     .echo-welcome-message {
         position: fixed;
         background: linear-gradient(135deg, ${config.primaryColor}, color-mix(in srgb, ${config.primaryColor}, white 30%));
@@ -21,7 +23,20 @@ export const welcomeMessageStyles = (config: StylesConfig) => `
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
-        cursor: default;
+        cursor: pointer;
+        border: none;
+        text-align: left;
+    }
+
+    .echo-welcome-message:hover {
+        transform: translateY(-2px) scale(1.02);
+        background: linear-gradient(135deg, ${hoverColor}, color-mix(in srgb, ${hoverColor}, white 30%));
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15),
+                   0 12px 40px ${config.primaryColor}50;
+    }
+
+    .echo-welcome-message:active {
+        transform: translateY(0) scale(0.98);
     }
 
     .echo-welcome-message-close {
@@ -110,3 +125,4 @@ export const welcomeMessageStyles = (config: StylesConfig) => `
         }
     }
 `
+}

@@ -31,6 +31,7 @@ export const FeedbackForm: Component = () => {
 		}
 
 		try {
+			store.setWidget({ isOpen: false })
 			await store.widget.onSubmit(data)
 			store.methods.postSubmit({ show: true, type: 'success', message: '' })
 		} catch (error) {

@@ -39,7 +39,7 @@ initEcho({
     drawingTooltip: {
       text: 'Click & drag to draw',
     },
-  }
+  },
   
   // Required: callback function when feedback is submitted
   onSubmit: async (data) => {

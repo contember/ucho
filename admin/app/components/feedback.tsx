@@ -7,8 +7,8 @@ export const FeedbackWidget = Component(() => {
 		const cleanup = initEcho({
 			onSubmit: async data => {
 				// TODO: Send feedback data to your backend
+				await new Promise(resolve => setTimeout(resolve, 2000))
 				console.info('Feedback received:', data)
-				// throw new Error('Not implemented')
 			},
 		})
 
