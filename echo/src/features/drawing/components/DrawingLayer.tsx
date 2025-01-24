@@ -72,7 +72,14 @@ export const DrawingLayer: Component = () => {
 			>
 				<path
 					class="echo-drawing-layer-mask"
-					d={generateCutoutPath(viewport, drawing.state.currentPoints, drawing.state.shapes)}
+					d={generateCutoutPath(
+						{
+							width: viewport.width(),
+							height: viewport.height(),
+						},
+						drawing.state.currentPoints,
+						drawing.state.shapes,
+					)}
 					fill="rgba(33, 43, 55, 1)"
 					fill-opacity="0.2"
 					fill-rule="evenodd"

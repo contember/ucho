@@ -11,6 +11,7 @@ export const overlayStyles = (config: StylesConfig) => {
             right: 0;
             bottom: 0;
             border: 3px solid ${primaryColor};
+            transition: opacity 0.3s ease-in-out;
         }
     `
 }

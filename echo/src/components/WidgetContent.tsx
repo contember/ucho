@@ -1,4 +1,4 @@
-import { Component, Show } from 'solid-js'
+import { Component } from 'solid-js'
 import { FeedbackForm } from '~/components/FeedbackForm'
 import { Notification } from '~/components/Notification'
 import { Overlay } from '~/components/Overlay'
@@ -15,10 +15,10 @@ export const WidgetContent: Component = () => {
 			<WelcomeMessage />
 			<Notification />
 
-			<Show when={store.widget.isOpen}>
+			<div class="echo-widget-content" data-hidden={!store.widget.isOpen}>
 				<FeedbackForm />
 				<Overlay />
-			</Show>
+			</div>
 		</div>
 	)
 }

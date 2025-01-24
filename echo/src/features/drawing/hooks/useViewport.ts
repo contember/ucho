@@ -1,7 +1,7 @@
 import { createSignal, onCleanup, onMount } from 'solid-js'
 import { ViewportState } from '../types'
 
-export const useViewport = (): ViewportState => {
+export const useViewport = () => {
 	const [width, setWidth] = createSignal(window.innerWidth)
 	const [height, setHeight] = createSignal(window.innerHeight)
 
@@ -19,7 +19,7 @@ export const useViewport = (): ViewportState => {
 	})
 
 	return {
-		width: width(),
-		height: height(),
+		width,
+		height,
 	}
 }
