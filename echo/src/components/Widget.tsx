@@ -19,6 +19,7 @@ import { WidgetContent } from './WidgetContent'
 
 const createStyles = (config: StylesConfig) => {
 	return `
+		/* Echo Components */
 		${widgetStyles(config)}
 		${widgetButtonStyles(config)}
 		${feedbackFormStyles(config)}
