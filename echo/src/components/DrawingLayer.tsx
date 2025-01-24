@@ -1,7 +1,7 @@
 import { Component, For, createSignal, onCleanup, onMount } from 'solid-js'
 import { drawingConfig } from '../config/drawingConfig'
 import { useRootStore } from '../contexts/RootContext'
-import { Shape as ShapeType } from '../types'
+import { Point, Shape as ShapeType } from '../types'
 import { renderShape } from '../utils/shape'
 import { DrawingTooltip } from './DrawingTooltip'
 import { Shape } from './Shape'
@@ -9,6 +9,11 @@ import { ShapeActions } from './ShapeActions'
 
 export const DrawingLayer: Component = () => {
 	const store = useRootStore()
+	const [isDragging, setIsDragging] = createSignal(false)
+	const [dragStartPos, setDragStartPos] = createSignal<Point | null>(null)
+	const [initialClickPos, setInitialClickPos] = createSignal<Point | null>(null)
+	const [dragOffset, setDragOffset] = createSignal<Point | null>(null)
+	const MOVEMENT_THRESHOLD = 5 // pixels
 
 	const [viewportWidth, setViewportWidth] = createSignal(window.innerWidth)
 	const [viewportHeight, setViewportHeight] = createSignal(window.innerHeight)
@@ -26,12 +31,38 @@ export const DrawingLayer: Component = () => {
 		}
 	}
 
+	const getDistance = (p1: Point, p2: Point) => {
+		const dx = p2.x - p1.x
+		const dy = p2.y - p1.y
+		return Math.sqrt(dx * dx + dy * dy)
+	}
+
 	const handleStart = (e: MouseEvent | TouchEvent) => {
 		// Accept events only on the drawing layer
 		if (e instanceof MouseEvent) {
 			const target = e.target as HTMLElement
-			if (!target.classList.contains('echo-drawing-layer-mask')) {
+			if (!target.classList.contains('echo-drawing-layer-mask') && !target.classList.contains('echo-shape')) {
 				return
+			}
+		}
+
+		const point = getPointFromEvent(e)
+
+		// Check if clicking on a shape
+		if (e.target instanceof SVGElement && e.target.classList.contains('echo-shape')) {
+			const shapeId = e.target.dataset.shapeId
+			if (shapeId) {
+				const shape = store.drawing.shapes.find(s => s.id === shapeId)
+				if (shape && store.drawing.selectedShapeId === shapeId) {
+					setIsDragging(true)
+					setDragStartPos(point)
+					// Calculate offset from shape's first point
+					setDragOffset({
+						x: point.x - shape.points[0].x,
+						y: point.y - shape.points[0].y,
+					})
+					return
+				}
 			}
 		}
 
@@ -44,14 +75,8 @@ export const DrawingLayer: Component = () => {
 			return
 		}
 
-		const point = getPointFromEvent(e)
-
-		store.setDrawing({ isDrawing: true })
-		store.setDrawing({ currentPoints: [point] })
-
-		if (store.drawing.selectedTool === 'pen') {
-			store.setDrawing({ currentPath: `M${point.x},${point.y}` })
-		}
+		// Store initial click position but don't start drawing yet
+		setInitialClickPos(point)
 	}
 
 	const handleMove = (e: MouseEvent | TouchEvent) => {
@@ -59,6 +84,49 @@ export const DrawingLayer: Component = () => {
 
 		// Update mouse position for tooltip regardless of drawing state
 		store.setDrawing({ mousePosition: point })
+
+		if (isDragging() && store.drawing.selectedShapeId && dragStartPos()) {
+			// Handle shape dragging
+			const shape = store.drawing.shapes.find(s => s.id === store.drawing.selectedShapeId)
+			if (shape) {
+				const dx = point.x - dragStartPos()!.x
+				const dy = point.y - dragStartPos()!.y
+
+				const updatedShapes = store.drawing.shapes.map(s => {
+					if (s.id === store.drawing.selectedShapeId) {
+						return {
+							...s,
+							points: s.points.map(p => ({
+								x: p.x + dx,
+								y: p.y + dy,
+							})),
+						}
+					}
+					return s
+				})
+
+				store.setDrawing({ shapes: updatedShapes })
+				setDragStartPos(point)
+				return
+			}
+		}
+
+		// Check if we should start drawing based on movement threshold
+		if (initialClickPos() && !store.drawing.isDrawing) {
+			const distance = getDistance(initialClickPos()!, point)
+			if (distance >= MOVEMENT_THRESHOLD) {
+				// Unselect any selected shape when starting to draw
+				store.setDrawing({
+					isDrawing: true,
+					currentPoints: [initialClickPos()!],
+					selectedShapeId: null,
+				})
+				if (store.drawing.selectedTool === 'pen') {
+					store.setDrawing({ currentPath: `M${initialClickPos()!.x},${initialClickPos()!.y}` })
+				}
+			}
+			return
+		}
 
 		if (!store.drawing.isDrawing) return
 
@@ -70,7 +138,29 @@ export const DrawingLayer: Component = () => {
 		}
 	}
 
-	const handleEnd = () => {
+	const handleEnd = (e: MouseEvent | TouchEvent) => {
+		if (isDragging()) {
+			setIsDragging(false)
+			setDragStartPos(null)
+			return
+		}
+
+		// If we have an initial click position and haven't started drawing,
+		// check if we should handle it as a click (for shape selection)
+		if (initialClickPos() && !store.drawing.isDrawing) {
+			const point = getPointFromEvent(e)
+			const distance = getDistance(initialClickPos()!, point)
+
+			if (distance < MOVEMENT_THRESHOLD && e.target instanceof SVGElement && e.target.classList.contains('echo-shape')) {
+				const shapeId = e.target.dataset.shapeId
+				if (shapeId) {
+					store.setDrawing({ selectedShapeId: shapeId })
+				}
+			}
+		}
+
+		setInitialClickPos(null)
+
 		if (store.drawing.currentPoints.length < 2) {
 			store.setDrawing({ isDrawing: false })
 			store.setDrawing({ currentPoints: [] })

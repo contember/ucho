@@ -32,8 +32,10 @@ export const Shape: Component<ShapeProps> = props => {
 					stroke-dasharray={isSelected() ? '5,5' : 'none'}
 					onClick={props.isMask ? undefined : () => props.onShapeClick?.(props.shape.id)}
 					onDblClick={(e: MouseEvent) => e.preventDefault()}
+					class="echo-shape"
+					data-shape-id={props.shape.id}
 					style={{
-						cursor: props.isMask || !props.onShapeClick ? undefined : 'pointer',
+						cursor: props.isMask ? undefined : isSelected() ? 'move' : 'pointer',
 					}}
 				/>
 				{isSelected() && !props.isMask && (
@@ -73,7 +75,18 @@ export const Shape: Component<ShapeProps> = props => {
 				stroke-dasharray={isSelected() ? '5,5' : 'none'}
 				onClick={() => props.onShapeClick?.(props.shape.id)}
 				onDblClick={(e: MouseEvent) => e.preventDefault()}
-				style={props.isMask ? undefined : props.onShapeClick !== null ? { cursor: 'pointer', opacity: tool().opacity.normal } : undefined}
+				class="echo-shape"
+				data-shape-id={props.shape.id}
+				style={
+					props.isMask
+						? undefined
+						: props.onShapeClick !== null
+							? {
+									cursor: isSelected() ? 'move' : 'pointer',
+									opacity: tool().opacity.normal,
+								}
+							: undefined
+				}
 			/>
 		)
 	}
