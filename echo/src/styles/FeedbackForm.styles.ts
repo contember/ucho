@@ -1,4 +1,4 @@
-import { StylesConfig } from '../types'
+import { StylesConfig } from '~/types'
 
 export const feedbackFormStyles = (config: StylesConfig) => {
 	const { primaryColor } = config

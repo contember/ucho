@@ -1,4 +1,4 @@
-import { StylesConfig } from '../types'
+import { StylesConfig } from '~/types'
 
 export const notificationStyles = (config: StylesConfig) => `
     .echo-widget-notification {

@@ -1,9 +1,9 @@
 import { Component } from 'solid-js'
-import { useRootStore } from '../contexts/RootContext'
-import { welcomeMessageStore } from '../stores/welcomeMessageStore'
-import { setToStorage } from '../utils/storage'
-import { CloseIcon } from './icons'
-import { ContemberIcon } from './icons/ContemberIcon'
+import { CloseIcon } from '~/components/icons'
+import { ContemberIcon } from '~/components/icons/ContemberIcon'
+import { useRootStore } from '~/contexts'
+import { welcomeMessageStore } from '~/stores'
+import { setToStorage } from '~/utils'
 
 export const WidgetButton: Component = () => {
 	const store = useRootStore()

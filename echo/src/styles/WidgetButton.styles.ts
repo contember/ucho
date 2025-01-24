@@ -1,4 +1,4 @@
-import { StylesConfig } from '../types'
+import { StylesConfig } from '~/types'
 
 export const widgetButtonStyles = (config: StylesConfig) => `
     .echo-widget-button {

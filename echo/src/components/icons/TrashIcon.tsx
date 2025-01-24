@@ -1,5 +1,5 @@
 import { Component } from 'solid-js'
-import { IconProps } from '../../types'
+import { IconProps } from '~/types'
 
 export const TrashIcon: Component<IconProps> = props => (
 	<svg

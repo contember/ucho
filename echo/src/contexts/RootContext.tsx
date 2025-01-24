@@ -1,7 +1,7 @@
 import { Component, createContext, useContext } from 'solid-js'
-import { defaultText } from '../config/defaultText'
-import { RootStore, createRootStore } from '../stores/rootStore'
-import { FeedbackData, TextConfig } from '../types'
+import { defaultText } from '~/config/defaultText'
+import { RootStore, createRootStore } from '~/stores'
+import { FeedbackData, TextConfig } from '~/types'
 
 interface RootProviderProps {
 	primaryColor: string

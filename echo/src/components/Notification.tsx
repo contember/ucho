@@ -1,8 +1,6 @@
 import { Component } from 'solid-js'
-import { useRootStore } from '../contexts/RootContext'
-import { CheckCircleIcon } from './icons/CheckCircleIcon'
-import { CloseIcon } from './icons/CloseIcon'
-import { XCircleIcon } from './icons/XCircleIcon'
+import { CheckCircleIcon, CloseIcon, XCircleIcon } from '~/components/icons'
+import { useRootStore } from '~/contexts/RootContext'
 
 export const Notification: Component = () => {
 	const store = useRootStore()

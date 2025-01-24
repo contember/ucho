@@ -1,8 +1,8 @@
 import { Component } from 'solid-js'
-import { useRootStore } from '../contexts/RootContext'
-import { welcomeMessageStore } from '../stores/welcomeMessageStore'
-import { getFromStorage, setToStorage } from '../utils/storage'
-import { CloseIcon } from './icons'
+import { CloseIcon } from '~/components/icons'
+import { useRootStore } from '~/contexts/RootContext'
+import { welcomeMessageStore } from '~/stores/welcomeMessageStore'
+import { getFromStorage, setToStorage } from '~/utils/storage'
 
 export const WelcomeMessage: Component = () => {
 	const store = useRootStore()

@@ -1,4 +1,4 @@
-import { DrawingTool } from '../types'
+import { DrawingTool } from '~/types'
 
 interface ToolConfig {
 	id: DrawingTool

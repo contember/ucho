@@ -1,8 +1,8 @@
 import { Component, Show } from 'solid-js'
-import { useRootStore } from '../contexts/RootContext'
-import { isMobileDevice } from '../utils/device'
-import { captureScreenshot } from '../utils/screenshot'
-import { ChevronRightIcon, MessageIcon } from './icons'
+import { ChevronRightIcon, MessageIcon } from '~/components/icons'
+import { useRootStore } from '~/contexts/RootContext'
+import { isMobileDevice } from '~/utils'
+import { captureScreenshot } from '~/utils/screenshot'
 
 export const FeedbackForm: Component = () => {
 	const store = useRootStore()

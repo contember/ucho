@@ -1,5 +1,5 @@
 import { Component } from 'solid-js'
-import { DrawingLayer } from './DrawingLayer'
+import { DrawingLayer } from '~/features/drawing/components/DrawingLayer'
 import { DrawingToolbar } from './DrawingToolbar'
 
 export const Overlay: Component = () => {

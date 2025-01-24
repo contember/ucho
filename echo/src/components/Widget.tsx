@@ -1,20 +1,19 @@
 import { Component } from 'solid-js'
 import { Portal } from 'solid-js/web'
-import { RootProvider } from '../contexts/RootContext'
+import { RootProvider } from '~/contexts'
+import { drawingLayerStyles, shapeActionsStyles } from '~/features/drawing/styles'
 import {
 	colorSelectorStyles,
-	drawingLayerStyles,
 	drawingToolbarStyles,
 	feedbackFormStyles,
 	notificationStyles,
 	overlayStyles,
-	shapeActionsStyles,
 	tooltipStyles,
 	welcomeMessageStyles,
 	widgetButtonStyles,
 	widgetStyles,
-} from '../styles'
-import { EchoWidgetProps, StylesConfig } from '../types'
+} from '~/styles'
+import { EchoWidgetProps, StylesConfig } from '~/types'
 import { WidgetContent } from './WidgetContent'
 
 const createStyles = (config: StylesConfig) => {

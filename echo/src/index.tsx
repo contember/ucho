@@ -1,6 +1,6 @@
 import { render } from 'solid-js/web'
-import { Widget } from './components/Widget'
-import { type EchoOptions, type FeedbackData, POSITIONS, type Position } from './types'
+import { Widget } from '~/components/Widget'
+import { type EchoOptions, type FeedbackData, POSITIONS, type Position } from '~/types'
 
 let activeInstance: (() => void) | null = null
 

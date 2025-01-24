@@ -1,5 +1,5 @@
 import { Component, For } from 'solid-js'
-import { useRootStore } from '../contexts/RootContext'
+import { useRootStore } from '~/contexts/RootContext'
 
 const COLORS = [
 	'#FF0000', // Red

@@ -1,4 +1,4 @@
-import { StylesConfig } from '../types'
+import { StylesConfig } from '~/types'
 
 export const drawingLayerStyles = (config: StylesConfig) => `
     .echo-drawing-layer {

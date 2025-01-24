@@ -1,10 +1,10 @@
 import { Component, Show } from 'solid-js'
-import { useRootStore } from '../contexts/RootContext'
-import { FeedbackForm } from './FeedbackForm'
-import { Notification } from './Notification'
-import { Overlay } from './Overlay'
-import { WelcomeMessage } from './WelcomeMessage'
-import { WidgetButton } from './WidgetButton'
+import { FeedbackForm } from '~/components/FeedbackForm'
+import { Notification } from '~/components/Notification'
+import { Overlay } from '~/components/Overlay'
+import { WelcomeMessage } from '~/components/WelcomeMessage'
+import { WidgetButton } from '~/components/WidgetButton'
+import { useRootStore } from '~/contexts'
 
 export const WidgetContent: Component = () => {
 	const store = useRootStore()

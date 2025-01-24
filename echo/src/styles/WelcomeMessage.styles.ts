@@ -1,4 +1,4 @@
-import { StylesConfig } from '../types'
+import { StylesConfig } from '~/types'
 
 export const welcomeMessageStyles = (config: StylesConfig) => {
 	const hoverColor = `color-mix(in srgb, ${config.primaryColor}, black 10%)`

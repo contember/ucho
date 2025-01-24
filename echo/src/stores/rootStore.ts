@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store'
-import { DrawingTool, FeedbackData, Notification, Point, Screenshot, Shape, TextConfig } from '../types'
+import { DrawingTool, FeedbackData, Notification, Point, Screenshot, Shape, TextConfig } from '~/types'
 
 export interface FeedbackState {
 	comment: string
@@ -10,15 +10,20 @@ export interface FeedbackState {
 
 export interface DrawingState {
 	isDrawing: boolean
-	currentPoints: Point[]
-	shapes: Shape[]
-	currentPath: string
 	selectedShapeId: string | null
 	selectedTool: DrawingTool
+	selectedColor: string
+	shapes: Shape[]
+	currentPoints: Point[]
+	currentPath: string
 	showTooltip: boolean
 	mousePosition: Point
 	hasDrawn: boolean
-	selectedColor: string
+	// Drag state
+	isDragging: boolean
+	dragStartPos: Point | null
+	initialClickPos: Point | null
+	dragOffset: Point | null
 }
 
 export interface WidgetState {
@@ -67,6 +72,11 @@ export const createRootStore = (config: RootStoreConfig): RootStore => {
 		mousePosition: { x: 0, y: 0 },
 		hasDrawn: false,
 		selectedColor: config.primaryColor,
+		// Initialize drag state
+		isDragging: false,
+		dragStartPos: null,
+		initialClickPos: null,
+		dragOffset: null,
 	})
 
 	const [widget, setWidget] = createStore<WidgetState>({
@@ -101,6 +111,11 @@ export const createRootStore = (config: RootStoreConfig): RootStore => {
 			mousePosition: { x: 0, y: 0 },
 			hasDrawn: false,
 			selectedColor: config.primaryColor,
+			// Reset drag state
+			isDragging: false,
+			dragStartPos: null,
+			initialClickPos: null,
+			dragOffset: null,
 		})
 
 		setWidget({

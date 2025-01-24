@@ -1,8 +1,8 @@
 import { Component, createMemo } from 'solid-js'
-import { useRootStore } from '../contexts/RootContext'
-import { Point } from '../types'
-import { getRectFromPoints } from '../utils/geometry'
-import { TrashIcon } from './icons/TrashIcon'
+import { TrashIcon } from '~/components/icons'
+import { useRootStore } from '~/contexts'
+import { Point } from '~/types'
+import { getRectFromPoints } from '~/utils/geometry'
 
 export const ShapeActions: Component = () => {
 	const store = useRootStore()

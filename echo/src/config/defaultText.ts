@@ -1,4 +1,4 @@
-import { TextConfig } from '../types'
+import { TextConfig } from '~/types'
 
 export const defaultText: TextConfig = {
 	welcomeMessage: {

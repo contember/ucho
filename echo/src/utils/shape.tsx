@@ -1,6 +1,6 @@
-import { drawingConfig } from '../config/drawingConfig'
-import { Shape } from '../types'
-import { getRectFromPoints } from '../utils/geometry'
+import { drawingConfig } from '~/config/drawingConfig'
+import { Shape } from '~/types'
+import { getRectFromPoints } from '~/utils/geometry'
 
 export const renderShape = (shape: Shape, isMask?: boolean) => {
 	const tool = shape.type === 'path' ? drawingConfig.pen : drawingConfig.highlight
