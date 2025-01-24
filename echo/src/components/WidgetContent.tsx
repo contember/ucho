@@ -1,10 +1,10 @@
 import { Component } from 'solid-js'
-import { FeedbackForm } from '~/components/FeedbackForm'
 import { Notification } from '~/components/Notification'
 import { Overlay } from '~/components/Overlay'
 import { WelcomeMessage } from '~/components/WelcomeMessage'
 import { WidgetButton } from '~/components/WidgetButton'
 import { useRootStore } from '~/contexts'
+import { FeedbackForm } from '~/features/feedback'
 
 export const WidgetContent: Component = () => {
 	const store = useRootStore()

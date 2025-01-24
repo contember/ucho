@@ -2,7 +2,7 @@ import { StylesConfig } from '~/types'
 
 export const widgetButtonStyles = (config: StylesConfig) => `
     .echo-widget-button {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease-out;
         transform: scale(1);
         background: linear-gradient(135deg, ${config.primaryColor}, color-mix(in srgb, ${config.primaryColor}, white 30%));
         border: none;
@@ -34,7 +34,7 @@ export const widgetButtonStyles = (config: StylesConfig) => `
     .echo-widget-button[data-hidden="true"] {
         opacity: 0;
         pointer-events: none;
-        transform: translateY(10px) scale(0.95);
-        transition: all 0.2s ease-in-out;
+        transform: scale(0.9);
+        transition: all 0.2s ease-out;
     }
 `

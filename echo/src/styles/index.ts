@@ -1,5 +1,4 @@
 export * from './DrawingToolbar.styles'
-export * from './FeedbackForm.styles'
 export * from './Notification.styles'
 export * from './Overlay.styles'
 export * from './Tooltip.styles'

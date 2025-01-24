@@ -2,10 +2,10 @@ import { Component } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { RootProvider } from '~/contexts'
 import { drawingLayerStyles, shapeActionsStyles } from '~/features/drawing/styles'
+import { feedbackFormStyles } from '~/features/feedback/styles'
 import {
 	colorSelectorStyles,
 	drawingToolbarStyles,
-	feedbackFormStyles,
 	notificationStyles,
 	overlayStyles,
 	tooltipStyles,
@@ -22,14 +22,17 @@ const createStyles = (config: StylesConfig) => {
 		${widgetStyles(config)}
 		${widgetButtonStyles(config)}
 		${feedbackFormStyles(config)}
-		${drawingLayerStyles(config)}
-		${drawingToolbarStyles(config)}
 		${tooltipStyles(config)}
 		${overlayStyles(config)}
 		${welcomeMessageStyles(config)}
-		${shapeActionsStyles(config)}
 		${notificationStyles(config)}
+		${feedbackFormStyles(config)}
+		
+		/* Drawing Components */
+		${drawingLayerStyles(config)}
+		${drawingToolbarStyles(config)}
 		${colorSelectorStyles(config)}
+		${shapeActionsStyles(config)}
 	`
 }
 
