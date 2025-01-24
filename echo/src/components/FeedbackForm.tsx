@@ -1,5 +1,5 @@
 import { Component, Show } from 'solid-js'
-import { ChevronRightIcon, MessageIcon } from '~/components/icons'
+import { ChevronRightIcon, MessageIcon, TrashIcon } from '~/components/icons'
 import { useRootStore } from '~/contexts/RootContext'
 import { isMobileDevice } from '~/utils'
 import { captureScreenshot } from '~/utils/screenshot'
@@ -55,13 +55,24 @@ export const FeedbackForm: Component = () => {
 						<h3 class="echo-feedback-title">{store.text.feedbackForm.title}</h3>
 						<div class="echo-header-buttons">
 							<button
+								type="button"
+								class="echo-header-button"
+								title="Clear feedback and drawings"
+								onClick={() => {
+									store.setFeedback({ comment: '' })
+									store.setDrawing({ shapes: [] })
+								}}
+							>
+								<TrashIcon size={16} />
+							</button>
+							<button
 								onClick={() => store.setFeedback({ isMinimized: !store.feedback.isMinimized })}
-								class="echo-minimize-button"
+								class="echo-header-button"
 								title={store.feedback.isMinimized ? store.text.feedbackForm.expandTitle : store.text.feedbackForm.minimizeTitle}
 							>
 								<ChevronRightIcon />
 							</button>
-							<button onClick={toggleWidget} class="echo-minimize-button" title={store.text.feedbackForm.closeTitle}>
+							<button onClick={toggleWidget} class="echo-header-button" title={store.text.feedbackForm.closeTitle}>
 								×
 							</button>
 						</div>

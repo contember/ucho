@@ -63,7 +63,7 @@ export const feedbackFormStyles = (config: StylesConfig) => {
             color: #1a1a1a;
         }
 
-        .echo-minimize-button {
+        .echo-header-button {
             background: transparent;
             border: none;
             padding: 8px;
@@ -80,7 +80,7 @@ export const feedbackFormStyles = (config: StylesConfig) => {
             line-height: 1;
         }
 
-        .echo-minimize-button:hover {
+        .echo-header-button:hover {
             background-color: rgba(0, 0, 0, 0.05);
             color: #333;
         }
@@ -146,6 +146,12 @@ export const feedbackFormStyles = (config: StylesConfig) => {
 
         .echo-submit-button:active {
             transform: translateY(0);
+        }
+
+        .echo-form-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
         }
 
         .echo-maximize-feedback-button {
