@@ -1,4 +1,4 @@
-import { Component, createMemo } from 'solid-js'
+import { Component, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { TrashIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts'
 import { Point } from '~/types'
@@ -7,6 +7,15 @@ import { getRectFromPoints } from '~/utils/geometry'
 export const ShapeActions: Component = () => {
 	const store = useEchoStore()
 	let actionsRef: HTMLDivElement | undefined
+	const [scrollPosition, setScrollPosition] = createSignal({ x: window.scrollX, y: window.scrollY })
+
+	onMount(() => {
+		const handleScroll = () => {
+			setScrollPosition({ x: window.scrollX, y: window.scrollY })
+		}
+		window.addEventListener('scroll', handleScroll)
+		onCleanup(() => window.removeEventListener('scroll', handleScroll))
+	})
 
 	const handleDelete = () => {
 		if (store.drawing.selectedShapeId) {
@@ -48,10 +57,10 @@ export const ShapeActions: Component = () => {
 
 		const PADDING = 8
 
-		// Ensure the position stays within viewport bounds
+		const scroll = scrollPosition()
 		return {
-			x: Math.max(actionsRect.width / 2 + PADDING, Math.min(window.innerWidth - actionsRect.width / 2 - PADDING, point.x)),
-			y: Math.max(actionsRect.height + PADDING, Math.min(window.innerHeight - PADDING, point.y)),
+			x: Math.max(actionsRect.width / 2 + PADDING, Math.min(window.innerWidth - actionsRect.width / 2 - PADDING, point.x - scroll.x)),
+			y: Math.max(actionsRect.height + PADDING, Math.min(window.innerHeight - PADDING, point.y - scroll.y)),
 		}
 	})
 
