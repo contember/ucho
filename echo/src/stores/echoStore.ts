@@ -1,5 +1,8 @@
+import { createEffect, onCleanup } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { DrawingTool, FeedbackData, Notification, Point, Screenshot, Shape, TextConfig } from '~/types'
+import { debounce } from '~/utils/debounce'
+import { clearPageState, getPageKey, loadPageState, savePageState } from '~/utils/storage'
 
 export interface FeedbackState {
 	comment: string
@@ -58,8 +61,11 @@ export interface EchoStore {
 }
 
 export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
+	let currentPageKey = getPageKey()
+	const savedState = loadPageState(currentPageKey)
+
 	const [feedback, setFeedback] = createStore<FeedbackState>({
-		comment: '',
+		comment: savedState?.feedback.comment || '',
 		screenshot: undefined,
 		isCapturing: false,
 		isMinimized: false,
@@ -68,15 +74,14 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 	const [drawing, setDrawing] = createStore<DrawingState>({
 		isDrawing: false,
 		currentPoints: [],
-		shapes: [],
+		shapes: savedState?.drawing.shapes || [],
 		currentPath: '',
 		selectedShapeId: null,
 		selectedTool: 'highlight',
 		showTooltip: true,
 		mousePosition: { x: 0, y: 0 },
-		hasDrawn: false,
+		hasDrawn: savedState?.drawing.hasDrawn || false,
 		selectedColor: config.primaryColor,
-		// Initialize drag state
 		isDragging: false,
 		dragStartPos: null,
 		initialClickPos: null,
@@ -100,7 +105,95 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 
 	const [text] = createStore<TextConfig>(config.text)
 
+	// Check if state should be saved
+	const shouldSaveState = () => {
+		return feedback.comment.trim().length > 0 || drawing.shapes.length > 0
+	}
+
+	// Debounced save function
+	const debouncedSave = debounce((pageKey: string) => {
+		if (shouldSaveState()) {
+			savePageState(pageKey, { feedback, drawing })
+		}
+	}, 1000)
+
+	// Handle URL changes
+	const handleUrlChange = () => {
+		const newPageKey = getPageKey()
+		if (newPageKey !== currentPageKey) {
+			// Save current state before switching only if there's content
+			if (shouldSaveState()) {
+				savePageState(currentPageKey, { feedback, drawing })
+			}
+
+			// Load new state
+			currentPageKey = newPageKey
+			const newState = loadPageState(currentPageKey)
+
+			setFeedback({
+				...feedback,
+				comment: newState?.feedback.comment || '',
+			})
+
+			setDrawing({
+				...drawing,
+				shapes: newState?.drawing.shapes || [],
+				hasDrawn: newState?.drawing.hasDrawn || false,
+			})
+		}
+	}
+
+	// Listen for URL changes
+	createEffect(() => {
+		// Listen for history changes (pushState/replaceState)
+		const originalPushState = history.pushState
+		const originalReplaceState = history.replaceState
+
+		history.pushState = function (...args) {
+			originalPushState.apply(this, args)
+			handleUrlChange()
+		}
+
+		history.replaceState = function (...args) {
+			originalReplaceState.apply(this, args)
+			handleUrlChange()
+		}
+
+		// Listen for popstate (back/forward buttons)
+		window.addEventListener('popstate', handleUrlChange)
+
+		// Listen for navigation events
+		const observer = new MutationObserver(() => {
+			handleUrlChange()
+		})
+		observer.observe(document.documentElement, {
+			childList: true,
+			subtree: true,
+		})
+
+		onCleanup(() => {
+			history.pushState = originalPushState
+			history.replaceState = originalReplaceState
+			window.removeEventListener('popstate', handleUrlChange)
+			observer.disconnect()
+		})
+	})
+
+	const wrappedSetFeedback = (state: Partial<FeedbackState>) => {
+		setFeedback(state)
+		debouncedSave(currentPageKey)
+	}
+
+	const wrappedSetDrawing = (state: Partial<DrawingState>) => {
+		setDrawing(state)
+		if (shouldSaveState()) {
+			savePageState(currentPageKey, { feedback, drawing })
+		}
+	}
+
 	const reset = () => {
+		clearPageState(currentPageKey)
+
 		setFeedback({
 			comment: '',
 			screenshot: undefined,
@@ -119,7 +212,6 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 			mousePosition: { x: 0, y: 0 },
 			hasDrawn: false,
 			selectedColor: config.primaryColor,
-			// Reset drag state
 			isDragging: false,
 			dragStartPos: null,
 			initialClickPos: null,
@@ -145,9 +237,9 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 
 	return {
 		feedback,
-		setFeedback,
+		setFeedback: wrappedSetFeedback,
 		drawing,
-		setDrawing,
+		setDrawing: wrappedSetDrawing,
 		widget,
 		setWidget,
 		text,
