@@ -31,6 +31,10 @@ export interface WidgetState {
 	primaryColor: string
 	onSubmit: (data: FeedbackData) => void | Promise<void>
 	notification: Notification
+	dimensions: {
+		width: number
+		height: number
+	}
 }
 
 interface EchoStoreConfig {
@@ -87,6 +91,10 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 			show: false,
 			type: null,
 			message: null,
+		},
+		dimensions: {
+			width: document.documentElement.clientWidth,
+			height: document.documentElement.scrollHeight,
 		},
 	})
 

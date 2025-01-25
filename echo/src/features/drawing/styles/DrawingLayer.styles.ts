@@ -8,13 +8,12 @@ export const drawingLayerStyles = (config: StylesConfig) => `
         right: 0;
         bottom: 0;
         pointer-events: none;
-        transform-origin: 0 0;
         user-select: none;
         -webkit-user-select: none;
     }
 
     .echo-drawing-layer-container {
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         right: 0;

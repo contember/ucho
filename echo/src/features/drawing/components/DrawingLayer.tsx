@@ -72,8 +72,8 @@ export const DrawingLayer: Component = () => {
 					class="echo-drawing-layer-mask"
 					d={generateCutoutPath(
 						{
-							width: document.documentElement.scrollWidth,
-							height: document.documentElement.scrollHeight,
+							width: store.widget.dimensions.width,
+							height: store.widget.dimensions.height,
 						},
 						drawing.state.currentPoints,
 						drawing.state.shapes,
@@ -81,10 +81,6 @@ export const DrawingLayer: Component = () => {
 					fill="rgba(33, 43, 55, 1)"
 					fill-opacity="0.2"
 					fill-rule="evenodd"
-					style={{
-						transition: 'opacity 0.3s ease-in-out',
-						opacity: store.widget.isOpen ? 1 : 0,
-					}}
 				/>
 
 				<For each={drawing.state.shapes}>

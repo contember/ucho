@@ -52,10 +52,11 @@ export const useDrawing = () => {
 	}
 
 	const handleMove = (e: MouseEvent | TouchEvent) => {
+		const clientPoint = getPointFromEvent(e, { useClientCoords: true })
 		const point = getPointFromEvent(e)
 
 		// Update mouse position for tooltip regardless of drawing state
-		store.setDrawing({ mousePosition: point })
+		store.setDrawing({ mousePosition: clientPoint })
 
 		if (drag.state.isDragging() && selectedShapeId() && drag.state.dragStartPos()) {
 			// Handle shape dragging

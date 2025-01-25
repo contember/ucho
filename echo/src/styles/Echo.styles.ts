@@ -7,7 +7,9 @@ export const echoStyles = (config: StylesConfig) => `
     }
 
     .echo-root {
-        position: relative;
+        position: absolute;
+        top: 0;
+        left: 0;
         z-index: ${zIndex.root};
         isolation: isolate;
         pointer-events: none;
@@ -16,20 +18,18 @@ export const echoStyles = (config: StylesConfig) => `
     .echo-launcher {
         position: fixed;
         z-index: ${zIndex.launcher};
-        pointer-events: auto;
         bottom: 20px;
         right: 20px;
     }
 
     .echo-overlay {
-        position: fixed;
+        position: absolute;
         z-index: ${zIndex.overlay};
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
         border: 3px solid ${config.primaryColor};
-        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, pointer-events 0.3s ease-in-out;
     }
 
     [data-hidden="true"] {
@@ -42,6 +42,8 @@ export const echoStyles = (config: StylesConfig) => `
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
+        user-select: none;
+        -webkit-user-select: none;
     }
 
     /* Hide elements when drawing is active */
@@ -56,5 +58,7 @@ export const echoStyles = (config: StylesConfig) => `
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
+        user-select: none;
+        -webkit-user-select: none;
     }
 `

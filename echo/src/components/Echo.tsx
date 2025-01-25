@@ -1,4 +1,4 @@
-import { Component } from 'solid-js'
+import { Component, onCleanup, onMount } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { EchoProvider } from '~/contexts'
 import { useEchoStore } from '~/contexts/EchoContext'
@@ -44,12 +44,65 @@ export const Echo: Component<EchoWidgetProps> = props => {
 }
 
 const EchoRoot: Component<EchoWidgetProps> = props => {
+	let rootRef: HTMLDivElement | undefined
+	let observer: MutationObserver | undefined
+
 	return (
 		<EchoProvider primaryColor={props.primaryColor!} onSubmit={props.onSubmit} textConfig={props.textConfig}>
-			<div class="echo-root" data-drawing={useEchoStore().drawing.isDrawing}>
-				<style>{createStyles({ primaryColor: props.primaryColor! })}</style>
+			<EchoRootInner rootRef={rootRef} observer={observer} primaryColor={props.primaryColor!}>
 				{props.children}
-			</div>
+			</EchoRootInner>
 		</EchoProvider>
+	)
+}
+
+const EchoRootInner: Component<{
+	rootRef: HTMLDivElement | undefined
+	observer: MutationObserver | undefined
+	primaryColor: string
+	children: any
+}> = props => {
+	const store = useEchoStore()
+	let localObserver: MutationObserver | undefined
+
+	const updateHeight = () => {
+		store.setWidget({
+			dimensions: {
+				width: document.documentElement.clientWidth,
+				height: document.documentElement.scrollHeight,
+			},
+		})
+	}
+
+	onMount(() => {
+		localObserver = new MutationObserver(updateHeight)
+		localObserver.observe(document.body, {
+			childList: true,
+			subtree: true,
+			attributes: true,
+		})
+		window.addEventListener('resize', updateHeight)
+
+		updateHeight()
+	})
+
+	onCleanup(() => {
+		localObserver?.disconnect()
+		window.removeEventListener('resize', updateHeight)
+	})
+
+	return (
+		<div
+			ref={props.rootRef}
+			class="echo-root"
+			data-drawing={store.drawing.isDrawing}
+			style={{
+				height: `${store.widget.dimensions.height}px`,
+				width: `${store.widget.dimensions.width}px`,
+			}}
+		>
+			<style>{createStyles({ primaryColor: props.primaryColor })}</style>
+			{props.children}
+		</div>
 	)
 }

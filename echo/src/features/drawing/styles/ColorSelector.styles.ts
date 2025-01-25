@@ -45,7 +45,6 @@ export const colorSelectorStyles = (config: StylesConfig) => {
 		gap: 8px;
 		border: 2px solid #ddd;
 		border-left: none;
-		box-sizing: border-box;
 	}
 
 	.echo-color-selector:hover .echo-color-swatch {
