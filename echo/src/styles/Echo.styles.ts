@@ -32,6 +32,10 @@ export const echoStyles = (config: StylesConfig) => `
         border: 3px solid ${config.primaryColor};
     }
 
+    [data-hidden="true"], [data-hidden="false"] {
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    }
+
     [data-hidden="true"] {
         opacity: 0;
         visibility: hidden;
