@@ -1,11 +1,11 @@
 import { Component, createMemo } from 'solid-js'
 import { TrashIcon } from '~/components/icons'
-import { useRootStore } from '~/contexts'
+import { useEchoStore } from '~/contexts'
 import { Point } from '~/types'
 import { getRectFromPoints } from '~/utils/geometry'
 
 export const ShapeActions: Component = () => {
-	const store = useRootStore()
+	const store = useEchoStore()
 	let actionsRef: HTMLDivElement | undefined
 
 	const handleDelete = () => {
@@ -59,6 +59,7 @@ export const ShapeActions: Component = () => {
 		<div
 			ref={actionsRef}
 			class="echo-shape-actions"
+			data-hide-when-drawing="true"
 			hidden={!position()}
 			style={{
 				left: position() ? `${position()?.x}px` : '0',

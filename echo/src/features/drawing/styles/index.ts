@@ -1,2 +1,6 @@
 export * from './DrawingLayer.styles'
 export * from './ShapeActions.styles'
+export * from './ColorSelector.styles'
+export * from './DrawingLayer.styles'
+export * from './DrawingToolbar.styles'
+export * from './DrawingTooltip.styles'

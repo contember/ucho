@@ -1,18 +1,16 @@
 import { Component, For, onCleanup, onMount } from 'solid-js'
 import { drawingConfig } from '~/config/drawingConfig'
-import { useRootStore } from '~/contexts'
+import { useEchoStore } from '~/contexts'
 import { renderShape } from '~/utils/shape'
 import { useDrawing } from '../hooks/useDrawing'
-import { useViewport } from '../hooks/useViewport'
 import { generateCutoutPath, getPenCursor } from '../utils/svg'
 import { DrawingTooltip } from './DrawingTooltip'
 import { Shape } from './Shape'
 import { ShapeActions } from './ShapeActions'
 
 export const DrawingLayer: Component = () => {
-	const store = useRootStore()
+	const store = useEchoStore()
 	const drawing = useDrawing()
-	const viewport = useViewport()
 
 	onMount(() => {
 		document.addEventListener('mousemove', drawing.actions.handleMove)
@@ -74,8 +72,8 @@ export const DrawingLayer: Component = () => {
 					class="echo-drawing-layer-mask"
 					d={generateCutoutPath(
 						{
-							width: viewport.width(),
-							height: viewport.height(),
+							width: document.documentElement.scrollWidth,
+							height: document.documentElement.scrollHeight,
 						},
 						drawing.state.currentPoints,
 						drawing.state.shapes,

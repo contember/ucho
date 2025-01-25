@@ -1,3 +1,4 @@
+import { zIndex } from '~/styles/zIndex'
 import { StylesConfig } from '~/types'
 
 export const feedbackFormStyles = (config: StylesConfig) => {
@@ -9,19 +10,11 @@ export const feedbackFormStyles = (config: StylesConfig) => {
 		bottom: 20px;
 		right: 20px;
 		width: min(calc(100vw - 40px), 24rem);
-		z-index: 10000;
+		z-index: ${zIndex.feedbackForm};
 		opacity: 1;
 		transform: translateY(0) scale(1);
 		transform-origin: right bottom;
 		transition: all 0.2s ease-out;
-		visibility: visible;
-	}
-
-	.echo-feedback[data-hidden="true"] {
-		opacity: 0;
-		visibility: hidden;
-		pointer-events: none;
-		transform: translateY(10px) scale(0.95);
 	}
 
 	.echo-feedback[data-minimized="true"] {
@@ -75,6 +68,7 @@ export const feedbackFormStyles = (config: StylesConfig) => {
 	}
 
 	.echo-feedback-form {
+		z-index: ${zIndex.feedbackForm};
 		background: white;
 		padding: 16px;
 		border-radius: 0 0 12px 12px;
@@ -134,6 +128,7 @@ export const feedbackFormStyles = (config: StylesConfig) => {
         right: 20px;
         width: 48px;
         height: 48px;
+		pointer-events: auto;
 
         transition: all 0.3s ease-out;
         transform: scale(1);
@@ -148,7 +143,8 @@ export const feedbackFormStyles = (config: StylesConfig) => {
         display: flex;
         align-items: center;
         justify-content: center;
-		z-index: 999;
+		z-index: ${zIndex.feedbackForm - 1};
+
 	}
 
 	.echo-feedback-maximize:hover {

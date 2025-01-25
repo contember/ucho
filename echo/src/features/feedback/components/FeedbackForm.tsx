@@ -1,11 +1,11 @@
 import { Component } from 'solid-js'
 import { ChevronRightIcon, MessageIcon, TrashIcon } from '~/components/icons'
-import { useRootStore } from '~/contexts/RootContext'
+import { useEchoStore } from '~/contexts/EchoContext'
 import { isMobileDevice } from '~/utils'
 import { captureScreenshot } from '~/utils/screenshot'
 
 export const FeedbackForm: Component = () => {
-	const store = useRootStore()
+	const store = useEchoStore()
 	const isMobile = isMobileDevice()
 
 	const handleSubmit = async (e: SubmitEvent) => {
@@ -41,7 +41,7 @@ export const FeedbackForm: Component = () => {
 
 	return (
 		<>
-			<div class="echo-feedback" data-hidden={store.drawing.isDrawing} data-minimized={store.feedback.isMinimized}>
+			<div class="echo-feedback" data-minimized={store.feedback.isMinimized} data-hide-when-drawing="true">
 				<div class="echo-feedback-header">
 					<h3 class="echo-feedback-title">{store.text.feedbackForm.title}</h3>
 					<div class="echo-feedback-header-actions">
@@ -59,7 +59,7 @@ export const FeedbackForm: Component = () => {
 						<button
 							onClick={() => store.setFeedback({ isMinimized: !store.feedback.isMinimized })}
 							class="echo-feedback-header-action"
-							title="Minimize form"
+							title="Hide form"
 						>
 							<ChevronRightIcon />
 						</button>
@@ -85,7 +85,12 @@ export const FeedbackForm: Component = () => {
 			</div>
 
 			{/* Maximize button */}
-			<button class="echo-feedback-maximize" onClick={() => store.setFeedback({ isMinimized: false })} title="Show form">
+			<button
+				class="echo-feedback-maximize"
+				title="Show form"
+				onClick={() => store.setFeedback({ isMinimized: false })}
+				data-hide-when-drawing="true"
+			>
 				<MessageIcon stroke="white" />
 			</button>
 		</>

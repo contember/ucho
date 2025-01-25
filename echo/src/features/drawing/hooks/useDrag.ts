@@ -1,9 +1,9 @@
 import { createEffect, createSignal } from 'solid-js'
-import { useRootStore } from '~/contexts'
+import { useEchoStore } from '~/contexts'
 import { Point } from '~/types'
 
 export const useDrag = () => {
-	const store = useRootStore()
+	const store = useEchoStore()
 	const [isDragging, setIsDragging] = createSignal(false)
 	const [dragStartPos, setDragStartPos] = createSignal<Point | null>(null)
 	const [initialClickPos, setInitialClickPos] = createSignal<Point | null>(null)

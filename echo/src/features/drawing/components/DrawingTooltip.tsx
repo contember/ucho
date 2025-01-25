@@ -1,14 +1,14 @@
 import { Component, Show } from 'solid-js'
-import { useRootStore } from '~/contexts'
+import { useEchoStore } from '~/contexts'
 import { isMobileDevice } from '~/utils/device'
 
 export const DrawingTooltip: Component = () => {
-	const store = useRootStore()
+	const store = useEchoStore()
 
 	return (
 		<Show when={store.drawing.showTooltip && store.widget.isOpen && !isMobileDevice()}>
 			<div
-				class="echo-tooltip"
+				class="echo-drawing-tooltip"
 				style={{
 					top: `${store.drawing.mousePosition.y + 20}px`,
 					left: `${store.drawing.mousePosition.x + 10}px`,

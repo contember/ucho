@@ -53,6 +53,7 @@ export interface EchoWidgetProps {
 	position?: Position
 	primaryColor?: `#${string}`
 	textConfig?: Partial<TextConfig>
+	children?: any
 }
 
 export type EchoOptions = EchoWidgetProps

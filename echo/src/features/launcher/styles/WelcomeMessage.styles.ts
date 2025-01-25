@@ -1,10 +1,12 @@
 import { StylesConfig } from '~/types'
+import { zIndex } from '../../../styles/zIndex'
 
 export const welcomeMessageStyles = (config: StylesConfig) => {
 	const hoverColor = `color-mix(in srgb, ${config.primaryColor}, black 10%)`
 	return `
     .echo-welcome-message {
         position: fixed;
+        z-index: ${zIndex.welcomeMessage};
         background: linear-gradient(135deg, ${config.primaryColor}, color-mix(in srgb, ${config.primaryColor}, white 30%));
         color: white;
         padding: 12px 20px;
@@ -14,7 +16,6 @@ export const welcomeMessageStyles = (config: StylesConfig) => {
         font-weight: 500;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
                     0 8px 30px ${config.primaryColor}40;
-        z-index: 1000001;
         opacity: 1;
         transform: translateY(0) scale(1);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -79,12 +80,6 @@ export const welcomeMessageStyles = (config: StylesConfig) => {
         transform: rotate(45deg);
         border-radius: 3px;
         z-index: -1;
-    }
-
-    .echo-welcome-message[data-hidden="true"] {
-        opacity: 0;
-        transform: translateY(10px) scale(0.95);
-        pointer-events: none;
     }
 
     @keyframes echo-welcome-message-enter {

@@ -1,8 +1,10 @@
 import { StylesConfig } from '~/types'
+import { zIndex } from '../../../styles/zIndex'
 
 export const notificationStyles = (config: StylesConfig) => `
-    .echo-widget-notification {
+    .echo-notification {
         position: absolute;
+        z-index: ${zIndex.notification};
         bottom: 70px;
         right: 0px;
         width: 300px;
@@ -15,7 +17,6 @@ export const notificationStyles = (config: StylesConfig) => `
         background: white;
         border: 1px solid rgba(0, 0, 0, 0.08);
         border-top-width: 4px;
-        z-index: 10000;
         transform-origin: bottom right;
         display: flex;
         flex-direction: column;
@@ -26,17 +27,11 @@ export const notificationStyles = (config: StylesConfig) => `
         transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
     }
 
-    .echo-widget-notification:not([data-empty="true"]) {
+    .echo-notification:not([data-empty="true"]) {
         animation: notificationSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .echo-widget-notification[data-hidden="true"] {
-        opacity: 0;
-        pointer-events: none;
-        transform: translateY(10px) scale(0.95);
-    }
-
-    .echo-widget-notification[data-empty="true"] {
+    .echo-notification[data-empty="true"] {
         opacity: 0;
         pointer-events: none;
         transform: translateY(10px) scale(0.95);
@@ -85,11 +80,11 @@ export const notificationStyles = (config: StylesConfig) => `
         margin-top: 12px;
     }
 
-    .echo-widget-notification[data-type="success"] .echo-notification-icon {
+    .echo-notification[data-type="success"] .echo-notification-icon {
         color: ${config.primaryColor};
     }
 
-    .echo-widget-notification[data-type="error"] .echo-notification-icon {
+    .echo-notification[data-type="error"] .echo-notification-icon {
         color: #f44336;
     }
 
@@ -116,11 +111,11 @@ export const notificationStyles = (config: StylesConfig) => `
         max-width: 100%;
     }
 
-    .echo-widget-notification[data-type="success"] {
+    .echo-notification[data-type="success"] {
         border-top-color: ${config.primaryColor};
     }
 
-    .echo-widget-notification[data-type="error"] {
+    .echo-notification[data-type="error"] {
         border-top-color: #f44336;
     }
 
@@ -136,7 +131,7 @@ export const notificationStyles = (config: StylesConfig) => `
     }
 
     @media (max-width: 768px) {
-        .echo-widget-notification {
+        .echo-notification {
             right: 0;
             width: calc(100vw - 40px);
             height: auto;

@@ -1,5 +1,5 @@
 import { Component, For } from 'solid-js'
-import { useRootStore } from '~/contexts/RootContext'
+import { useEchoStore } from '~/contexts/EchoContext'
 
 const COLORS = [
 	'#FF0000', // Red
@@ -13,7 +13,7 @@ const COLORS = [
 ]
 
 export const ColorSelector: Component = () => {
-	const store = useRootStore()
+	const store = useEchoStore()
 
 	return (
 		<>

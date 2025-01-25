@@ -1,7 +1,8 @@
+import { zIndex } from '~/styles/zIndex'
 import { StylesConfig } from '~/types'
 
 export const tooltipStyles = (config: StylesConfig) => `
-    .echo-tooltip {
+    .echo-drawing-tooltip {
         display: flex;
         text-wrap: nowrap;
         position: fixed;
@@ -11,12 +12,12 @@ export const tooltipStyles = (config: StylesConfig) => `
         box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         font-size: 14px;
         color: #333;
-        z-index: 1000001;
+        z-index: ${zIndex.drawingTooltip};
         pointer-events: none;
-        animation: echo-tooltip-fade-in 0.3s ease;
+        animation: echo-drawing-tooltip-fade-in 0.3s ease;
     }
 
-    @keyframes echo-tooltip-fade-in {
+    @keyframes echo-drawing-tooltip-fade-in {
         from {
             opacity: 0;
             transform: translateY(-10px);

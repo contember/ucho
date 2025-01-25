@@ -1,11 +1,11 @@
 import { Component } from 'solid-js'
 import { CloseIcon } from '~/components/icons'
-import { useRootStore } from '~/contexts/RootContext'
+import { useEchoStore } from '~/contexts/EchoContext'
 import { welcomeMessageStore } from '~/stores/welcomeMessageStore'
 import { getFromStorage, setToStorage } from '~/utils/storage'
 
 export const WelcomeMessage: Component = () => {
-	const store = useRootStore()
+	const store = useEchoStore()
 	const hasSeenMessage = getFromStorage('welcome_message_shown', false)
 
 	const hideMessage = (e: MouseEvent | KeyboardEvent) => {

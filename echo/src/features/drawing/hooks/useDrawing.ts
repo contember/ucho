@@ -1,5 +1,5 @@
 import { createMemo } from 'solid-js'
-import { useRootStore } from '~/contexts'
+import { useEchoStore } from '~/contexts'
 import { Shape } from '~/types'
 import { getDistance, getPointFromEvent } from '../utils/events'
 import { useDrag } from './useDrag'
@@ -7,7 +7,7 @@ import { useDrag } from './useDrag'
 const MOVEMENT_THRESHOLD = 5 // pixels
 
 export const useDrawing = () => {
-	const store = useRootStore()
+	const store = useEchoStore()
 	const drag = useDrag()
 
 	// Create memoized values for frequently accessed store properties

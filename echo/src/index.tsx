@@ -1,22 +1,8 @@
 import { render } from 'solid-js/web'
-import { Widget } from '~/components/Widget'
-import { type EchoOptions, type FeedbackData, POSITIONS, type Position } from '~/types'
+import { type EchoOptions, type FeedbackData, type Position } from '~/types'
+import { Echo } from './components/Echo'
 
 let activeInstance: (() => void) | null = null
-
-const createMountPoint = (position: Position): HTMLDivElement => {
-	const mountPoint = document.createElement('div')
-
-	Object.assign(mountPoint.style, {
-		position: 'fixed',
-		zIndex: '999999',
-		pointerEvents: 'none', // Only enable pointer events for the widget itself
-		transform: 'translate3d(0,0,0)', // Force GPU acceleration
-		...POSITIONS[position],
-	})
-
-	return mountPoint
-}
 
 const validateOptions = (options: EchoOptions): void => {
 	if (typeof options !== 'object' || options === null) {
@@ -48,17 +34,13 @@ export function initEcho(options: EchoOptions): () => void {
 		validateOptions(options)
 
 		const { position = 'bottom-right', primaryColor = '#805AD5', onSubmit, textConfig } = options
-		const mountPoint = createMountPoint(position)
-
-		queueMicrotask(() => {
-			document.body.appendChild(mountPoint)
-		})
 
 		const dispose = render(
 			() => (
-				<Widget
+				<Echo
 					position={position}
 					primaryColor={primaryColor}
+					textConfig={textConfig}
 					onSubmit={async data => {
 						try {
 							await onSubmit(data)
@@ -67,32 +49,15 @@ export function initEcho(options: EchoOptions): () => void {
 							throw error
 						}
 					}}
-					textConfig={textConfig}
 				/>
 			),
-			mountPoint,
+			document.body,
 		)
 
 		const cleanup = () => {
 			dispose()
-			mountPoint.remove()
 			activeInstance = null
 		}
-
-		// Handle unexpected unmounts
-		const observer = new MutationObserver(mutations => {
-			for (const mutation of mutations) {
-				for (const node of Array.from(mutation.removedNodes)) {
-					if (node === mountPoint || node.contains(mountPoint)) {
-						cleanup()
-						observer.disconnect()
-						return
-					}
-				}
-			}
-		})
-
-		observer.observe(document.body, { childList: true, subtree: true })
 
 		window.addEventListener('unload', cleanup, { once: true })
 

@@ -1,3 +1,4 @@
+import { zIndex } from '~/styles/zIndex'
 import { StylesConfig } from '~/types'
 
 export const drawingToolbarStyles = (config: StylesConfig) => {
@@ -11,15 +12,10 @@ export const drawingToolbarStyles = (config: StylesConfig) => {
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
-		z-index: 1000;
+		z-index: ${zIndex.drawingToolbar};
 		opacity: 1;
 		transition: opacity 0.2s ease-in-out;
 		pointer-events: auto;
-	}
-
-	.echo-drawing-toolbar[data-hidden="true"] {
-		opacity: 0;
-		pointer-events: none;
 	}
 
 	.echo-drawing-toolbar-button {

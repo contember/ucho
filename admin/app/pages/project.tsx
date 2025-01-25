@@ -19,6 +19,8 @@ export const List = () => {
 				<Slots.Back>
 					<BackButton />
 				</Slots.Back>
+				{/* alot of vertical stuff to enable scrolling */}
+				<div className="h-screen">lala</div>
 				<DefaultDataGrid entities="Project" toolbar={<DataGridQueryFilter />}>
 					<DataGridColumn>
 						<div className="flex gap-4" />

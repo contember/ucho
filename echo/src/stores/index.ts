@@ -1,2 +1,2 @@
-export * from './rootStore'
+export * from './echoStore'
 export * from './welcomeMessageStore'

@@ -1,9 +1,9 @@
 import { Component } from 'solid-js'
 import { CheckCircleIcon, CloseIcon, XCircleIcon } from '~/components/icons'
-import { useRootStore } from '~/contexts/RootContext'
+import { useEchoStore } from '~/contexts/EchoContext'
 
 export const Notification: Component = () => {
-	const store = useRootStore()
+	const store = useEchoStore()
 
 	const hideNotification = () => {
 		store.setWidget({ notification: { ...store.widget.notification, show: false } })
@@ -22,7 +22,7 @@ export const Notification: Component = () => {
 
 	return (
 		<div
-			class="echo-widget-notification"
+			class="echo-notification"
 			data-type={store.widget.notification.type}
 			data-empty={!store.widget.notification.type}
 			data-hidden={!store.widget.notification.show}

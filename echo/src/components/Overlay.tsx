@@ -1,12 +1,12 @@
-import { Component } from 'solid-js'
-import { DrawingLayer } from '~/features/drawing/components/DrawingLayer'
-import { DrawingToolbar } from '../features/drawing/components/DrawingToolbar'
+import { Component, JSX } from 'solid-js'
+import { useEchoStore } from '~/contexts'
 
-export const Overlay: Component = () => {
+export const Overlay: Component<{ children: JSX.Element }> = props => {
+	const store = useEchoStore()
+
 	return (
-		<div class="echo-overlay">
-			<DrawingToolbar />
-			<DrawingLayer />
+		<div class="echo-overlay" data-hidden={!store.widget.isOpen}>
+			{props.children}
 		</div>
 	)
 }

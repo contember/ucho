@@ -1,9 +1,10 @@
+import { zIndex } from '~/styles/zIndex'
 import { StylesConfig } from '~/types'
 
 export const shapeActionsStyles = (config: StylesConfig) => `
     .echo-shape-actions {
         position: fixed;
-        z-index: 1000000;
+        z-index: ${zIndex.shapeActions};
         display: flex;
         gap: 2px;
         background: white;

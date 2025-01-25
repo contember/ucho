@@ -33,13 +33,13 @@ export interface WidgetState {
 	notification: Notification
 }
 
-interface RootStoreConfig {
+interface EchoStoreConfig {
 	primaryColor: string
 	onSubmit: (data: FeedbackData) => Promise<void>
 	text: TextConfig
 }
 
-export interface RootStore {
+export interface EchoStore {
 	feedback: FeedbackState
 	setFeedback: (state: Partial<FeedbackState>) => void
 	drawing: DrawingState
@@ -53,7 +53,7 @@ export interface RootStore {
 	}
 }
 
-export const createRootStore = (config: RootStoreConfig): RootStore => {
+export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 	const [feedback, setFeedback] = createStore<FeedbackState>({
 		comment: '',
 		screenshot: undefined,

@@ -13,11 +13,7 @@ const createCanvas = (width: number, height: number): HTMLCanvasElement => {
 }
 
 const shouldIgnoreElement = (element: Element): boolean => {
-	return (
-		element.classList.contains('echo-widget-button') ||
-		element.classList.contains('echo-feedback-form') ||
-		element.classList.contains('echo-drawing-toolbar')
-	)
+	return element.hasAttribute('data-hide-when-drawing')
 }
 
 // const drawAnnotations = (ctx: CanvasRenderingContext2D, annotations: Shape[]): void => {
