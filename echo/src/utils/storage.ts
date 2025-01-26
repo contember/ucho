@@ -8,6 +8,7 @@ interface StoredPageState {
 	drawing: {
 		shapes: Shape[]
 	}
+	latestQuery?: string
 }
 
 const STORAGE_PREFIX = 'echo_'
@@ -48,6 +49,7 @@ export const savePageState = (pageKey: string, state: { feedback: FeedbackState;
 		if (!state.feedback.comment && (!state.drawing.shapes || state.drawing.shapes.length === 0)) {
 			delete allPagesData[pageKey]
 		} else {
+			const currentQuery = window.location.search || undefined
 			const essentialState: StoredPageState = {
 				feedback: {
 					comment: state.feedback.comment,
@@ -55,6 +57,7 @@ export const savePageState = (pageKey: string, state: { feedback: FeedbackState;
 				drawing: {
 					shapes: state.drawing.shapes,
 				},
+				latestQuery: currentQuery,
 			}
 			allPagesData[pageKey] = essentialState
 		}

@@ -1,4 +1,4 @@
-import { Component, For, Show, createSignal, onCleanup, onMount } from 'solid-js'
+import { Component, For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { Button } from '~/components/atoms/Button'
 import { XIcon } from '~/components/icons'
 import { ExternalLinkIcon } from '~/components/icons/ExternalLinkIcon'
@@ -8,7 +8,7 @@ import { clearPageState, getStoredPages } from '~/utils/storage'
 export const SavedPagesDropdown: Component = () => {
 	const store = useEchoStore()
 	const [pages, setPages] = createSignal(getStoredPages())
-	const currentPath = () => window.location.pathname
+	const [currentPath, setCurrentPath] = createSignal(window.location.pathname)
 
 	onMount(() => {
 		const handleStorageChange = () => {
@@ -17,14 +17,32 @@ export const SavedPagesDropdown: Component = () => {
 			store.setWidget({ pagesCount: storedPages.length })
 		}
 
+		const handleUrlChange = () => {
+			setCurrentPath(window.location.pathname)
+		}
+
 		window.addEventListener('echo-storage-change', handleStorageChange)
+		window.addEventListener('popstate', handleUrlChange)
+
+		const observer = new MutationObserver(() => {
+			setCurrentPath(window.location.pathname)
+		})
+
+		observer.observe(document.documentElement, {
+			subtree: true,
+			childList: true,
+		})
+
 		onCleanup(() => {
 			window.removeEventListener('echo-storage-change', handleStorageChange)
+			window.removeEventListener('popstate', handleUrlChange)
+			observer.disconnect()
 		})
 	})
 
-	const handleNavigate = (path: string) => {
-		window.location.href = path
+	const handleNavigate = (path: string, latestQuery?: string) => {
+		const targetUrl = latestQuery ? `${path}${latestQuery}` : path
+		window.location.href = targetUrl
 		store.setWidget({ isPagesDropdownOpen: false })
 	}
 
@@ -59,9 +77,9 @@ export const SavedPagesDropdown: Component = () => {
 				<div class="echo-saved-pages-list">
 					<For each={pages()}>
 						{page => {
-							const isCurrent = page.path === currentPath()
+							const isCurrent = createMemo(() => page.path === currentPath())
 							return (
-								<div class={`echo-saved-pages-item ${isCurrent ? 'echo-saved-pages-item-current' : ''}`}>
+								<div class={`echo-saved-pages-item ${isCurrent() ? 'echo-saved-pages-item-current' : ''}`}>
 									<div class="echo-saved-pages-content">
 										<div class="echo-saved-pages-path">
 											<span title={page.path}>{formatPath(page.path)}</span>
@@ -69,8 +87,14 @@ export const SavedPagesDropdown: Component = () => {
 										<div class="echo-saved-pages-preview">{page.state.feedback.comment}</div>
 									</div>
 									<div class="echo-saved-pages-actions">
-										{!isCurrent && (
-											<Button variant="secondary" size="sm" class="echo-saved-pages-link" onClick={() => handleNavigate(page.path)} title="Open page">
+										{!isCurrent() && (
+											<Button
+												variant="secondary"
+												size="sm"
+												class="echo-saved-pages-link"
+												onClick={() => handleNavigate(page.path, page.state.latestQuery)}
+												title="Open page"
+											>
 												<ExternalLinkIcon />
 											</Button>
 										)}
