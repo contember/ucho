@@ -5,7 +5,7 @@ import { Menu, MenuItem } from '~/lib/ui/menu'
 export const Navigation = Component(() => (
 	<Menu>
 		<MenuItem label="Projects" icon={<FolderIcon />} to="project/list" />
-		<MenuItem label="Feedback" icon={<MessageSquareIcon />} to="feedback/list" />
+		<MenuItem label="Feedback" icon={<MessageSquareIcon />} to="feedback/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
 		<MenuItem label="Groupings" icon={<LayersIcon />} to="grouping/list" />
 		<MenuItem label="Users" icon={<UsersIcon />} to="user/list" />
 		<MenuItem label="Tags" icon={<TagIcon />} to="tag/list" />

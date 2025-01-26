@@ -6,6 +6,7 @@ import { colorSelectorStyles, drawingLayerStyles, drawingToolbarStyles, shapeAct
 import { feedbackFormStyles } from '~/features/feedback/styles'
 import { echoButtonStyles } from '~/features/launcher/styles/EchoButton.styles'
 import { notificationStyles } from '~/features/launcher/styles/Notification.styles'
+import { savedPagesDropdownStyles } from '~/features/launcher/styles/SavedPagesDropdown.styles'
 import { welcomeMessageStyles } from '~/features/launcher/styles/WelcomeMessage.styles'
 import { echoStyles } from '~/styles'
 import { EchoWidgetProps, StylesConfig } from '~/types'
@@ -20,6 +21,7 @@ const createStyles = (config: StylesConfig) => {
 		${notificationStyles(config)}
 		${welcomeMessageStyles(config)}
 		${echoButtonStyles(config)}
+		${savedPagesDropdownStyles(config)}
 
 		/* Drawing Components */
 		${drawingLayerStyles(config)}

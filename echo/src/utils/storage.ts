@@ -12,6 +12,11 @@ interface StoredPageState {
 }
 
 const STORAGE_PREFIX = 'echo_'
+const STORAGE_KEY = 'echo_page_state'
+
+export const dispatchStorageChange = () => {
+	window.dispatchEvent(new CustomEvent('echo-storage-change'))
+}
 
 export const getStorageKey = (key: string): string => `${STORAGE_PREFIX}${key}`
 
@@ -31,8 +36,6 @@ export const setToStorage = <T>(key: string, value: T): void => {
 		console.warn('Failed to save to localStorage:', error)
 	}
 }
-
-const STORAGE_KEY = 'echo_page_state'
 
 export const getPageKey = () => {
 	return window.location.pathname
@@ -55,6 +58,7 @@ export const savePageState = (pageKey: string, state: { feedback: FeedbackState;
 
 		allPagesData[pageKey] = essentialState
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(allPagesData))
+		dispatchStorageChange()
 	} catch (error) {
 		console.error('Failed to save page state:', error)
 	}
@@ -81,7 +85,37 @@ export const clearPageState = (pageKey: string) => {
 		const allPagesData = JSON.parse(existingData)
 		delete allPagesData[pageKey]
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(allPagesData))
+		dispatchStorageChange()
 	} catch (error) {
 		console.error('Failed to clear page state:', error)
+	}
+}
+
+export const getStoredPagesCount = (): number => {
+	try {
+		const existingData = localStorage.getItem(STORAGE_KEY)
+		if (!existingData) return 0
+
+		const allPagesData = JSON.parse(existingData)
+		return Object.keys(allPagesData).length
+	} catch (error) {
+		console.error('Failed to get stored pages count:', error)
+		return 0
+	}
+}
+
+export const getStoredPages = (): { path: string; state: StoredPageState }[] => {
+	try {
+		const existingData = localStorage.getItem(STORAGE_KEY)
+		if (!existingData) return []
+
+		const allPagesData = JSON.parse(existingData)
+		return Object.entries(allPagesData).map(([path, state]) => ({
+			path,
+			state: state as StoredPageState,
+		}))
+	} catch (error) {
+		console.error('Failed to get stored pages:', error)
+		return []
 	}
 }

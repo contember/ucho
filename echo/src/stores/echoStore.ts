@@ -2,7 +2,7 @@ import { createEffect, onCleanup } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { DrawingTool, FeedbackData, Notification, Point, Screenshot, Shape, TextConfig } from '~/types'
 import { debounce } from '~/utils/debounce'
-import { clearPageState, getPageKey, loadPageState, savePageState } from '~/utils/storage'
+import { clearPageState, getPageKey, getStoredPagesCount, loadPageState, savePageState } from '~/utils/storage'
 
 export interface FeedbackState {
 	comment: string
@@ -38,6 +38,8 @@ export interface WidgetState {
 		width: number
 		height: number
 	}
+	isPagesDropdownOpen: boolean
+	pagesCount: number
 }
 
 interface EchoStoreConfig {
@@ -72,15 +74,15 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 	})
 
 	const [drawing, setDrawing] = createStore<DrawingState>({
+		shapes: savedState?.drawing.shapes || [],
+		hasDrawn: savedState?.drawing.hasDrawn || false,
 		isDrawing: false,
 		currentPoints: [],
-		shapes: savedState?.drawing.shapes || [],
 		currentPath: '',
 		selectedShapeId: null,
 		selectedTool: 'highlight',
 		showTooltip: true,
 		mousePosition: { x: 0, y: 0 },
-		hasDrawn: savedState?.drawing.hasDrawn || false,
 		selectedColor: config.primaryColor,
 		isDragging: false,
 		dragStartPos: null,
@@ -101,6 +103,8 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 			width: document.documentElement.clientWidth,
 			height: document.documentElement.scrollHeight,
 		},
+		isPagesDropdownOpen: false,
+		pagesCount: getStoredPagesCount(),
 	})
 
 	const [text] = createStore<TextConfig>(config.text)
@@ -114,6 +118,7 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 	const debouncedSave = debounce((pageKey: string) => {
 		if (shouldSaveState()) {
 			savePageState(pageKey, { feedback, drawing })
+			setWidget({ pagesCount: getStoredPagesCount() })
 		}
 	}, 1000)
 
@@ -124,6 +129,7 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 			// Save current state before switching only if there's content
 			if (shouldSaveState()) {
 				savePageState(currentPageKey, { feedback, drawing })
+				setWidget({ pagesCount: getStoredPagesCount() })
 			}
 
 			// Load new state
@@ -187,7 +193,9 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 	const wrappedSetDrawing = (state: Partial<DrawingState>) => {
 		setDrawing(state)
 		if (shouldSaveState()) {
-			savePageState(currentPageKey, { feedback, drawing })
+			// TODO :HERE
+			// savePageState(currentPageKey, { feedback, drawing })
+			setWidget({ pagesCount: getStoredPagesCount() })
 		}
 	}
 

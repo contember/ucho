@@ -14,7 +14,7 @@ import {
 import { Slots } from '~/lib/layout'
 import { AnchorButton } from '~/lib/ui/button'
 
-export const List = () => {
+export const aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa = () => {
 	return (
 		<>
 			<Binding>

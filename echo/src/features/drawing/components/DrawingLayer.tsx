@@ -11,19 +11,20 @@ import { ShapeActions } from './ShapeActions'
 export const DrawingLayer: Component = () => {
 	const store = useEchoStore()
 	const drawing = useDrawing()
+	let drawingLayerContainerRef: HTMLDivElement | undefined
 
 	onMount(() => {
-		document.addEventListener('mousemove', drawing.actions.handleMove)
-		document.addEventListener('mouseup', drawing.actions.handleEnd)
-		document.addEventListener('touchmove', drawing.actions.handleMove, { passive: false })
-		document.addEventListener('touchend', drawing.actions.handleEnd)
+		drawingLayerContainerRef?.addEventListener('mousemove', drawing.actions.handleMove)
+		drawingLayerContainerRef?.addEventListener('mouseup', drawing.actions.handleEnd)
+		drawingLayerContainerRef?.addEventListener('touchmove', drawing.actions.handleMove, { passive: false })
+		drawingLayerContainerRef?.addEventListener('touchend', drawing.actions.handleEnd)
 	})
 
 	onCleanup(() => {
-		document.removeEventListener('mousemove', drawing.actions.handleMove)
-		document.removeEventListener('mouseup', drawing.actions.handleEnd)
-		document.removeEventListener('touchmove', drawing.actions.handleMove)
-		document.removeEventListener('touchend', drawing.actions.handleEnd)
+		drawingLayerContainerRef?.removeEventListener('mousemove', drawing.actions.handleMove)
+		drawingLayerContainerRef?.removeEventListener('mouseup', drawing.actions.handleEnd)
+		drawingLayerContainerRef?.removeEventListener('touchmove', drawing.actions.handleMove)
+		drawingLayerContainerRef?.removeEventListener('touchend', drawing.actions.handleEnd)
 	})
 
 	const getCursor = () => {
@@ -36,6 +37,7 @@ export const DrawingLayer: Component = () => {
 
 	return (
 		<div
+			ref={drawingLayerContainerRef}
 			class="echo-drawing-layer-container"
 			style={{
 				cursor: getCursor(),
