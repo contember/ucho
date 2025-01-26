@@ -1,12 +1,12 @@
 import { zIndex } from '~/styles/zIndex'
 import { StylesConfig } from '~/types'
 
-export const echoButtonStyles = (config: StylesConfig) => `
-	.echo-button-wrapper {
+export const echoLauncherButtonStyles = (config: StylesConfig) => `
+	.echo-launcher-button-wrapper {
 		position: relative;
 	}
 
-	.echo-button {
+	.echo-launcher-button {
 		position: relative;
 		display: flex;
 		align-items: center;
@@ -26,17 +26,17 @@ export const echoButtonStyles = (config: StylesConfig) => `
 		transition: all 0.3s ease-out;
 	}
 
-	.echo-button:hover {
+	.echo-launcher-button:hover {
 		transform: scale(1.1);
 		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15),
 					0 12px 40px ${config.primaryColor}50;
 	}
 
-	.echo-button:active {
+	.echo-launcher-button:active {
 		transform: scale(0.95);
 	}
 
-	.echo-button-count {
+	.echo-launcher-button-count {
 		position: absolute;
 		top: -6px;
 		right: -6px;
@@ -61,7 +61,7 @@ export const echoButtonStyles = (config: StylesConfig) => `
 		transition: transform 0.2s ease;
 	}
 
-	.echo-button-count:hover {
+	.echo-launcher-button-count:hover {
 		transform: scale(1.1);
 	}
 

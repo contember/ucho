@@ -14,10 +14,17 @@ export interface Metadata {
 	browserInfo: BrowserInfo
 }
 
+export interface ConsoleEntry {
+	type: 'log' | 'warn' | 'error'
+	message: string
+	timestamp: string
+}
+
 export interface FeedbackData {
 	comment: string
 	screenshot?: Screenshot
 	metadata: Metadata
+	console: ConsoleEntry[]
 }
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
@@ -104,6 +111,10 @@ export interface IconProps {
 
 export interface StylesConfig {
 	primaryColor: string
+}
+
+export interface EnrichedStylesConfig extends StylesConfig {
+	primaryTextColor: string
 }
 
 export interface Notification {

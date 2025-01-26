@@ -1,12 +1,13 @@
 import { Component } from 'solid-js'
 import { IconProps } from '~/types'
 
-export const CloseIcon: Component<IconProps> = props => (
+export const XIcon: Component<IconProps> = props => (
 	<svg
+		xmlns="http://www.w3.org/2000/svg"
 		width={props.size ?? 24}
 		height={props.size ?? 24}
 		viewBox="0 0 24 24"
-		fill="none"
+		fill={props.fill ?? 'none'}
 		stroke={props.stroke ?? 'currentColor'}
 		stroke-width={props.strokeWidth ?? 2}
 		stroke-linecap="round"
@@ -14,7 +15,7 @@ export const CloseIcon: Component<IconProps> = props => (
 		class={props.class}
 		style={props.style}
 	>
-		<line x1="18" y1="6" x2="6" y2="18" />
-		<line x1="6" y1="6" x2="18" y2="18" />
+		<path d="M18 6 6 18" />
+		<path d="m6 6 12 12" />
 	</svg>
 )

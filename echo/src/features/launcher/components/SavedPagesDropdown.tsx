@@ -1,4 +1,6 @@
 import { Component, For, Show, createSignal, onCleanup, onMount } from 'solid-js'
+import { Button } from '~/components/atoms/Button'
+import { XIcon } from '~/components/icons'
 import { ExternalLinkIcon } from '~/components/icons/ExternalLinkIcon'
 import { useEchoStore } from '~/contexts'
 import { clearPageState, getStoredPages } from '~/utils/storage'
@@ -50,6 +52,9 @@ export const SavedPagesDropdown: Component = () => {
 			<div class="echo-saved-pages-dropdown">
 				<div class="echo-saved-pages-header">
 					<h3>Saved Feedback</h3>
+					<Button variant="secondary" size="sm" onClick={() => store.setWidget({ isPagesDropdownOpen: false })} title="Close">
+						<XIcon size={20} />
+					</Button>
 				</div>
 				<div class="echo-saved-pages-list">
 					<For each={pages()}>
@@ -65,24 +70,13 @@ export const SavedPagesDropdown: Component = () => {
 									</div>
 									<div class="echo-saved-pages-actions">
 										{!isCurrent && (
-											<button
-												class="echo-saved-pages-link"
-												onClick={() => handleNavigate(page.path)}
-												title={`Go to ${page.path}`}
-												aria-label={`Go to ${page.path}`}
-											>
+											<Button variant="secondary" size="sm" class="echo-saved-pages-link" onClick={() => handleNavigate(page.path)} title="Open page">
 												<ExternalLinkIcon />
-											</button>
+											</Button>
 										)}
-										<button
-											class="echo-saved-pages-delete"
-											onClick={() => handleDelete(page.path)}
-											style={{ color: store.widget.primaryColor }}
-											title={`Delete feedback for ${page.path}`}
-											aria-label={`Delete feedback for ${page.path}`}
-										>
+										<Button variant="secondary" size="md" class="echo-saved-pages-delete" onClick={() => handleDelete(page.path)}>
 											Delete
-										</button>
+										</Button>
 									</div>
 								</div>
 							)

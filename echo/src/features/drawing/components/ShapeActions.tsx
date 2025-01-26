@@ -1,4 +1,5 @@
 import { Component, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
+import { Button } from '~/components/atoms'
 import { TrashIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts'
 import { Point } from '~/types'
@@ -75,9 +76,9 @@ export const ShapeActions: Component = () => {
 				top: position() ? `${position()?.y}px` : '0',
 			}}
 		>
-			<button onClick={handleDelete} class="echo-shape-action-button" title="Delete shape">
-				<TrashIcon size={16} />
-			</button>
+			<Button onClick={handleDelete} size="sm" variant="secondary" title="Delete shape">
+				<TrashIcon size={20} />
+			</Button>
 		</div>
 	)
 }

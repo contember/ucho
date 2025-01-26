@@ -1,7 +1,9 @@
 import { Component } from 'solid-js'
-import { ChevronRightIcon, MessageIcon, TrashIcon } from '~/components/icons'
+import { Button } from '~/components/atoms/Button'
+import { ChevronRightIcon, MessageIcon, TrashIcon, XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
 import { isMobileDevice } from '~/utils'
+import { getConsoleBuffer } from '~/utils/console'
 import { captureScreenshot } from '~/utils/screenshot'
 
 export const FeedbackForm: Component = () => {
@@ -32,7 +34,10 @@ export const FeedbackForm: Component = () => {
 
 		try {
 			store.setWidget({ isOpen: false })
-			await store.widget.onSubmit(data)
+			await store.widget.onSubmit({
+				...data,
+				console: getConsoleBuffer(),
+			})
 			store.methods.postSubmit({ show: true, type: 'success', message: '' })
 		} catch (error) {
 			store.methods.postSubmit({ show: true, type: 'error', message: store.text.notification.errorMessage })
@@ -45,27 +50,23 @@ export const FeedbackForm: Component = () => {
 				<div class="echo-feedback-header">
 					<h3 class="echo-feedback-title">{store.text.feedbackForm.title}</h3>
 					<div class="echo-feedback-header-actions">
-						<button
-							type="button"
-							class="echo-feedback-header-action"
-							title="Clear feedback and drawings"
+						<Button
+							variant="secondary"
+							size="sm"
 							onClick={() => {
-								store.setFeedback({ comment: '' })
-								store.setDrawing({ shapes: [] })
+								store.setFeedback({ comment: '' }, true)
+								store.setDrawing({ shapes: [] }, true)
 							}}
+							title="Clear feedback and drawings"
 						>
-							<TrashIcon size={16} />
-						</button>
-						<button
-							onClick={() => store.setFeedback({ isMinimized: !store.feedback.isMinimized })}
-							class="echo-feedback-header-action"
-							title="Hide form"
-						>
-							<ChevronRightIcon />
-						</button>
-						<button onClick={() => store.setWidget({ isOpen: false })} class="echo-feedback-header-action" title="Close form">
-							×
-						</button>
+							<TrashIcon size={20} />
+						</Button>
+						<Button variant="secondary" size="sm" onClick={() => store.setFeedback({ isMinimized: !store.feedback.isMinimized })} title="Hide form">
+							<ChevronRightIcon size={20} />
+						</Button>
+						<Button variant="secondary" size="sm" onClick={() => store.setWidget({ isOpen: false })} title="Close form">
+							<XIcon size={20} />
+						</Button>
 					</div>
 				</div>
 
@@ -78,17 +79,17 @@ export const FeedbackForm: Component = () => {
 						required
 					/>
 
-					<button type="submit" class="echo-feedback-form-submit">
+					<Button type="submit" variant="primary" size="lg" style={{ width: '100%' }}>
 						{store.text.feedbackForm.submitButton}
-					</button>
+					</Button>
 				</form>
 			</div>
 
 			{/* Maximize button */}
 			<button
 				class="echo-feedback-maximize"
-				title="Show form"
 				onClick={() => store.setFeedback({ isMinimized: false })}
+				title="Show form"
 				data-hide-when-drawing="true"
 			>
 				<MessageIcon stroke="white" />

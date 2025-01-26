@@ -49,9 +49,9 @@ interface EchoStoreConfig {
 
 export interface EchoStore {
 	feedback: FeedbackState
-	setFeedback: (state: Partial<FeedbackState>) => void
+	setFeedback: (state: Partial<FeedbackState>, isClearing?: boolean) => void
 	drawing: DrawingState
-	setDrawing: (state: Partial<DrawingState>) => void
+	setDrawing: (state: Partial<DrawingState>, isClearing?: boolean) => void
 	widget: WidgetState
 	setWidget: (state: Partial<WidgetState>) => void
 	text: TextConfig
@@ -74,7 +74,7 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 
 	const [drawing, setDrawing] = createStore<DrawingState>({
 		shapes: savedState?.drawing.shapes || [],
-		hasDrawn: savedState?.drawing.hasDrawn || false,
+		hasDrawn: false,
 		isDrawing: false,
 		currentPoints: [],
 		currentPath: '',
@@ -108,12 +108,20 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 
 	const [text] = createStore<TextConfig>(config.text)
 
-	const shouldSaveState = () => {
-		return feedback.comment.trim().length > 0 || drawing.shapes.length > 0
+	const shouldSaveState = (isClearing = false) => {
+		return isClearing || feedback.comment.trim().length > 0 || drawing.shapes.length > 0
 	}
 
-	const debouncedSave = debounce((pageKey: string) => {
-		if (shouldSaveState()) {
+	const shouldTriggerSave = (state: Partial<FeedbackState | DrawingState>) => {
+		if ('comment' in state) return true
+		if ('shapes' in state) return true
+		if ('isClearing' in state) return true
+
+		return false
+	}
+
+	const debouncedSave = debounce((pageKey: string, isClearing = false) => {
+		if (shouldSaveState(isClearing)) {
 			savePageState(pageKey, { feedback, drawing })
 			setWidget({ pagesCount: getStoredPagesCount() })
 		}
@@ -122,10 +130,7 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 	const handleUrlChange = () => {
 		const newPageKey = getPageKey()
 		if (newPageKey !== currentPageKey) {
-			if (shouldSaveState()) {
-				savePageState(currentPageKey, { feedback, drawing })
-				setWidget({ pagesCount: getStoredPagesCount() })
-			}
+			debouncedSave(currentPageKey, true)
 
 			currentPageKey = newPageKey
 			const newState = loadPageState(currentPageKey)
@@ -138,7 +143,6 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 			setDrawing({
 				...drawing,
 				shapes: newState?.drawing.shapes || [],
-				hasDrawn: newState?.drawing.hasDrawn || false,
 			})
 		}
 	}
@@ -164,14 +168,18 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 		})
 	})
 
-	const wrappedSetFeedback = (state: Partial<FeedbackState>) => {
+	const wrappedSetFeedback = (state: Partial<FeedbackState>, isClearing = false) => {
 		setFeedback(state)
-		debouncedSave(currentPageKey)
+		if (shouldTriggerSave(state) || isClearing) {
+			debouncedSave(currentPageKey, isClearing)
+		}
 	}
 
-	const wrappedSetDrawing = (state: Partial<DrawingState>) => {
+	const wrappedSetDrawing = (state: Partial<DrawingState>, isClearing = false) => {
 		setDrawing(state)
-		debouncedSave(currentPageKey)
+		if (shouldTriggerSave(state) || isClearing) {
+			debouncedSave(currentPageKey, isClearing)
+		}
 	}
 
 	const reset = () => {

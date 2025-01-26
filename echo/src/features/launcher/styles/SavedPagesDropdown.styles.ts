@@ -32,6 +32,33 @@ export const savedPagesDropdownStyles = (config: StylesConfig) => `
 		color: #1a1a1a;
 	}
 
+	.echo-saved-pages-close {
+		background: none;
+		border: none;
+		width: 24px;
+		height: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 20px;
+		color: #666;
+		cursor: pointer;
+		border-radius: 4px;
+		transition: all 0.2s;
+		padding: 0;
+		line-height: 1;
+	}
+
+	.echo-saved-pages-close:hover {
+		background-color: ${config.primaryColor}10;
+		color: ${config.primaryColor};
+	}
+
+	.echo-saved-pages-close:focus-visible {
+		outline: 2px solid ${config.primaryColor};
+		outline-offset: 2px;
+	}
+
 	.echo-saved-pages-header span {
 		font-size: 14px;
 		color: #666;

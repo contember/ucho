@@ -7,7 +7,6 @@ interface StoredPageState {
 	}
 	drawing: {
 		shapes: Shape[]
-		hasDrawn: boolean
 	}
 }
 
@@ -46,17 +45,20 @@ export const savePageState = (pageKey: string, state: { feedback: FeedbackState;
 		const existingData = localStorage.getItem(STORAGE_KEY)
 		const allPagesData = existingData ? JSON.parse(existingData) : {}
 
-		const essentialState: StoredPageState = {
-			feedback: {
-				comment: state.feedback.comment,
-			},
-			drawing: {
-				shapes: state.drawing.shapes,
-				hasDrawn: state.drawing.hasDrawn,
-			},
+		if (!state.feedback.comment && (!state.drawing.shapes || state.drawing.shapes.length === 0)) {
+			delete allPagesData[pageKey]
+		} else {
+			const essentialState: StoredPageState = {
+				feedback: {
+					comment: state.feedback.comment,
+				},
+				drawing: {
+					shapes: state.drawing.shapes,
+				},
+			}
+			allPagesData[pageKey] = essentialState
 		}
 
-		allPagesData[pageKey] = essentialState
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(allPagesData))
 		dispatchStorageChange()
 	} catch (error) {
@@ -104,28 +106,18 @@ export const getStoredPagesCount = (): number => {
 	}
 }
 
-let cachedPages: { path: string; state: StoredPageState }[] | null = null
-
 export const getStoredPages = (): { path: string; state: StoredPageState }[] => {
-	if (cachedPages !== null) return cachedPages
-
 	try {
 		const existingData = localStorage.getItem(STORAGE_KEY)
 		if (!existingData) return []
 
 		const allPagesData = JSON.parse(existingData)
-		cachedPages = Object.entries(allPagesData).map(([path, state]) => ({
+		return Object.entries(allPagesData).map(([path, state]) => ({
 			path,
 			state: state as StoredPageState,
 		}))
-		return cachedPages
 	} catch (error) {
 		console.error('Failed to get stored pages:', error)
 		return []
 	}
-}
-
-// Clear cache when storage changes
-export const clearCache = () => {
-	cachedPages = null
 }

@@ -1,5 +1,5 @@
 import { Component } from 'solid-js'
-import { CloseIcon } from '~/components/icons'
+import { XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
 import { welcomeMessageStore } from '~/stores/welcomeMessageStore'
 import { getFromStorage, setToStorage } from '~/utils/storage'
@@ -42,7 +42,7 @@ export const WelcomeMessage: Component = () => {
 				aria-label={store.text.welcomeMessage.closeAriaLabel}
 				onKeyDown={e => e.key === 'Enter' && hideMessage(e)}
 			>
-				<CloseIcon size={16} stroke="currentColor" />
+				<XIcon size={16} stroke="currentColor" />
 			</div>
 			{store.text.welcomeMessage.text}
 		</button>

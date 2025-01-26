@@ -1,5 +1,6 @@
 import { render } from 'solid-js/web'
 import { type EchoOptions, type FeedbackData, type Position } from '~/types'
+import { cleanupConsole, getConsoleBuffer, setupConsole } from '~/utils/console'
 import { Echo } from './components/Echo'
 
 let activeInstance: (() => void) | null = null
@@ -24,7 +25,6 @@ const validateOptions = (options: EchoOptions): void => {
  * @returns {() => void} Cleanup function to remove the widget
  */
 export function initEcho(options: EchoOptions): () => void {
-	// Prevent multiple instances
 	if (activeInstance) {
 		console.warn('Echo widget is already initialized. Cleaning up previous instance...')
 		activeInstance()
@@ -32,6 +32,7 @@ export function initEcho(options: EchoOptions): () => void {
 
 	try {
 		validateOptions(options)
+		setupConsole()
 
 		const { position = 'bottom-right', primaryColor = '#805AD5', onSubmit, textConfig } = options
 
@@ -43,7 +44,10 @@ export function initEcho(options: EchoOptions): () => void {
 					textConfig={textConfig}
 					onSubmit={async data => {
 						try {
-							await onSubmit(data)
+							await onSubmit({
+								...data,
+								console: getConsoleBuffer(),
+							})
 						} catch (error) {
 							console.error('Error in Echo onSubmit handler:', error)
 							throw error
@@ -56,6 +60,7 @@ export function initEcho(options: EchoOptions): () => void {
 
 		const cleanup = () => {
 			dispose()
+			cleanupConsole()
 			activeInstance = null
 		}
 

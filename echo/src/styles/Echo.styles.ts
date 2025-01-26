@@ -1,7 +1,7 @@
-import { StylesConfig } from '~/types'
+import { EnrichedStylesConfig } from '~/types'
 import { zIndex } from './zIndex'
 
-export const echoStyles = (config: StylesConfig) => `
+export const echoStyles = (config: EnrichedStylesConfig) => `
     *, *::before, *::after {
         box-sizing: border-box;
     }

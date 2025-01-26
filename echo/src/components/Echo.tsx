@@ -4,34 +4,48 @@ import { EchoProvider } from '~/contexts'
 import { useEchoStore } from '~/contexts/EchoContext'
 import { colorSelectorStyles, drawingLayerStyles, drawingToolbarStyles, shapeActionsStyles, tooltipStyles } from '~/features/drawing/styles'
 import { feedbackFormStyles } from '~/features/feedback/styles'
-import { echoButtonStyles } from '~/features/launcher/styles/EchoButton.styles'
+import { echoLauncherButtonStyles } from '~/features/launcher/styles/EchoLauncherButton.styles'
 import { notificationStyles } from '~/features/launcher/styles/Notification.styles'
 import { savedPagesDropdownStyles } from '~/features/launcher/styles/SavedPagesDropdown.styles'
 import { welcomeMessageStyles } from '~/features/launcher/styles/WelcomeMessage.styles'
 import { echoStyles } from '~/styles'
-import { EchoWidgetProps, StylesConfig } from '~/types'
+import { EchoWidgetProps, EnrichedStylesConfig, StylesConfig } from '~/types'
+import { getContrastColor } from '~/utils/color'
 import { EchoLayout } from './EchoLayout'
+import { buttonStyles } from './atoms'
+
+const enrichConfig = (config: StylesConfig): EnrichedStylesConfig => {
+	return {
+		...config,
+		primaryTextColor: getContrastColor(config.primaryColor),
+	}
+}
 
 const createStyles = (config: StylesConfig) => {
+	const enrichedConfig = enrichConfig(config)
+
 	return `
 		/* Echo Components */
-		${echoStyles(config)}
+		${echoStyles(enrichedConfig)}
+
+		/* Atoms */
+		${buttonStyles(enrichedConfig)}
 
 		/* Launcher Components */
-		${notificationStyles(config)}
-		${welcomeMessageStyles(config)}
-		${echoButtonStyles(config)}
-		${savedPagesDropdownStyles(config)}
+		${notificationStyles(enrichedConfig)}
+		${welcomeMessageStyles(enrichedConfig)}
+		${echoLauncherButtonStyles(enrichedConfig)}
+		${savedPagesDropdownStyles(enrichedConfig)}
 
 		/* Drawing Components */
-		${drawingLayerStyles(config)}
-		${drawingToolbarStyles(config)}
-		${colorSelectorStyles(config)}
-		${shapeActionsStyles(config)}
-		${tooltipStyles(config)}
+		${drawingLayerStyles(enrichedConfig)}
+		${drawingToolbarStyles(enrichedConfig)}
+		${colorSelectorStyles(enrichedConfig)}
+		${shapeActionsStyles(enrichedConfig)}
+		${tooltipStyles(enrichedConfig)}
 		
 		/* Feedback Components */
-		${feedbackFormStyles(config)}
+		${feedbackFormStyles(enrichedConfig)}
 	`
 }
 

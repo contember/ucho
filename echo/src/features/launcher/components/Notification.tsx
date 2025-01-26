@@ -1,5 +1,5 @@
 import { Component } from 'solid-js'
-import { CheckCircleIcon, CloseIcon, XCircleIcon } from '~/components/icons'
+import { CheckCircleIcon, XCircleIcon, XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
 
 export const Notification: Component = () => {
@@ -28,7 +28,7 @@ export const Notification: Component = () => {
 			data-hidden={!store.widget.notification.show}
 		>
 			<button class="echo-notification-hide" onClick={hideNotification} title={store.text.notification.hideTitle}>
-				<CloseIcon size={16} />
+				<XIcon size={16} />
 			</button>
 			<div class="echo-notification-icon">
 				{store.widget.notification.type === 'success' ? (

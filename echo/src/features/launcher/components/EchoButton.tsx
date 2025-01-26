@@ -20,11 +20,11 @@ export const EchoButton: Component = () => {
 	}
 
 	return (
-		<div class="echo-button-wrapper">
-			<button class="echo-button" onClick={handleClick} data-hidden={store.widget.isOpen}>
+		<div class="echo-launcher-button-wrapper">
+			<button class="echo-launcher-button" onClick={handleClick} data-hidden={store.widget.isOpen}>
 				<ContemberIcon stroke="white" fill="#ffffff" />
 				{store.widget.pagesCount > 0 && (
-					<span class="echo-button-count" onClick={handleCountClick}>
+					<span class="echo-launcher-button-count" onClick={handleCountClick}>
 						{store.widget.pagesCount}
 					</span>
 				)}

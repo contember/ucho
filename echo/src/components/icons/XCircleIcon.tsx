@@ -7,9 +7,9 @@ export const XCircleIcon: Component<IconProps> = props => (
 		width={props.size ?? 24}
 		height={props.size ?? 24}
 		viewBox="0 0 24 24"
-		fill="none"
+		fill={props.fill ?? 'none'}
 		stroke={props.stroke ?? 'currentColor'}
-		stroke-width="2"
+		stroke-width={props.strokeWidth ?? 2}
 		stroke-linecap="round"
 		stroke-linejoin="round"
 		class={props.class}
