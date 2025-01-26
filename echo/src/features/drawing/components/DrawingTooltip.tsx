@@ -9,6 +9,7 @@ export const DrawingTooltip: Component = () => {
 		<Show when={store.drawing.showTooltip && store.widget.isOpen && !isMobileDevice()}>
 			<div
 				class="echo-drawing-tooltip"
+				data-hide-when-drawing="true"
 				style={{
 					top: `${store.drawing.mousePosition.y + 20}px`,
 					left: `${store.drawing.mousePosition.x + 10}px`,
