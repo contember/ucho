@@ -42,7 +42,7 @@ export const WelcomeMessage: Component = () => {
 				aria-label={store.text.welcomeMessage.closeAriaLabel}
 				onKeyDown={e => e.key === 'Enter' && hideMessage(e)}
 			>
-				<XIcon size={16} stroke="currentColor" />
+				<XIcon size={16} />
 			</div>
 			{store.text.welcomeMessage.text}
 		</button>

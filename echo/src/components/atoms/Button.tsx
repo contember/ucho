@@ -11,7 +11,7 @@ export const Button: Component<ButtonProps> = props => {
 	const variant = () => props.variant || 'primary'
 	const size = () => props.size || 'md'
 
-	return <button {...props} class={`echo-button echo-button-${variant()} echo-button-${size()}`} />
+	return <button {...props} class={`echo-button echo-button-${variant()} echo-button-${size()} ${props.class}`} />
 }
 
 export const buttonStyles = (config: EnrichedStylesConfig) => {

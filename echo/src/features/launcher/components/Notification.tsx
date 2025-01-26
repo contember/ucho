@@ -1,4 +1,5 @@
 import { Component } from 'solid-js'
+import { Button } from '~/components/atoms'
 import { CheckCircleIcon, XCircleIcon, XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
 
@@ -27,9 +28,9 @@ export const Notification: Component = () => {
 			data-empty={!store.widget.notification.type}
 			data-hidden={!store.widget.notification.show}
 		>
-			<button class="echo-notification-hide" onClick={hideNotification} title={store.text.notification.hideTitle}>
-				<XIcon size={16} />
-			</button>
+			<Button class="echo-notification-hide" variant="secondary" size="sm" onClick={hideNotification} title={store.text.notification.hideTitle}>
+				<XIcon size={20} />
+			</Button>
 			<div class="echo-notification-icon">
 				{store.widget.notification.type === 'success' ? (
 					<CheckCircleIcon size={32} />
