@@ -1,6 +1,6 @@
 {
   "name": "contember-echo",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "type": "module",
   "main": "dist/echo-widget.umd.js",
   "module": "dist/echo-widget.es.js",
