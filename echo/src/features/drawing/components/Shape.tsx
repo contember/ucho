@@ -30,7 +30,7 @@ export const Shape: Component<ShapeProps> = props => {
 					stroke-width={strokeWidth()}
 					vector-effect="non-scaling-stroke"
 					stroke-dasharray={isSelected() ? '5,5' : 'none'}
-					onClick={props.isMask ? undefined : () => props.onShapeClick?.(props.shape.id)}
+					// onClick={props.isMask ? undefined : () => props.onShapeClick?.(props.shape.id)}
 					onDblClick={(e: MouseEvent) => e.preventDefault()}
 					class="echo-shape"
 					data-shape-id={props.shape.id}
@@ -73,7 +73,7 @@ export const Shape: Component<ShapeProps> = props => {
 				vector-effect="non-scaling-stroke"
 				stroke-linecap="round"
 				stroke-dasharray={isSelected() ? '5,5' : 'none'}
-				onClick={() => props.onShapeClick?.(props.shape.id)}
+				// onClick={() => props.onShapeClick?.(props.shape.id)}
 				onDblClick={(e: MouseEvent) => e.preventDefault()}
 				class="echo-shape"
 				data-shape-id={props.shape.id}

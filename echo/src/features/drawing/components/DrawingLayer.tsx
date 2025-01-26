@@ -86,9 +86,11 @@ export const DrawingLayer: Component = () => {
 				/>
 
 				<For each={drawing.state.shapes}>
-					{shape => (
-						<Shape shape={shape} selectedShapeId={drawing.state.selectedShapeId} onShapeClick={drawing.actions.handleShapeClick} isMask={false} />
-					)}
+					{shape => {
+						return (
+							<Shape shape={shape} selectedShapeId={drawing.state.selectedShapeId} onShapeClick={drawing.actions.handleShapeClick} isMask={false} />
+						)
+					}}
 				</For>
 
 				{drawing.state.currentPoints.length === 2 &&

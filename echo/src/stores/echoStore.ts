@@ -22,7 +22,6 @@ export interface DrawingState {
 	showTooltip: boolean
 	mousePosition: Point
 	hasDrawn: boolean
-	// Drag state
 	isDragging: boolean
 	dragStartPos: Point | null
 	initialClickPos: Point | null
@@ -109,12 +108,10 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 
 	const [text] = createStore<TextConfig>(config.text)
 
-	// Check if state should be saved
 	const shouldSaveState = () => {
 		return feedback.comment.trim().length > 0 || drawing.shapes.length > 0
 	}
 
-	// Debounced save function
 	const debouncedSave = debounce((pageKey: string) => {
 		if (shouldSaveState()) {
 			savePageState(pageKey, { feedback, drawing })
@@ -122,17 +119,14 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 		}
 	}, 1000)
 
-	// Handle URL changes
 	const handleUrlChange = () => {
 		const newPageKey = getPageKey()
 		if (newPageKey !== currentPageKey) {
-			// Save current state before switching only if there's content
 			if (shouldSaveState()) {
 				savePageState(currentPageKey, { feedback, drawing })
 				setWidget({ pagesCount: getStoredPagesCount() })
 			}
 
-			// Load new state
 			currentPageKey = newPageKey
 			const newState = loadPageState(currentPageKey)
 
@@ -149,39 +143,24 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 		}
 	}
 
-	// Listen for URL changes
 	createEffect(() => {
-		// Listen for history changes (pushState/replaceState)
-		const originalPushState = history.pushState
-		const originalReplaceState = history.replaceState
+		const observer = new MutationObserver(() => {
+			const newPageKey = getPageKey()
+			if (newPageKey !== currentPageKey) {
+				handleUrlChange()
+			}
+		})
 
-		history.pushState = function (...args) {
-			originalPushState.apply(this, args)
-			handleUrlChange()
-		}
+		observer.observe(document.documentElement, {
+			subtree: true,
+			childList: true,
+		})
 
-		history.replaceState = function (...args) {
-			originalReplaceState.apply(this, args)
-			handleUrlChange()
-		}
-
-		// Listen for popstate (back/forward buttons)
 		window.addEventListener('popstate', handleUrlChange)
 
-		// Listen for navigation events
-		const observer = new MutationObserver(() => {
-			handleUrlChange()
-		})
-		observer.observe(document.documentElement, {
-			childList: true,
-			subtree: true,
-		})
-
 		onCleanup(() => {
-			history.pushState = originalPushState
-			history.replaceState = originalReplaceState
-			window.removeEventListener('popstate', handleUrlChange)
 			observer.disconnect()
+			window.removeEventListener('popstate', handleUrlChange)
 		})
 	})
 
@@ -192,11 +171,7 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 
 	const wrappedSetDrawing = (state: Partial<DrawingState>) => {
 		setDrawing(state)
-		if (shouldSaveState()) {
-			// TODO :HERE
-			// savePageState(currentPageKey, { feedback, drawing })
-			setWidget({ pagesCount: getStoredPagesCount() })
-		}
+		debouncedSave(currentPageKey)
 	}
 
 	const reset = () => {

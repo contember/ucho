@@ -104,18 +104,28 @@ export const getStoredPagesCount = (): number => {
 	}
 }
 
+let cachedPages: { path: string; state: StoredPageState }[] | null = null
+
 export const getStoredPages = (): { path: string; state: StoredPageState }[] => {
+	if (cachedPages !== null) return cachedPages
+
 	try {
 		const existingData = localStorage.getItem(STORAGE_KEY)
 		if (!existingData) return []
 
 		const allPagesData = JSON.parse(existingData)
-		return Object.entries(allPagesData).map(([path, state]) => ({
+		cachedPages = Object.entries(allPagesData).map(([path, state]) => ({
 			path,
 			state: state as StoredPageState,
 		}))
+		return cachedPages
 	} catch (error) {
 		console.error('Failed to get stored pages:', error)
 		return []
 	}
+}
+
+// Clear cache when storage changes
+export const clearCache = () => {
+	cachedPages = null
 }
