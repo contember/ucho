@@ -130,8 +130,6 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 	const handleUrlChange = () => {
 		const newPageKey = getPageKey()
 		if (newPageKey !== currentPageKey) {
-			debouncedSave(currentPageKey, true)
-
 			currentPageKey = newPageKey
 			const newState = loadPageState(currentPageKey)
 
