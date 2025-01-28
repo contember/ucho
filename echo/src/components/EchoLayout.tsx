@@ -1,13 +1,18 @@
 import { Component } from 'solid-js'
 import { DrawingLayer, DrawingToolbar } from '~/features/drawing'
 import { FeedbackForm } from '~/features/feedback'
+import { Position } from '~/types'
 import { EchoButton } from '../features/launcher/components/EchoButton'
 import { Notification } from '../features/launcher/components/Notification'
 import { WelcomeMessage } from '../features/launcher/components/WelcomeMessage'
 import { Launcher } from './Launcher'
 import { Overlay } from './Overlay'
 
-export const EchoLayout: Component = () => {
+interface EchoLayoutProps {
+	position?: Position
+}
+
+export const EchoLayout: Component<EchoLayoutProps> = props => {
 	return (
 		<>
 			<Launcher>

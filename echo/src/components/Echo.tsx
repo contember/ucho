@@ -9,7 +9,7 @@ import { notificationStyles } from '~/features/launcher/styles/Notification.styl
 import { savedPagesDropdownStyles } from '~/features/launcher/styles/SavedPagesDropdown.styles'
 import { welcomeMessageStyles } from '~/features/launcher/styles/WelcomeMessage.styles'
 import { echoStyles } from '~/styles'
-import { EchoWidgetProps, EnrichedStylesConfig, StylesConfig } from '~/types'
+import { EchoOptions, EnrichedStylesConfig, StylesConfig } from '~/types'
 import { getContrastColor } from '~/utils/color'
 import { EchoLayout } from './EchoLayout'
 import { buttonStyles } from './atoms'
@@ -49,7 +49,7 @@ const createStyles = (config: StylesConfig) => {
 	`
 }
 
-export const Echo: Component<EchoWidgetProps> = props => {
+export const Echo: Component<EchoOptions> = props => {
 	return (
 		<Portal useShadow mount={document.body}>
 			<EchoRoot {...props}>
@@ -59,7 +59,7 @@ export const Echo: Component<EchoWidgetProps> = props => {
 	)
 }
 
-const EchoRoot: Component<EchoWidgetProps> = props => {
+const EchoRoot: Component<EchoOptions> = props => {
 	let rootRef: HTMLDivElement | undefined
 	let observer: MutationObserver | undefined
 

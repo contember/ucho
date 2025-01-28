@@ -55,15 +55,13 @@ export interface TextConfig {
 	}
 }
 
-export interface EchoWidgetProps {
+export type EchoOptions = {
 	onSubmit: (data: FeedbackData) => Promise<void>
 	position?: Position
 	primaryColor?: `#${string}`
 	textConfig?: Partial<TextConfig>
 	children?: any
 }
-
-export type EchoOptions = EchoWidgetProps
 
 export const POSITIONS: Record<Position, { [key: string]: string }> = {
 	'top-left': {

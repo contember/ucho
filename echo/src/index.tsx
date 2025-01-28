@@ -1,7 +1,7 @@
 import { render } from 'solid-js/web'
-import { type EchoOptions, type FeedbackData, type Position } from '~/types'
-import { cleanupConsole, getConsoleBuffer, setupConsole } from '~/utils/console'
 import { Echo } from './components/Echo'
+import { type EchoOptions, type FeedbackData, type Position } from './types'
+import { cleanupConsole, getConsoleBuffer, setupConsole } from './utils/console'
 
 let activeInstance: (() => void) | null = null
 
