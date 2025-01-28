@@ -1,4 +1,3 @@
-import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import solid from 'vite-plugin-solid'
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -7,10 +6,10 @@ export default defineConfig({
 	plugins: [solid(), tsconfigPaths()],
 	build: {
 		lib: {
-			entry: resolve(__dirname, 'src/index.tsx'),
-			name: 'EchoWidget',
+			entry: 'src/index.tsx',
+			name: 'Echo',
 			formats: ['es', 'umd'],
-			fileName: format => `echo-widget.${format}.js`,
+			fileName: format => `echo.${format}.js`,
 		},
 		rollupOptions: {
 			external: ['solid-js'],
