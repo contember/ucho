@@ -1,4 +1,4 @@
-import { Component, onCleanup, onMount } from 'solid-js'
+import { Component, createEffect, onCleanup, onMount } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { EchoProvider } from '~/contexts'
 import { useEchoStore } from '~/contexts/EchoContext'
@@ -79,32 +79,51 @@ const EchoRootInner: Component<{
 	children: any
 }> = props => {
 	const store = useEchoStore()
-	let localObserver: MutationObserver | undefined
 
 	const updateHeight = () => {
-		store.setWidget({
-			dimensions: {
-				width: document.documentElement.clientWidth,
-				height: document.documentElement.scrollHeight,
-			},
+		requestAnimationFrame(() => {
+			if (!props.rootRef) return
+
+			// Temporarily set root height to 0 to measure true document height
+			const originalHeight = props.rootRef.style.height
+			props.rootRef.style.height = '0px'
+
+			// Get the height without root's influence
+			const height = document.documentElement.scrollHeight
+
+			// Restore original height
+			props.rootRef.style.height = originalHeight
+
+			store.setWidget({
+				dimensions: {
+					width: document.documentElement.clientWidth,
+					height,
+				},
+			})
 		})
 	}
 
 	onMount(() => {
-		localObserver = new MutationObserver(updateHeight)
-		localObserver.observe(document.body, {
-			childList: true,
-			subtree: true,
-			attributes: true,
-		})
 		window.addEventListener('resize', updateHeight)
-
 		updateHeight()
 	})
 
 	onCleanup(() => {
-		localObserver?.disconnect()
 		window.removeEventListener('resize', updateHeight)
+	})
+
+	createEffect(() => {
+		const observer = new MutationObserver(() => {
+			updateHeight()
+		})
+		observer.observe(document.documentElement, {
+			childList: true,
+			subtree: true,
+			attributes: true,
+		})
+		onCleanup(() => {
+			observer.disconnect()
+		})
 	})
 
 	return (

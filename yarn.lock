@@ -2829,6 +2829,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^20.17.12":
+  version: 20.17.16
+  resolution: "@types/node@npm:20.17.16"
+  dependencies:
+    undici-types: "npm:~6.19.2"
+  checksum: 10/2a6f9f3d6e2640a6de5ae88ea690d8064eb421cca2989c84bc23eb1adf5e9f483c52e273722c05afba451054d3ca902df72bb8b6c33d1684404161bb410922f7
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*":
   version: 15.7.14
   resolution: "@types/prop-types@npm:15.7.14"
@@ -3278,6 +3287,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "contember-echo@workspace:echo"
   dependencies:
+    "@types/node": "npm:^20.17.12"
     concurrently: "npm:^9.1.2"
     html2canvas: "npm:^1.4.1"
     solid-js: "npm:^1.8.15"
@@ -5657,6 +5667,13 @@ __metadata:
   version: 1.5.4
   resolution: "ufo@npm:1.5.4"
   checksum: 10/a885ed421e656aea6ca64e9727b8118a9488715460b6f1a0f0427118adfe2f2830fe7c1d5bd9c5c754a332e6807516551cd663ea67ce9ed6a4e3edc739916335
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~6.19.2":
+  version: 6.19.8
+  resolution: "undici-types@npm:6.19.8"
+  checksum: 10/cf0b48ed4fc99baf56584afa91aaffa5010c268b8842f62e02f752df209e3dea138b372a60a963b3b2576ed932f32329ce7ddb9cb5f27a6c83040d8cd74b7a70
   languageName: node
   linkType: hard
 
