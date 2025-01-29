@@ -15,7 +15,6 @@ export const drawingToolbarStyles = (config: StylesConfig) => {
 		z-index: ${zIndex.drawingToolbar};
 		opacity: 1;
 		transition: opacity 0.2s ease-in-out;
-		pointer-events: auto;
 	}
 
 	.echo-drawing-toolbar-button {
