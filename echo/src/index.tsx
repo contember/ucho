@@ -34,7 +34,7 @@ export function initEcho(options: EchoOptions): () => void {
 		validateOptions(options)
 		setupConsole()
 
-		const { position = 'bottom-right', primaryColor = '#805AD5', onSubmit, textConfig } = options
+		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig } = options
 
 		const dispose = render(
 			() => (

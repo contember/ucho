@@ -2,7 +2,13 @@ import { Component, createEffect, onCleanup, onMount } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { EchoProvider } from '~/contexts'
 import { useEchoStore } from '~/contexts/EchoContext'
-import { colorSelectorStyles, drawingLayerStyles, drawingToolbarStyles, shapeActionsStyles, tooltipStyles } from '~/features/drawing/styles'
+import {
+	colorSelectorStyles,
+	drawingLayerStyles,
+	drawingToolbarStyles,
+	shapeActionsStyles,
+	tooltipStyles,
+} from '~/features/drawing/styles'
 import { feedbackFormStyles } from '~/features/feedback/styles'
 import { echoLauncherButtonStyles } from '~/features/launcher/styles/EchoLauncherButton.styles'
 import { notificationStyles } from '~/features/launcher/styles/Notification.styles'
@@ -11,8 +17,8 @@ import { welcomeMessageStyles } from '~/features/launcher/styles/WelcomeMessage.
 import { echoStyles } from '~/styles'
 import { EchoOptions, EnrichedStylesConfig, StylesConfig } from '~/types'
 import { getContrastColor } from '~/utils/color'
-import { EchoLayout } from './EchoLayout'
 import { buttonStyles } from './atoms'
+import { EchoLayout } from './EchoLayout'
 
 const enrichConfig = (config: StylesConfig): EnrichedStylesConfig => {
 	return {
@@ -136,7 +142,17 @@ const EchoRootInner: Component<{
 				width: `${store.widget.dimensions.width}px`,
 			}}
 		>
-			<style>{createStyles({ primaryColor: props.primaryColor })}</style>
+			<style>{'.echo-root {\n' +
+				'    /* Primary Color */\n' +
+				'    --primary-color: #4B0082; /* Dark Indigo */\n' +
+				'\n' +
+				'    /* Shadow Colors */\n' +
+				'    --dark-shadow-color: rgba(0, 0, 0, 0.6); /* Darker shadow for depth */\n' +
+				'    --light-shadow-color: rgba(255, 255, 255, 0.1); /* Subtle light shadow for highlight */\n' +
+				'\n' +
+				'    /* Optional: Background Color */\n' +
+				'    --background-color: #2C003E; /* Deep Purple Background */\n' +
+				'} \n'} {createStyles({ primaryColor: props.primaryColor })}</style>
 			{props.children}
 		</div>
 	)

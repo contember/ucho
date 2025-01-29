@@ -1,16 +1,19 @@
+import { zIndex } from '~/styles'
 import { StylesConfig } from '~/types'
-import { zIndex } from '../../../styles/zIndex'
 
 export const welcomeMessageStyles = (config: StylesConfig) => {
-	const hoverColor = `color-mix(in srgb, ${config.primaryColor}, black 10%)`
+	const lighterPrimaryColor = `color-mix(in srgb, ${config.primaryColor} 7%, white 100%)`
 	return `
     .echo-welcome-message {
+        display: flex;
+        align-items: center;
+        gap: 4px;
         position: fixed;
         z-index: ${zIndex.welcomeMessage};
-        background: linear-gradient(135deg, ${config.primaryColor}, color-mix(in srgb, ${config.primaryColor}, white 30%));
-        color: white;
-        padding: 12px 20px;
-        padding-right: 36px;
+        background: ${lighterPrimaryColor};
+        border: 1px solid ${config.primaryColor};
+        color: ${config.primaryColor};
+        padding: 12px 16px;
         border-radius: 12px;
         font-size: 14px;
         font-weight: 500;
@@ -25,13 +28,12 @@ export const welcomeMessageStyles = (config: StylesConfig) => {
         -moz-user-select: none;
         -ms-user-select: none;
         cursor: pointer;
-        border: none;
         text-align: left;
     }
 
     .echo-welcome-message:hover {
         transform: translateY(-2px) scale(1.02);
-        background: linear-gradient(135deg, ${hoverColor}, color-mix(in srgb, ${hoverColor}, white 30%));
+        background: ${lighterPrimaryColor};
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15),
                    0 12px 40px ${config.primaryColor}50;
     }
@@ -41,15 +43,12 @@ export const welcomeMessageStyles = (config: StylesConfig) => {
     }
 
     .echo-welcome-message-close {
-        position: absolute;
-        top: 8px;
-        right: 8px;
         width: 20px;
         height: 20px;
         padding: 2px;
+        margin-left: 4px;
         border: none;
         background: transparent;
-        color: white;
         opacity: 0.7;
         cursor: pointer;
         border-radius: 50%;
@@ -69,18 +68,31 @@ export const welcomeMessageStyles = (config: StylesConfig) => {
         transform: scale(0.95);
     }
 
-    .echo-welcome-message::before {
+    .echo-welcome-message::after {
         content: '';
         position: absolute;
-        bottom: -8px;
-        right: 20px;
+        bottom: -4px;
+        right: 17px;
         width: 16px;
         height: 16px;
         background: inherit;
         transform: rotate(45deg);
         border-radius: 3px;
-        z-index: -1;
+        border: 1px solid ${config.primaryColor};
+        z-index: -2;
     }
+    
+    .echo-welcome-message::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: ${lighterPrimaryColor};
+		z-index: -1;
+		border-radius: 12px;
+	}
 
     @keyframes echo-welcome-message-enter {
         0% {
@@ -94,14 +106,14 @@ export const welcomeMessageStyles = (config: StylesConfig) => {
     }
 
     /* Pulsing dot animation */
-    .echo-welcome-message::after {
+    .echo-welcome-message-pulsar {
         content: '';
         display: inline-block;
         width: 6px;
         height: 6px;
-        background: white;
+        background: ${config.primaryColor};
         border-radius: 50%;
-        margin-left: 8px;
+ 	    margin-right: 8px;
         animation: echo-welcome-message-pulse 1.5s ease-in-out infinite;
     }
 
