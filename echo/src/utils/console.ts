@@ -1,4 +1,4 @@
-import { ConsoleEntry } from '~/types'
+import type { ConsoleEntry } from '~/types'
 
 let consoleBuffer: ConsoleEntry[] = []
 let originalConsole: { log: typeof console.log; warn: typeof console.warn; error: typeof console.error } | null = null

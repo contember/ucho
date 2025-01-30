@@ -1,6 +1,6 @@
-import { Component } from 'solid-js'
+import type { Component } from 'solid-js'
 import { drawingConfig } from '~/config/drawingConfig'
-import { Shape as ShapeType } from '~/types'
+import type { Shape as ShapeType } from '~/types'
 import { getRectFromPoints } from '~/utils/geometry'
 
 interface ShapeProps {
@@ -60,10 +60,7 @@ export const Shape: Component<ShapeProps> = props => {
 	if (props.shape.type === 'path') {
 		if (props.isMask) return null
 
-		const pathData = `M ${props.shape.points[0].x} ${props.shape.points[0].y} ${props.shape.points
-			.slice(1)
-			.map(point => `L ${point.x} ${point.y}`)
-			.join(' ')}`
+		const pathData = `M ${props.shape.points[0].x} ${props.shape.points[0].y} ${props.shape.points.slice(1).map(point => `L ${point.x} ${point.y}`).join(' ')}`
 		return (
 			<path
 				d={pathData}
@@ -82,9 +79,9 @@ export const Shape: Component<ShapeProps> = props => {
 						? undefined
 						: props.onShapeClick !== null
 							? {
-									cursor: isSelected() ? 'move' : 'pointer',
-									opacity: tool().opacity.normal,
-								}
+								cursor: isSelected() ? 'move' : 'pointer',
+								opacity: tool().opacity.normal,
+							}
 							: undefined
 				}
 			/>

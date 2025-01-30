@@ -1,6 +1,6 @@
 import { createMemo } from 'solid-js'
 import { useEchoStore } from '~/contexts'
-import { Point, Shape } from '~/types'
+import type { Point, Shape } from '~/types'
 import { getDistance, getPointFromEvent } from '../utils/events'
 import { useDrag } from './useDrag'
 

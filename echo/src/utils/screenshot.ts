@@ -1,5 +1,5 @@
 import html2canvas from 'html2canvas'
-import { Screenshot, Shape } from '~/types'
+import type { Screenshot, Shape } from '~/types'
 
 interface CaptureScreenshotConfig {
 	annotations: Shape[]

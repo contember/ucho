@@ -1,5 +1,5 @@
-import { Component } from 'solid-js'
-import { IconProps } from '~/types'
+import type { Component } from 'solid-js'
+import type { IconProps } from '~/types'
 
 export const HighlightIcon: Component<IconProps> = props => (
 	<svg

@@ -1,7 +1,7 @@
 import { zIndex } from '~/styles/zIndex'
-import { StylesConfig } from '~/types'
+import type { EnrichedStylesConfig } from '~/types'
 
-export const tooltipStyles = (config: StylesConfig) => `
+export const tooltipStyles = (config: EnrichedStylesConfig) => `
     .echo-drawing-tooltip {
         display: flex;
         text-wrap: nowrap;

@@ -1,8 +1,8 @@
-import { Component, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
+import { type Component, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { Button } from '~/components/atoms'
 import { TrashIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts'
-import { Point } from '~/types'
+import type { Point } from '~/types'
 import { getRectFromPoints } from '~/utils/geometry'
 
 export const ShapeActions: Component = () => {

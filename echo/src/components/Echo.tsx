@@ -1,4 +1,4 @@
-import { Component, createEffect, onCleanup, onMount } from 'solid-js'
+import { type Component, createEffect, onCleanup, onMount } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { EchoProvider } from '~/contexts'
 import { useEchoStore } from '~/contexts/EchoContext'
@@ -9,7 +9,7 @@ import { notificationStyles } from '~/features/launcher/styles/Notification.styl
 import { savedPagesDropdownStyles } from '~/features/launcher/styles/SavedPagesDropdown.styles'
 import { welcomeMessageStyles } from '~/features/launcher/styles/WelcomeMessage.styles'
 import { echoStyles } from '~/styles'
-import { EchoOptions, EnrichedStylesConfig, StylesConfig } from '~/types'
+import type { EchoOptions, EnrichedStylesConfig, StylesConfig } from '~/types'
 import { getContrastColor } from '~/utils/color'
 import { EchoLayout } from './EchoLayout'
 import { buttonStyles } from './atoms'
@@ -18,6 +18,8 @@ const enrichConfig = (config: StylesConfig): EnrichedStylesConfig => {
 	return {
 		...config,
 		primaryTextColor: getContrastColor(config.primaryColor),
+		primaryColorLighter: `color-mix(in srgb, ${config.primaryColor} 100%, white 40%)`,
+		primaryColorLightest: `color-mix(in srgb, ${config.primaryColor} 7%, white 100%)`,
 	}
 }
 
@@ -25,6 +27,11 @@ const createStyles = (config: StylesConfig) => {
 	const enrichedConfig = enrichConfig(config)
 
 	return `
+		.echo-root {
+		    --dark-shadow-color: rgba(0, 0, 0, 0.6);
+		    --light-shadow-color: rgba(255, 255, 255, 0.1);
+		}
+	
 		/* Echo Components */
 		${echoStyles(enrichedConfig)}
 

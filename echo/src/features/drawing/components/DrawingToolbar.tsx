@@ -1,8 +1,8 @@
-import { Component, For } from 'solid-js'
+import { type Component, For } from 'solid-js'
 import { HighlightIcon, PenIcon } from '~/components/icons'
 import { drawingConfig } from '~/config/drawingConfig'
 import { useEchoStore } from '~/contexts/EchoContext'
-import { IconProps } from '~/types'
+import type { IconProps } from '~/types'
 import { ColorSelector } from './ColorSelector'
 
 const ToolIcon: Record<string, Component<IconProps>> = {

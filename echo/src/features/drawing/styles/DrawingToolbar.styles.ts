@@ -1,7 +1,7 @@
 import { zIndex } from '~/styles/zIndex'
-import { StylesConfig } from '~/types'
+import type { EnrichedStylesConfig } from '~/types'
 
-export const drawingToolbarStyles = (config: StylesConfig) => {
+export const drawingToolbarStyles = (config: EnrichedStylesConfig) => {
 	const { primaryColor } = config
 	const hoverColor = `color-mix(in srgb, ${primaryColor}, black 10%)`
 	return `

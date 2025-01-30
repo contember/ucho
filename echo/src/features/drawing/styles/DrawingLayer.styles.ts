@@ -1,6 +1,6 @@
-import { StylesConfig } from '~/types'
+import type { EnrichedStylesConfig } from '~/types'
 
-export const drawingLayerStyles = (config: StylesConfig) => `
+export const drawingLayerStyles = (config: EnrichedStylesConfig) => `
     .echo-drawing-layer {
         position: absolute;
         top: 0;

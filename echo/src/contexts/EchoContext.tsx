@@ -1,7 +1,7 @@
-import { Component, createContext, useContext } from 'solid-js'
+import { type Component, createContext, useContext } from 'solid-js'
 import { defaultText } from '~/config/defaultText'
-import { EchoStore, createEchoStore } from '~/stores'
-import { FeedbackData, TextConfig } from '~/types'
+import { createEchoStore, type EchoStore } from '~/stores'
+import type { FeedbackData, TextConfig } from '~/types'
 
 interface EchoProviderProps {
 	primaryColor: string

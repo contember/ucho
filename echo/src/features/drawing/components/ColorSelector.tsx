@@ -1,14 +1,14 @@
-import { Component, For } from 'solid-js'
+import { type Component, For } from 'solid-js'
 import { useEchoStore } from '~/contexts/EchoContext'
 
 const COLORS = [
-	'#FF0000', // Red
-	'#00FF00', // Green
-	'#0000FF', // Blue
-	'#FFFF00', // Yellow
-	'#FF00FF', // Magenta
-	'#00FFFF', // Cyan
-	'#FFA500', // Orange
+	'#ff0000', // Red
+	'#00ff00', // Green
+	'#0000ff', // Blue
+	'#ffff00', // Yellow
+	'#ff00ff', // Magenta
+	'#00ffff', // Cyan
+	'#ffa500', // Orange
 	'#800080', // Purple
 ]
 

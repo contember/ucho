@@ -113,6 +113,8 @@ export interface StylesConfig {
 
 export interface EnrichedStylesConfig extends StylesConfig {
 	primaryTextColor: string
+	primaryColorLighter: string
+	primaryColorLightest: string
 }
 
 export interface Notification {

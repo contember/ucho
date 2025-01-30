@@ -1,4 +1,4 @@
-import { EnrichedStylesConfig } from '~/types'
+import type { EnrichedStylesConfig } from '~/types'
 import { zIndex } from './zIndex'
 
 export const echoStyles = (config: EnrichedStylesConfig) => `

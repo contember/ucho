@@ -1,4 +1,4 @@
-import { StylesConfig } from '~/types'
+import type { StylesConfig } from '~/types'
 
 export const colorSelectorStyles = (config: StylesConfig) => {
 	const { primaryColor } = config

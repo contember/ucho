@@ -1,7 +1,7 @@
 import { zIndex } from '~/styles/zIndex'
-import { StylesConfig } from '~/types'
+import type { EnrichedStylesConfig } from '~/types'
 
-export const feedbackFormStyles = (config: StylesConfig) => {
+export const feedbackFormStyles = (config: EnrichedStylesConfig) => {
 	const { primaryColor } = config
 	const hoverColor = `color-mix(in srgb, ${primaryColor}, black 10%)`
 	return `

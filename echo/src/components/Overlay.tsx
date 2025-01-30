@@ -1,4 +1,4 @@
-import { Component, JSX } from 'solid-js'
+import type { Component, JSX } from 'solid-js'
 import { useEchoStore } from '~/contexts'
 
 export const Overlay: Component<{ children: JSX.Element }> = props => {
