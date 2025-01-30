@@ -11,7 +11,7 @@
     "contember:build-api": "tsc --project api",
     "client:build": "tsc --project client",
     "client:generate": "bash ./scripts/generate-client.sh",
-    "ui:update": "bash ./scripts/update-ui.lib.sh",
+    "ui:update": "bash ./scripts/update-ui-lib.sh",
     "ts:build": "tsc --build",
     "ts:clean": "tsc --build --clean",
     "ts:watch": "tsc --build --watch",

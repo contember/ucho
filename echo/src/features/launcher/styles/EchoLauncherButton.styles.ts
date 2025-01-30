@@ -32,7 +32,7 @@ export const echoLauncherButtonStyles = (config: EnrichedStylesConfig) => {
 	            2px 2px 10px var(--dark-shadow-color),
 	            -8px -8px 16px var(--light-shadow-color);
 	        
-	        transition: all 0.3s ease-out;
+	        transition: all 0.3s ease-out, left 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
 		}
 	
 		.echo-launcher-button:hover {
@@ -40,6 +40,7 @@ export const echoLauncherButtonStyles = (config: EnrichedStylesConfig) => {
 		        4px 4px 8px var(--dark-shadow-color), 
 		        -4px -4px 8px var(--light-shadow-color);
 		    transform: translateY(-2px);
+            opacity: 1 !important;
 		}
 	
 		.echo-launcher-button:active {
