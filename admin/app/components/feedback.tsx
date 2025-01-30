@@ -1,5 +1,5 @@
+import { initEcho } from '@contember/echo'
 import { Component } from '@contember/interface'
-import { initEcho } from 'contember-echo'
 import { useEffect } from 'react'
 
 export const FeedbackWidget = Component(() => {

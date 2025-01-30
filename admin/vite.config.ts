@@ -11,7 +11,7 @@ export default defineConfig(() => {
 		},
 		server: {
 			watch: {
-				ignored: ['!**/node_modules/contember-echo/**'],
+				ignored: ['!**/node_modules/@contember/echo/**'],
 			},
 		},
 	}

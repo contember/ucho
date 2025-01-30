@@ -7,7 +7,7 @@ A lightweight feedback widget built with Solid.js that allows users to capture s
 ### Using as an NPM Package
 
 ```typescript
-import { initEcho } from 'contember-echo';
+import { initEcho } from '@contember/echo';
 
 initEcho({
   // Optional: widget position (default: 'bottom-right')
@@ -55,7 +55,7 @@ initEcho({
 
 ```html
 <script type="module">
-  import { initEcho } from "https://esm.sh/contember-echo";
+  import { initEcho } from "https://esm.sh/@contember/echo";
 
   initEcho({
     // Optional: widget position (default: 'bottom-right')

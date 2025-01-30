@@ -26,6 +26,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@app/admin@workspace:admin"
   dependencies:
+    "@contember/echo": "workspace:^"
     "@contember/graphql-client-tenant": "npm:2.0.0-alpha.36"
     "@contember/interface": "npm:2.0.0-alpha.36"
     "@contember/react-block-repeater": "npm:2.0.0-alpha.36"
@@ -72,7 +73,6 @@ __metadata:
     autoprefixer: "npm:^10"
     class-variance-authority: "npm:^0.7.0"
     clsx: "npm:^2.1.1"
-    contember-echo: "workspace:^"
     lucide-react: "npm:^0.453.0"
     postcss: "npm:^8"
     qrcode-generator: "npm:^1.4.4"
@@ -578,6 +578,21 @@ __metadata:
   checksum: 10/494f65d711c503023f76d9ae5f57146168b47577b2eb7464d586d41b2d97f87fb373a30269e8ec235b5e51dd6e79e09583c6084b5b49528a41b95bd841d1c327
   languageName: node
   linkType: hard
+
+"@contember/echo@workspace:^, @contember/echo@workspace:echo":
+  version: 0.0.0-use.local
+  resolution: "@contember/echo@workspace:echo"
+  dependencies:
+    "@types/node": "npm:^20.17.12"
+    concurrently: "npm:^9.1.2"
+    html2canvas: "npm:^1.4.1"
+    solid-js: "npm:^1.8.15"
+    typescript: "npm:^5.0.0"
+    vite: "npm:^5.0.0"
+    vite-plugin-solid: "npm:^2.10.1"
+    vite-tsconfig-paths: "npm:^5.1.4"
+  languageName: unknown
+  linkType: soft
 
 "@contember/graphql-builder@npm:2.0.0-alpha.30":
   version: 2.0.0-alpha.30
@@ -3282,21 +3297,6 @@ __metadata:
   checksum: 10/4ebcfb1c6a3b25276734ec5722e88768eb61fc02f98e11960b845c5c62bc27fd05f493d2a8244d9675b24ef95afe4c0d511cdcad02c72f5eeea463cc26687999
   languageName: node
   linkType: hard
-
-"contember-echo@workspace:^, contember-echo@workspace:echo":
-  version: 0.0.0-use.local
-  resolution: "contember-echo@workspace:echo"
-  dependencies:
-    "@types/node": "npm:^20.17.12"
-    concurrently: "npm:^9.1.2"
-    html2canvas: "npm:^1.4.1"
-    solid-js: "npm:^1.8.15"
-    typescript: "npm:^5.0.0"
-    vite: "npm:^5.0.0"
-    vite-plugin-solid: "npm:^2.10.1"
-    vite-tsconfig-paths: "npm:^5.1.4"
-  languageName: unknown
-  linkType: soft
 
 "convert-source-map@npm:^2.0.0":
   version: 2.0.0
