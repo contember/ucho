@@ -24,6 +24,8 @@ const enrichConfig = (config: StylesConfig): EnrichedStylesConfig => {
 	return {
 		...config,
 		primaryTextColor: getContrastColor(config.primaryColor),
+		primaryColorLighter: `color-mix(in srgb, ${config.primaryColor} 100%, white 20%)`,
+		primaryColorLightest: `color-mix(in srgb, ${config.primaryColor} 7%, white 100%)`,
 	}
 }
 
@@ -31,6 +33,11 @@ const createStyles = (config: StylesConfig) => {
 	const enrichedConfig = enrichConfig(config)
 
 	return `
+		.echo-root {
+		    --dark-shadow-color: rgba(0, 0, 0, 0.6);
+		    --light-shadow-color: rgba(255, 255, 255, 0.1);
+		}
+	
 		/* Echo Components */
 		${echoStyles(enrichedConfig)}
 
@@ -142,17 +149,7 @@ const EchoRootInner: Component<{
 				width: `${store.widget.dimensions.width}px`,
 			}}
 		>
-			<style>{'.echo-root {\n' +
-				'    /* Primary Color */\n' +
-				'    --primary-color: #4B0082; /* Dark Indigo */\n' +
-				'\n' +
-				'    /* Shadow Colors */\n' +
-				'    --dark-shadow-color: rgba(0, 0, 0, 0.6); /* Darker shadow for depth */\n' +
-				'    --light-shadow-color: rgba(255, 255, 255, 0.1); /* Subtle light shadow for highlight */\n' +
-				'\n' +
-				'    /* Optional: Background Color */\n' +
-				'    --background-color: #2C003E; /* Deep Purple Background */\n' +
-				'} \n'} {createStyles({ primaryColor: props.primaryColor })}</style>
+			<style>{createStyles({ primaryColor: props.primaryColor })}</style>
 			{props.children}
 		</div>
 	)

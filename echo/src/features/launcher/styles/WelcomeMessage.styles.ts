@@ -1,8 +1,7 @@
 import { zIndex } from '~/styles'
-import { StylesConfig } from '~/types'
+import type { EnrichedStylesConfig } from '~/types'
 
-export const welcomeMessageStyles = (config: StylesConfig) => {
-	const lighterPrimaryColor = `color-mix(in srgb, ${config.primaryColor} 7%, white 100%)`
+export const welcomeMessageStyles = (config: EnrichedStylesConfig) => {
 	return `
     .echo-welcome-message {
         display: flex;
@@ -10,7 +9,7 @@ export const welcomeMessageStyles = (config: StylesConfig) => {
         gap: 4px;
         position: fixed;
         z-index: ${zIndex.welcomeMessage};
-        background: ${lighterPrimaryColor};
+        background: ${config.primaryColorLightest};
         border: 1px solid ${config.primaryColor};
         color: ${config.primaryColor};
         padding: 12px 16px;

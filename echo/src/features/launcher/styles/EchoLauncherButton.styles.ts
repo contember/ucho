@@ -1,8 +1,7 @@
 import { zIndex } from '~/styles/zIndex'
-import { StylesConfig } from '~/types'
+import type { EnrichedStylesConfig } from '~/types'
 
-export const echoLauncherButtonStyles = (config: StylesConfig) => {
-	const lighterPrimaryColor = `color-mix(in srgb, ${config.primaryColor} 100%, white 20%)`
+export const echoLauncherButtonStyles = (config: EnrichedStylesConfig) => {
 	return `
 		.echo-launcher-button-wrapper {
 			position: relative;
@@ -21,8 +20,8 @@ export const echoLauncherButtonStyles = (config: StylesConfig) => {
 	        background: radial-gradient(
 	            circle at 40% 40%, /* Move gradient origin */
 			    ${config.primaryColor} 0%,
-			    ${lighterPrimaryColor} 65%,
-			    ${lighterPrimaryColor} 100%
+			    ${config.primaryColorLighter} 65%,
+			    ${config.primaryColorLighter} 100%
 	        );
 	        border: none;
 	        border-radius: 50%;
