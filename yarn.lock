@@ -27,28 +27,28 @@ __metadata:
   resolution: "@app/admin@workspace:admin"
   dependencies:
     "@contember/echo": "workspace:^"
-    "@contember/graphql-client-tenant": "npm:2.0.0-alpha.36"
-    "@contember/interface": "npm:2.0.0-alpha.36"
-    "@contember/react-block-repeater": "npm:2.0.0-alpha.36"
-    "@contember/react-board": "npm:2.0.0-alpha.36"
-    "@contember/react-board-dnd-kit": "npm:2.0.0-alpha.36"
-    "@contember/react-client": "npm:2.0.0-alpha.36"
-    "@contember/react-client-tenant": "npm:2.0.0-alpha.36"
-    "@contember/react-dataview": "npm:2.0.0-alpha.36"
-    "@contember/react-form": "npm:2.0.0-alpha.36"
-    "@contember/react-identity": "npm:2.0.0-alpha.36"
-    "@contember/react-multipass-rendering": "npm:2.0.0-alpha.36"
-    "@contember/react-repeater": "npm:2.0.0-alpha.36"
-    "@contember/react-repeater-dnd-kit": "npm:2.0.0-alpha.36"
-    "@contember/react-select": "npm:2.0.0-alpha.36"
-    "@contember/react-slate-editor": "npm:2.0.0-alpha.36"
-    "@contember/react-slate-editor-base": "npm:2.0.0-alpha.36"
-    "@contember/react-slots": "npm:2.0.0-alpha.36"
-    "@contember/react-uploader": "npm:2.0.0-alpha.36"
-    "@contember/react-uploader-dropzone": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
-    "@contember/vite-plugin": "npm:2.0.0-alpha.36"
+    "@contember/graphql-client-tenant": "npm:2.0.0-beta.2"
+    "@contember/interface": "npm:2.0.0-beta.2"
+    "@contember/react-block-repeater": "npm:2.0.0-beta.2"
+    "@contember/react-board": "npm:2.0.0-beta.2"
+    "@contember/react-board-dnd-kit": "npm:2.0.0-beta.2"
+    "@contember/react-client": "npm:2.0.0-beta.2"
+    "@contember/react-client-tenant": "npm:2.0.0-beta.2"
+    "@contember/react-dataview": "npm:2.0.0-beta.2"
+    "@contember/react-form": "npm:2.0.0-beta.2"
+    "@contember/react-identity": "npm:2.0.0-beta.2"
+    "@contember/react-multipass-rendering": "npm:2.0.0-beta.2"
+    "@contember/react-repeater": "npm:2.0.0-beta.2"
+    "@contember/react-repeater-dnd-kit": "npm:2.0.0-beta.2"
+    "@contember/react-select": "npm:2.0.0-beta.2"
+    "@contember/react-slate-editor": "npm:2.0.0-beta.2"
+    "@contember/react-slate-editor-base": "npm:2.0.0-beta.2"
+    "@contember/react-slots": "npm:2.0.0-beta.2"
+    "@contember/react-uploader": "npm:2.0.0-beta.2"
+    "@contember/react-uploader-dropzone": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
+    "@contember/vite-plugin": "npm:2.0.0-beta.2"
     "@dnd-kit/core": "npm:^6.1.0"
     "@dnd-kit/sortable": "npm:^8.0.0"
     "@radix-ui/react-alert-dialog": "npm:^1.1.2"
@@ -61,6 +61,7 @@ __metadata:
     "@radix-ui/react-progress": "npm:^1.1.0"
     "@radix-ui/react-scroll-area": "npm:^1.2.0"
     "@radix-ui/react-select": "npm:^2.1.2"
+    "@radix-ui/react-separator": "npm:^1.1.1"
     "@radix-ui/react-slot": "npm:^1.1.0"
     "@radix-ui/react-switch": "npm:^1.1.1"
     "@radix-ui/react-toast": "npm:^1.2.2"
@@ -297,12 +298,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.22.15":
-  version: 7.26.0
-  resolution: "@babel/runtime@npm:7.26.0"
+"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.22.15":
+  version: 7.26.7
+  resolution: "@babel/runtime@npm:7.26.7"
   dependencies:
     regenerator-runtime: "npm:^0.14.0"
-  checksum: 10/9f4ea1c1d566c497c052d505587554e782e021e6ccd302c2ad7ae8291c8e16e3f19d4a7726fb64469e057779ea2081c28b7dbefec6d813a22f08a35712c0f699
+  checksum: 10/c7a661a6836b332d9d2e047cba77ba1862c1e4f78cec7146db45808182ef7636d8a7170be9797e5d8fd513180bffb9fa16f6ca1c69341891efec56113cf22bfc
   languageName: node
   linkType: hard
 
@@ -484,13 +485,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contember/binding-common@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/binding-common@npm:2.0.0-alpha.36"
+"@contember/binding-common@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/binding-common@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/client": "npm:2.0.0-alpha.36"
-    "@contember/client-content": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/client": "npm:2.0.0-beta.2"
+    "@contember/client-content": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
     chevrotain: "npm:6.5.0"
     fast-deep-equal: "npm:^3.1.3"
     js-levenshtein: "npm:1.1.6"
@@ -498,50 +499,50 @@ __metadata:
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/7e7ee7a9019a68b6fc74c966460b89df9c0b3c771e067a6f9dd249ace67a01b0f921fc992393c8998e0a8063ea4179c1dc4d5a1c68d2f875e07f546e91aa6e6a
+  checksum: 10/21e783326c5a34b7c1bdbf88c49329ce34898d0f929ab4d2bddab6482e03888c6afdb2e888d425d8f46e23d7d86b3e47ffa9e4b952811208425465f6cca3bc78
   languageName: node
   linkType: hard
 
-"@contember/binding-legacy@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/binding-legacy@npm:2.0.0-alpha.36"
+"@contember/binding-legacy@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/binding-legacy@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/binding-common": "npm:2.0.0-alpha.36"
-    "@contember/client": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/binding-common": "npm:2.0.0-beta.2"
+    "@contember/client": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
     uuid: "npm:9.0.1"
-  checksum: 10/a5f82663ac87ec4eb51aa3f0141dbc3dd9fcf037efe9bc17b5708c7a7c1f04969f79effb7bf802225fe34bc1bb5ebff39e7884be72ad014ba152f207dcbc82ee
+  checksum: 10/49d3b441d43d0187526e395be133cf2a65e9afac339f131a9ef8dec8338992517a96e8f699d4471b29ccfbe353f4c6b008072d2df7f0c7b52fa6d2efe4b61eba
   languageName: node
   linkType: hard
 
-"@contember/binding-ng@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/binding-ng@npm:2.0.0-alpha.36"
-  checksum: 10/1c592c942684f9fa21c54827fa597a8929b6342d8d97d03245e29472e91aca1fe341b35714ca9f6b7facc265e9f081fd66087bd2442296ff2db848e28320fa3a
+"@contember/binding-ng@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/binding-ng@npm:2.0.0-beta.2"
+  checksum: 10/6bbadb3136af0683a1c47c24100ad6e7e86ee60a7060cfb5cb162c1df7aaf773fbd49ebcb4e98c2ee004a8dd3c54a87a49dacd8bd1143c7e5f859603f0df21b0
   languageName: node
   linkType: hard
 
-"@contember/binding@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/binding@npm:2.0.0-alpha.36"
+"@contember/binding@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/binding@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/binding-common": "npm:2.0.0-alpha.36"
-    "@contember/binding-legacy": "npm:2.0.0-alpha.36"
-    "@contember/binding-ng": "npm:2.0.0-alpha.36"
-  checksum: 10/72a0d701f2c3ee8cc0e1e2888abad8127a94b261ffbfff8acabfa743137111c7339d9f2de6a885001b70828bb714150a77094f14de264213ed5267e3a611c7d5
+    "@contember/binding-common": "npm:2.0.0-beta.2"
+    "@contember/binding-legacy": "npm:2.0.0-beta.2"
+    "@contember/binding-ng": "npm:2.0.0-beta.2"
+  checksum: 10/ab780ff32140a96605c0b1569662588a7dae11c84d3f7667bc4b319dfe177b07eb4e5ea05ccbbd292408928fe2e83550cf0fba12178a0addeb5ee19e33c99bda
   languageName: node
   linkType: hard
 
-"@contember/client-content-generator@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/client-content-generator@npm:2.0.0-alpha.36"
+"@contember/client-content-generator@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/client-content-generator@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/client-content": "npm:2.0.0-alpha.36"
-    "@contember/schema": "npm:2.0.0-alpha.36"
-    "@contember/schema-utils": "npm:2.0.0-alpha.36"
+    "@contember/client-content": "npm:2.0.0-beta.2"
+    "@contember/schema": "npm:2.0.0-beta.2"
+    "@contember/schema-utils": "npm:2.0.0-beta.2"
   bin:
     contember-client-generator: dist/production/generate.cjs
-  checksum: 10/7fbafaaf9775b8a864d803b6d1973fdff0096c71400a1bec37bcd9508157bcb817d1c287d1debd9597bb8f5c60264567f7f3f23c0b491eb6b323f90f9865c138
+  checksum: 10/87fbb0d2ae5e0029fecde9a455802bdc71df12da4046cded4b144d4177dda890274f32d11cd37f98a985ffef86761d9f96d824c9a9526b5b3bae88b625be3843
   languageName: node
   linkType: hard
 
@@ -556,26 +557,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contember/client-content@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/client-content@npm:2.0.0-alpha.36"
+"@contember/client-content@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/client-content@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/graphql-builder": "npm:2.0.0-alpha.36"
-    "@contember/graphql-client": "npm:2.0.0-alpha.36"
-    "@contember/schema": "npm:2.0.0-alpha.36"
-  checksum: 10/b7a18c787be474ce0d333de3eae389c18cff30ae12c9b7d006bdacf3b9522227090e177e4bb1a6d85c3b5a806fcc704e2071b7b0bffba115089709d59a42cd4c
+    "@contember/graphql-builder": "npm:2.0.0-beta.2"
+    "@contember/graphql-client": "npm:2.0.0-beta.2"
+    "@contember/schema": "npm:2.0.0-beta.2"
+  checksum: 10/ff1b4826fa48dcbe33408612956103931c182c9c1dc7659a84b3c689f7d396457bab477ce1b03f8657d6417fe647fe6919f509401a2a6ea467f2c7cf8950f12e
   languageName: node
   linkType: hard
 
-"@contember/client@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/client@npm:2.0.0-alpha.36"
+"@contember/client@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/client@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/client-content": "npm:2.0.0-alpha.36"
-    "@contember/graphql-builder": "npm:2.0.0-alpha.36"
-    "@contember/graphql-client": "npm:2.0.0-alpha.36"
-    "@contember/schema": "npm:2.0.0-alpha.36"
-  checksum: 10/494f65d711c503023f76d9ae5f57146168b47577b2eb7464d586d41b2d97f87fb373a30269e8ec235b5e51dd6e79e09583c6084b5b49528a41b95bd841d1c327
+    "@contember/client-content": "npm:2.0.0-beta.2"
+    "@contember/graphql-builder": "npm:2.0.0-beta.2"
+    "@contember/graphql-client": "npm:2.0.0-beta.2"
+    "@contember/schema": "npm:2.0.0-beta.2"
+  checksum: 10/eacf37888038b88aa9bea0b16b180429ab1e86c9f26b2d5dd59444a271849869f78f9953130c1d345e89fdebf518fa334208e2615829420b35ca0fd38baf7751
   languageName: node
   linkType: hard
 
@@ -603,21 +604,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contember/graphql-builder@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/graphql-builder@npm:2.0.0-alpha.36"
+"@contember/graphql-builder@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/graphql-builder@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/schema": "npm:2.0.0-alpha.36"
-  checksum: 10/379d4c5075ff1544bcd423cbbbd6521d388e0ed27b0deca2c31038074aba4ccbb629ab331319c92ed855a90adabf5503d762b50c6dfe72fa2fbee6cd128ad19b
+    "@contember/schema": "npm:2.0.0-beta.2"
+  checksum: 10/8124c5e7096f3484cf75c69fb11875e1a6d7173750cb8eaff5dbbfc38d46e0c71dd318972e03d5172ad78535d49be3f6692af8336e60b12e59353bc3d615ac09
   languageName: node
   linkType: hard
 
-"@contember/graphql-client-tenant@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/graphql-client-tenant@npm:2.0.0-alpha.36"
+"@contember/graphql-client-tenant@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/graphql-client-tenant@npm:2.0.0-beta.2"
   dependencies:
     graphql-ts-client-api: "npm:^3.1.17"
-  checksum: 10/b007fd61ca9d55247e9996c8a506b502f52a8a3ee2fbd7e573f1b7c442665230f04bf9ae6ad3d68695b8f476c3c786687dd5ecf14d215268d608e5da69c72fce
+  checksum: 10/b6699d151b346493c948c42fae430307ada42920cc4b60a05635ed65778dcbb2cfb33ec38510b0b33d1de86867595a59fb5330e720d8da38d5108dae944de857
   languageName: node
   linkType: hard
 
@@ -628,74 +629,76 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contember/graphql-client@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/graphql-client@npm:2.0.0-alpha.36"
-  checksum: 10/a9f0ca2b02e3a1e3ab2edca628cad83d4d44e0fe3e0d777d44e39e6dea259122f3d02673894103b9bdaf895820dfac574ad54e220c03d5736ac4613541344d4e
+"@contember/graphql-client@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/graphql-client@npm:2.0.0-beta.2"
+  checksum: 10/38a7fa32c997da542bc79901d2eb4650c8ada8e16ec125db243fdcee4252cce273e104bdd8ed40b82f00f68836cad4f23d8042ab3d9d1cc7b6fe54fe5b4663e9
   languageName: node
   linkType: hard
 
-"@contember/interface@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/interface@npm:2.0.0-alpha.36"
+"@contember/interface@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/interface@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-client": "npm:2.0.0-alpha.36"
-    "@contember/react-dataview": "npm:2.0.0-alpha.36"
-    "@contember/react-devbar": "npm:2.0.0-alpha.36"
-    "@contember/react-identity": "npm:2.0.0-alpha.36"
-    "@contember/react-routing": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-client": "npm:2.0.0-beta.2"
+    "@contember/react-dataview": "npm:2.0.0-beta.2"
+    "@contember/react-devbar": "npm:2.0.0-beta.2"
+    "@contember/react-identity": "npm:2.0.0-beta.2"
+    "@contember/react-routing": "npm:2.0.0-beta.2"
     "@radix-ui/react-slot": "npm:^1.1.0"
     stacktracey: "npm:^2.1.8"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/14f614142b3dbdf4131a9518e57a4e7469c56cdea805d92a11664cf027e74995546fed29cb31ef6dd6fd125e22f628ebd6dd5c705fd62f0b0c64d33b15aea1d7
+  checksum: 10/21496227eae38a910b2fc0fa202b4b519d1554f2385701c69db888439196fa05d2c0129139256654a847d32fe58bc76b5026f8875875568fbaa1638af10ab0d8
   languageName: node
   linkType: hard
 
-"@contember/react-binding@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-binding@npm:2.0.0-alpha.36"
+"@contember/react-binding@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-binding@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/binding": "npm:2.0.0-alpha.36"
-    "@contember/client": "npm:2.0.0-alpha.36"
-    "@contember/graphql-client": "npm:2.0.0-alpha.36"
-    "@contember/react-client": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
-  peerDependencies:
-    react: ^18 || ^19
-    react-dom: ^18 || ^19
-  checksum: 10/aa6b0e4dd064d59e676a9ebe6f408bc228661118c7c38bbbad0dd7dc22942ee837ce0209f62c75dd5aa4339dddc502f58e76cc9dc90da58688c946b7fa05a14a
-  languageName: node
-  linkType: hard
-
-"@contember/react-block-repeater@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-block-repeater@npm:2.0.0-alpha.36"
-  dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-multipass-rendering": "npm:2.0.0-alpha.36"
-    "@contember/react-repeater": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
+    "@contember/binding": "npm:2.0.0-beta.2"
+    "@contember/client": "npm:2.0.0-beta.2"
+    "@contember/graphql-client": "npm:2.0.0-beta.2"
+    "@contember/react-client": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
+    "@radix-ui/primitive": "npm:^0.1.0"
     "@radix-ui/react-slot": "npm:^1.1.0"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/f0fcd5247667b77bbdfbe1f389f205b27b4f70ca7efc540cfbd38c6e11c3eacdbcb74cb5aba770ee5f19f930f7426d4949d80516155b8189e0c3ece6cc5675c4
+  checksum: 10/9e602a2f050e742508f596a48612705b9603806a947f2f52021ddc9fe62d1fefd3b497e30cb4e6eec249214867c902010a727bde47f2354fd3d43f2da7503ec4
   languageName: node
   linkType: hard
 
-"@contember/react-board-dnd-kit@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-board-dnd-kit@npm:2.0.0-alpha.36"
+"@contember/react-block-repeater@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-block-repeater@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-board": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-multipass-rendering": "npm:2.0.0-beta.2"
+    "@contember/react-repeater": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@radix-ui/primitive": "npm:^1.1.0"
+    "@radix-ui/react-slot": "npm:^1.1.0"
+  peerDependencies:
+    react: ^18 || ^19
+    react-dom: ^18 || ^19
+  checksum: 10/a52b2dd908f8cb88cea1ef909406ad0dc50b3100ccb2337cfd3df0e6e39cfad057934e2e2ab86cefcc896293bfbb7a463e0d79fb4bdcde2be01b2e2b79d50b0b
+  languageName: node
+  linkType: hard
+
+"@contember/react-board-dnd-kit@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-board-dnd-kit@npm:2.0.0-beta.2"
+  dependencies:
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-board": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
     "@dnd-kit/core": "npm:^6.1.0"
     "@dnd-kit/sortable": "npm:^8.0.0"
     "@radix-ui/react-portal": "npm:^1.1.2"
@@ -703,133 +706,134 @@ __metadata:
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/3683a8c0f6d10e512c83113832f78a0685d61be132733b14d45cfdfeb7ee64f89d3b559df118798ef33277bccacd60fbb05502c2a494801f04d0dfa3ac796d6a
+  checksum: 10/34bfaaba35246af9375d574591ba40763adcb7bd9ecef2f092c39a740a2f9cf5de39a0e319d1c99898943001656c316d5c14c0e176d4d60710433c24eab076ab
   languageName: node
   linkType: hard
 
-"@contember/react-board@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-board@npm:2.0.0-alpha.36"
+"@contember/react-board@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-board@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-multipass-rendering": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-multipass-rendering": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/200304c1c43df8eb5f5d44a3083212312344f9eaafaafadadb24c32b54753d9d3a7d684282a579cfac2453bad276ed9f50886aa5cbd21c7ded5becca02e4f1c6
+  checksum: 10/a789dd7af11d7b46cf34a8346df3b62f5f1aa70b7829f63b4a9d59d836e16bd571722933598d375be07cafad47bb4ddf740ecfe2ec4731717e73e143857e41fe
   languageName: node
   linkType: hard
 
-"@contember/react-client-tenant@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-client-tenant@npm:2.0.0-alpha.36"
+"@contember/react-client-tenant@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-client-tenant@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/graphql-client-tenant": "npm:2.0.0-alpha.36"
-    "@contember/react-client": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
+    "@contember/graphql-client-tenant": "npm:2.0.0-beta.2"
+    "@contember/react-client": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
     "@radix-ui/primitive": "npm:^1.1.0"
     "@radix-ui/react-slot": "npm:^1.1.0"
     graphql-ts-client-api: "npm:^3.1.17"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/ce61265507923fc2d28023e726d1bd2201c3f85349f48fcea3362140f1529d853acc816f4cc90d9e2b356f6474d4ceb084c8181dca9c2b7112c6b2523d2ffaad
+  checksum: 10/fc3c07f76de6f1f5f8703be163abcb994e0c1305e02bc5fba58ad439e3592793f7b458f464d42334611b60cb66226a5c2751863e138c7d94ac0f801e636dfe68
   languageName: node
   linkType: hard
 
-"@contember/react-client@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-client@npm:2.0.0-alpha.36"
+"@contember/react-client@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-client@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/client": "npm:2.0.0-alpha.36"
-    "@contember/react-richtext-renderer": "npm:2.0.0-alpha.36"
+    "@contember/client": "npm:2.0.0-beta.2"
+    "@contember/react-richtext-renderer": "npm:2.0.0-beta.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10/dc524cf7b3826799c43b96089fd522e1d088cdff31fc489d07f502722ebf4b4896342b39300255239ebf3e114a42bc2d28f7ae2e96259e8f8ff4f2b9ac1db63d
+  checksum: 10/cdaa85007e2f948a9a8ce5805e8e6947ffa225d41a79d14b434e59b87e8cf220d7352b9e618a692dcde401a0855b52bea80bd35d6a1bba89ef590472878ba9fc
   languageName: node
   linkType: hard
 
-"@contember/react-dataview@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-dataview@npm:2.0.0-alpha.36"
+"@contember/react-dataview@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-dataview@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/client": "npm:2.0.0-alpha.36"
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-client": "npm:2.0.0-alpha.36"
-    "@contember/react-multipass-rendering": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/client": "npm:2.0.0-beta.2"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-client": "npm:2.0.0-beta.2"
+    "@contember/react-multipass-rendering": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
+    "@radix-ui/primitive": "npm:^1.1.0"
     "@radix-ui/react-slot": "npm:^1.1.0"
     fast-deep-equal: "npm:^3.1.3"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/d95ddb5f7611705f20a3ef7f0b11f8b6fa11be20cf029e6a4353cee83ce3643c40c042909bb266d63c07eee53515a21113eeb495cfd283bac00fee665c1db887
+  checksum: 10/422f3764754352b6d274ea6b8bc06fa16153260ab86f480964d3bf867015573cb5bb2405b7fdf8cc2f3dcc60c70fe3e1f4cc0cc4ea97e6f3029bcdb4663e4a96
   languageName: node
   linkType: hard
 
-"@contember/react-devbar@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-devbar@npm:2.0.0-alpha.36"
+"@contember/react-devbar@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-devbar@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
     buffer: "npm:6.0.3"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/733645b5b64ce99ac179e52ffa20629c6edf96d953c13edae81e4addbf0fd18a28e78a1c0717635a52cd8a9f576841fe1a59037fc765dcd743010074b9e99259
+  checksum: 10/ae72430d3bcd70a3a9fbc314a7e616835e999fc251cc490cef8e81a168a87250c6db618d7fbf5b53cc09f4a13a7455b809d05ac0ddcfab612feec26b51cba36d
   languageName: node
   linkType: hard
 
-"@contember/react-form@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-form@npm:2.0.0-alpha.36"
+"@contember/react-form@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-form@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
     "@radix-ui/react-slot": "npm:^1.1.0"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/eb0cd79bfb03a5967535c603c05246216caf01b9152fd447d140f3b521639403eb6440b25bb681f56a7f651afedd14c7b8746d8f8abf6046aba1790a1d4cb674
+  checksum: 10/5c238ff2ac0c15639dd1b2074dc4cd0200c3e8784687584bbf572c76245ea8df0980a19ac365239b7af2c2247a4a180e67bcd28eef35901f8f43b16a70539187
   languageName: node
   linkType: hard
 
-"@contember/react-identity@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-identity@npm:2.0.0-alpha.36"
+"@contember/react-identity@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-identity@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-client": "npm:2.0.0-alpha.36"
-    "@contember/react-client-tenant": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-client": "npm:2.0.0-beta.2"
+    "@contember/react-client-tenant": "npm:2.0.0-beta.2"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/2e43fb4de8774fc529e25254fccfea5d977f4792c6e2973ae4375e627a2b90baa541c86c4e27911f42e0129e056f48916f13cf7d7762847b8738b45237639a39
+  checksum: 10/d451a4bbf355050c44c5fc98f83c8acb20610793d4bbe06325ff0f69c2d463366c9b378fa51f07b3a3768b7ec229e56967342f6dba3d0d6b3368c2ae91373b45
   languageName: node
   linkType: hard
 
-"@contember/react-multipass-rendering@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-multipass-rendering@npm:2.0.0-alpha.36"
+"@contember/react-multipass-rendering@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-multipass-rendering@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/utilities": "npm:2.0.0-beta.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10/3509dd2121ecaf57b998ff930191eece47ef1b2b8b1f4f340c48a99120ca9e0d699c6447b8c7cfcc326945bb796feb860f2392a83eb053b2fe68ea14fafe2ff0
+  checksum: 10/3b0a695700bc227e06aec8dc92a6ade5addc6996bb45f310bf82ac3d5738a7a78983ef3fffbb77397d56c2c4c40f1f0ae4194dce40c15ef0cde75f245a667626
   languageName: node
   linkType: hard
 
-"@contember/react-repeater-dnd-kit@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-repeater-dnd-kit@npm:2.0.0-alpha.36"
+"@contember/react-repeater-dnd-kit@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-repeater-dnd-kit@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-repeater": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-repeater": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
     "@dnd-kit/core": "npm:^6.1.0"
     "@dnd-kit/sortable": "npm:^8.0.0"
     "@radix-ui/react-portal": "npm:^1.1.2"
@@ -837,72 +841,73 @@ __metadata:
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/978354bf1da825bad0a6280020a88d06db15d6193f952616e051b40a116c4d334250fcbfbfd115cb0e2e2a5584d81fb55c998be1e2d5136ae21802a90a10d6c4
+  checksum: 10/1596a19f8e1a880f91d04838d7196009f41104dfb2e0235098414cbd8bf666a8441616dacc08759267b696e56173ecf50362a6f8b1ea6a2b0f540ca62e0d6a50
   languageName: node
   linkType: hard
 
-"@contember/react-repeater@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-repeater@npm:2.0.0-alpha.36"
+"@contember/react-repeater@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-repeater@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@radix-ui/primitive": "npm:^1.1.0"
     "@radix-ui/react-slot": "npm:^1.1.0"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/bb8b6ce5c99e81ad14991a56ba761d0cb1bbd7efa673863b3d2675dc99b1f1cd465ac5d89ddd080a5b43389b33aef0c9aa1e0f083e12f3159a01384406caef23
+  checksum: 10/97f392f582635a0c8fec2a050a7953987455b3d5f6244964aa87214cf5e7768af83564f13885f4a46938c47c5505b85ac547d47d56eab082fdbb649c6d50d4b9
   languageName: node
   linkType: hard
 
-"@contember/react-richtext-renderer@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-richtext-renderer@npm:2.0.0-alpha.36"
+"@contember/react-richtext-renderer@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-richtext-renderer@npm:2.0.0-beta.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10/4178d7aaf69f9c4f1e4495fc4b8875394eb8075076bea53e798c7555b100bcf9653b5c3719b573c460ab1bf4a543123e157c10a207fce3b0473a08393b64f652
+  checksum: 10/aad4295a845fac1416ca6b0599922e8679e5fe9b8a9f7f2e6651875cab613b71a95431f8dcf7034bb6611b38fbff01260617ec06c3ece2ead1590283e2586a6c
   languageName: node
   linkType: hard
 
-"@contember/react-routing@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-routing@npm:2.0.0-alpha.36"
+"@contember/react-routing@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-routing@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
     "@radix-ui/react-slot": "npm:^1.1.0"
     path-to-regexp: "npm:^6.2.2"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/d943d22ae25d324ef366fe212a7797fe65c2ade317d59c87fca91445179d3667bbd64da8b20c68900e13d599eb014e9b7ac9eb03c2545d91762dba7200062f1b
+  checksum: 10/c2e9b5df407c04936d83035d10f4913acedf509b9c7bf7fc069ca67b4420c329c89cb950a40a1f18191a5d03176509e2d1041f4108f29b88c8ae869b2da1b2ff
   languageName: node
   linkType: hard
 
-"@contember/react-select@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-select@npm:2.0.0-alpha.36"
+"@contember/react-select@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-select@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-dataview": "npm:2.0.0-alpha.36"
-    "@contember/react-repeater": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-dataview": "npm:2.0.0-beta.2"
+    "@contember/react-repeater": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
     "@radix-ui/react-slot": "npm:^1.1.0"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/4da7ec8208401594bd137a3c276631a64f724310e779d6bb4c535f4edd52846bce31a5d3591a0935348867e62654c13af36e386b47ba241334269523c02b4562
+  checksum: 10/0f9410e91480dcbeca0e056fb9fdd3dcc37ec9b1f0d8c902c9a980846816b628a174109aea0b4675924db952f6a4e423556958519cc76046437d0098a4212570
   languageName: node
   linkType: hard
 
-"@contember/react-slate-editor-base@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-slate-editor-base@npm:2.0.0-alpha.36"
+"@contember/react-slate-editor-base@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-slate-editor-base@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
     "@radix-ui/primitive": "npm:^1.1.0"
     "@radix-ui/react-slot": "npm:^1.1.0"
     is-hotkey: "npm:^0.2.0"
@@ -912,18 +917,18 @@ __metadata:
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/ab3fae5d16bb2cc1eb67448a4ecfaff2ee8a525abe63c67b53cadf9bc52109f8eb2e9cc0c666dd1e8f4fe09ca0e29e7719ae971993c75b2a2c4926fac9262671
+  checksum: 10/97fed5424c572c3f40338325f0f1c68f645f249d57592ea5adbe004c53b61c86b7cc65ab70dbad33c9ccca87c4f0ac7f586597bc6f0ca66e4fb2f3dd12205ee6
   languageName: node
   linkType: hard
 
-"@contember/react-slate-editor@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-slate-editor@npm:2.0.0-alpha.36"
+"@contember/react-slate-editor@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-slate-editor@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-multipass-rendering": "npm:2.0.0-alpha.36"
-    "@contember/react-slate-editor-base": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-multipass-rendering": "npm:2.0.0-beta.2"
+    "@contember/react-slate-editor-base": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
     "@radix-ui/react-slot": "npm:^1.1.0"
     react-error-boundary: "npm:^4.0.13"
     slate: "npm:^0.103.0"
@@ -931,65 +936,65 @@ __metadata:
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/56945a7d6badb4912e807ce3196d77b54ba5c4141faf5cd54afffb789de70c0339d686d1af649a98bf8e14c5f65d3170bfa48a9b3dc780a0cc28c0fc8ef14a6d
+  checksum: 10/3dac5873781fc3271119c0154adade51267e131e1c04d8e14b73bd89a258ba543c75f3e9a5071fa303ac3349f2828984edabc9aa985a0e7e7e8cfcfc9611f831
   languageName: node
   linkType: hard
 
-"@contember/react-slots@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-slots@npm:2.0.0-alpha.36"
+"@contember/react-slots@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-slots@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/58f546b06ef2d32ca780c24c48f32f11869c4d5b356767d6c0738bdbb48de594d644c77db172180ef00475bb5cb929ae84f3c52c74c394d366818e9e56eff639
+  checksum: 10/446e5c139d11ad0a97ef28bde9362c79f72b5320f22c6b058f050b71b947babf8a2e193a9f123484e86b599cbc7e3f5ce55e7c3dc48767f79d14ef6fcf52d29c
   languageName: node
   linkType: hard
 
-"@contember/react-uploader-dropzone@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-uploader-dropzone@npm:2.0.0-alpha.36"
+"@contember/react-uploader-dropzone@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-uploader-dropzone@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-uploader": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
-    "@contember/utilities": "npm:2.0.0-alpha.36"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-uploader": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
+    "@contember/utilities": "npm:2.0.0-beta.2"
     "@radix-ui/react-slot": "npm:^1.1.0"
     react-dropzone: "npm:^14.2.9"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/162c7ac48562c6b3becb7b0a3ee576d9ee1b022d0e0d1f9b90d46411837ad34a24a1fe84f1d322357a5fe767ffa507b8e4852a551ff3eee0fea763effc2d4fb3
+  checksum: 10/6269239eb6e454e3852a52f7fbf82eaf9972f6e16a619cfc0762f8ff91d0b30c5c51a1ab2e2f27415269366f5b40046a0a72d35ac94003e276224d55385ba785
   languageName: node
   linkType: hard
 
-"@contember/react-uploader@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-uploader@npm:2.0.0-alpha.36"
+"@contember/react-uploader@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-uploader@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/client": "npm:2.0.0-alpha.36"
-    "@contember/graphql-client": "npm:2.0.0-alpha.36"
-    "@contember/react-binding": "npm:2.0.0-alpha.36"
-    "@contember/react-client": "npm:2.0.0-alpha.36"
-    "@contember/react-repeater": "npm:2.0.0-alpha.36"
-    "@contember/react-utils": "npm:2.0.0-alpha.36"
+    "@contember/client": "npm:2.0.0-beta.2"
+    "@contember/graphql-client": "npm:2.0.0-beta.2"
+    "@contember/react-binding": "npm:2.0.0-beta.2"
+    "@contember/react-client": "npm:2.0.0-beta.2"
+    "@contember/react-repeater": "npm:2.0.0-beta.2"
+    "@contember/react-utils": "npm:2.0.0-beta.2"
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/48af1655a83940b89169be71f87b6638e24dee94d1a8526da089b67d96a350113ce9e70062b04b2876a1fb4aa1155763db18edf4b479097b5c31b1c020f903da
+  checksum: 10/9a7e34bede9e070a80f1b6301c65668bffcb26f19fe886020d34996ae4f7658eacdee524f5d3201204abe5471064839191dd75e6d9d5605a8258036ae3e3dd43
   languageName: node
   linkType: hard
 
-"@contember/react-utils@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/react-utils@npm:2.0.0-alpha.36"
+"@contember/react-utils@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/react-utils@npm:2.0.0-beta.2"
   dependencies:
     fast-deep-equal: "npm:^3.1.3"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10/1a5a2719aae655de43bfa69f7d9116337303f090b31e0a467824c532a9971759897c2eaece8c8b10c964da52bf77caa3b00d32c0e3b05cb1a6841c734ce7e44c
+  checksum: 10/551a919c67eb3c7f2a5891454fe8134526014cf5edb4810cf5d72794f252433d067672b8a661d699911269c2ec6c6529d19599fea8d7c4c5eaedc921306c74f5
   languageName: node
   linkType: hard
 
@@ -1016,13 +1021,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contember/schema-utils@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/schema-utils@npm:2.0.0-alpha.36"
+"@contember/schema-utils@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/schema-utils@npm:2.0.0-beta.2"
   dependencies:
-    "@contember/schema": "npm:2.0.0-alpha.36"
-    "@contember/typesafe": "npm:2.0.0-alpha.36"
-  checksum: 10/79a27141acd126045f9147b1cea14cd09fc3620e5a58d6ffc642babbe25e3457f14ad9e2498c64a4c01701bb2c5e4805756bd3fb309ba5041a30a6ce47f94ea1
+    "@contember/schema": "npm:2.0.0-beta.2"
+    "@contember/typesafe": "npm:2.0.0-beta.2"
+  checksum: 10/0b3cd4b64e0ffb3fe19d987e179dd37bee26e4ea185c00e6bf2414be1356db3cae4e9f474be6140e58601849c19e8fe7d6952b060b4e0f9c85db97d5bbf1e0d1
   languageName: node
   linkType: hard
 
@@ -1040,10 +1045,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contember/schema@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/schema@npm:2.0.0-alpha.36"
-  checksum: 10/71587410fe4296b68f4fb430b00aaeda8c13b42f2d644270b8a15d7c4d957d9c17561523f0905f2b7a726d75f9004ac38d204d4971bf3a8eeb93e1b8197c2ce6
+"@contember/schema@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/schema@npm:2.0.0-beta.2"
+  checksum: 10/ab49f7be32479ccc2e7038be90e4dbf340cd4ef831ae14162d4c6122291e3a0c151bcebd7ec3a7bb66c4cdcc682fe891e8400ccba78617f1d8164f1a33c89c34
   languageName: node
   linkType: hard
 
@@ -1054,28 +1059,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contember/typesafe@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/typesafe@npm:2.0.0-alpha.36"
-  checksum: 10/b856c698ff53015d7bd8ef48e9622b217d2f4ae6fdc9680351d6849e0470dde9b47d883b64d38c9a31458e30f9fc2c5f4fd8f8636f8695b0dc60d3c9bfa79486
+"@contember/typesafe@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/typesafe@npm:2.0.0-beta.2"
+  checksum: 10/491b9411739fc5852c0d8c2948e5c34190cd3f311dad5f3789e72375658b5d2443563092fd5d226d0f76fa4401c881dd7f935181948f5961aeaa1b5fb43dd702
   languageName: node
   linkType: hard
 
-"@contember/utilities@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/utilities@npm:2.0.0-alpha.36"
+"@contember/utilities@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/utilities@npm:2.0.0-beta.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10/024b6796537ef57141010b9c6b1ab5407a4552ce118c4c2475dc3a31ba5b3d6d32eee94f5e5eb286b251db57cb589f747e24322314fe17ddc2f8dd993f3e2ae3
+  checksum: 10/42ca19b528fbeedc573f9712004548471414658afe813c3d086897448f6fc2cba03026f8cc3f594a29a508b5d5bf996ba9c2f8c59d3c41bf18c0aee66f9ce6a8
   languageName: node
   linkType: hard
 
-"@contember/vite-plugin@npm:2.0.0-alpha.36":
-  version: 2.0.0-alpha.36
-  resolution: "@contember/vite-plugin@npm:2.0.0-alpha.36"
+"@contember/vite-plugin@npm:2.0.0-beta.2":
+  version: 2.0.0-beta.2
+  resolution: "@contember/vite-plugin@npm:2.0.0-beta.2"
   peerDependencies:
     vite: ^4 || ^5
-  checksum: 10/a8b22f42f9fe12e18075ed06faadbb403687897200568b91d7fdfe4bc1252cd175de5f6ccae4faeb1005b374559f008a88c0232dc05bb72298de15111ecf003a
+  checksum: 10/94c2a09a85f5ec978590249bb3540e326d5fc74b6aaa37da178b32cb846e51f82795d12c06fb3578aeb74f5d29029a00307a787137342c9826a36d5fc5ebf9a4
   languageName: node
   linkType: hard
 
@@ -1845,6 +1850,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/primitive@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@radix-ui/primitive@npm:0.1.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.13.10"
+  checksum: 10/5f721bcfebb2482fc2d034d2782219f4b1035977d3a1bd854719ff07c82fb545083ff1247a987ea0218109c5801375724f60910b0c71f7bb78ea0ab21b2bcb26
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-alert-dialog@npm:^1.1.2":
   version: 1.1.4
   resolution: "@radix-ui/react-alert-dialog@npm:1.1.4"
@@ -2389,6 +2403,25 @@ __metadata:
     "@types/react-dom":
       optional: true
   checksum: 10/acf3d5cd77be0dd117f04385b5524c7ca3296cf89dbdd468fe3bfc0e8da1a326543ba6e5026d73b96023e56a12d9cd72ae431ac62e6ce7396b8c1c012344b717
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-separator@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@radix-ui/react-separator@npm:1.1.1"
+  dependencies:
+    "@radix-ui/react-primitive": "npm:2.0.1"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 10/85de387e6b94548d777b5ebafe3f170eb0bab31ec1850ee8bc58f7fc48b725d6cf33c4fb2c92be3196ca843a14819fa32108dd78d5675994e31adb5500484e01
   languageName: node
   linkType: hard
 
@@ -5136,9 +5169,9 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@biomejs/biome": "npm:^1.9.4"
-    "@contember/client-content": "npm:2.0.0-alpha.36"
-    "@contember/client-content-generator": "npm:2.0.0-alpha.36"
-    "@contember/graphql-builder": "npm:2.0.0-alpha.36"
+    "@contember/client-content": "npm:2.0.0-beta.2"
+    "@contember/client-content-generator": "npm:2.0.0-beta.2"
+    "@contember/graphql-builder": "npm:2.0.0-beta.2"
     "@contember/schema": "npm:1.4.6"
     "@contember/schema-definition": "npm:1.4.6"
     "@contember/schema-utils": "npm:1.4.6"

@@ -8,10 +8,6 @@ const postponeTimeoutMs = 60_000 * 5
 const checkIntervalMs = 30_000
 
 export const OutdatedApplicationDialog: ComponentType = () => {
-	if (import.meta.env.DEV) {
-		return null
-	}
-
 	const isOutdated = useIsApplicationOutdated({ checkIntervalMs })
 	const [open, setOpen] = useState(true)
 
@@ -41,3 +37,5 @@ export const OutdatedApplicationDialog: ComponentType = () => {
 		</AlertDialog>
 	)
 }
+
+

@@ -21,7 +21,7 @@ export const List = () => {
 				</Slots.Back>
 				<DefaultDataGrid entities="Grouping" toolbar={<DataGridQueryFilter />}>
 					<DataGridColumn>
-						<div className="flex gap-4" />
+						<div className="flex gap-4 h-[1000rem]" />
 					</DataGridColumn>
 					<DataGridTextColumn field="name" header="Name" />
 					<DataGridHasOneColumn field="project" header="Project">
@@ -54,16 +54,17 @@ export const Detail = () => {
 	return (
 		<>
 			<Binding>
-				<Slots.Actions>
-					<Link to="grouping/edit(id: $entity.id)">
-						<AnchorButton>Edit</AnchorButton>
-					</Link>
-				</Slots.Actions>
 				<Slots.Title>Grouping detail</Slots.Title>
 				<Slots.Back>
 					<BackButton />
 				</Slots.Back>
-				<EntitySubTree entity="Grouping(id = $id)" />
+				<EntitySubTree entity="Grouping(id = $id)">
+					<Slots.Actions>
+						<Link to="grouping/edit(id: $entity.id)">
+							<AnchorButton>Edit</AnchorButton>
+						</Link>
+					</Slots.Actions>
+				</EntitySubTree>
 			</Binding>
 		</>
 	)
