@@ -2,13 +2,7 @@ import { type Component, createEffect, onCleanup, onMount } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { EchoProvider } from '~/contexts'
 import { useEchoStore } from '~/contexts/EchoContext'
-import {
-	colorSelectorStyles,
-	drawingLayerStyles,
-	drawingToolbarStyles,
-	shapeActionsStyles,
-	tooltipStyles,
-} from '~/features/drawing/styles'
+import { colorSelectorStyles, drawingLayerStyles, drawingToolbarStyles, shapeActionsStyles, tooltipStyles } from '~/features/drawing/styles'
 import { feedbackFormStyles } from '~/features/feedback/styles'
 import { echoLauncherButtonStyles } from '~/features/launcher/styles/EchoLauncherButton.styles'
 import { notificationStyles } from '~/features/launcher/styles/Notification.styles'
@@ -17,14 +11,14 @@ import { welcomeMessageStyles } from '~/features/launcher/styles/WelcomeMessage.
 import { echoStyles } from '~/styles'
 import type { EchoOptions, EnrichedStylesConfig, StylesConfig } from '~/types'
 import { getContrastColor } from '~/utils/color'
-import { buttonStyles } from './atoms'
 import { EchoLayout } from './EchoLayout'
+import { buttonStyles } from './atoms'
 
 const enrichConfig = (config: StylesConfig): EnrichedStylesConfig => {
 	return {
 		...config,
 		primaryTextColor: getContrastColor(config.primaryColor),
-		primaryColorLighter: `color-mix(in srgb, ${config.primaryColor} 100%, white 20%)`,
+		primaryColorLighter: `color-mix(in srgb, ${config.primaryColor} 100%, white 40%)`,
 		primaryColorLightest: `color-mix(in srgb, ${config.primaryColor} 7%, white 100%)`,
 	}
 }
