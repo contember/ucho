@@ -50,8 +50,8 @@ export const echoLauncherButtonStyles = (config: EnrichedStylesConfig) => {
 			position: absolute;
 			top: -6px;
 			right: -6px;
-			background: ${config.primaryColor};
-			color: white;
+			background: ${config.primaryColorLighter};
+			color: ${config.primaryTextColor};
 			border-radius: 12px;
 			min-width: 20px;
 			height: 20px;
