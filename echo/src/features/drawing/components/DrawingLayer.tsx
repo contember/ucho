@@ -70,6 +70,7 @@ export const DrawingLayer: Component = () => {
 				onMouseLeave={drawing.actions.handleLeave}
 				onTouchEnd={drawing.actions.handleLeave}
 			>
+				{/* overlay mask */}
 				<path
 					class="echo-drawing-layer-mask"
 					d={generateCutoutPath(
@@ -85,14 +86,14 @@ export const DrawingLayer: Component = () => {
 					fill-rule="evenodd"
 				/>
 
+				{/* shapes */}
 				<For each={drawing.state.shapes}>
 					{shape => {
-						return (
-							<Shape shape={shape} selectedShapeId={drawing.state.selectedShapeId} onShapeClick={drawing.actions.handleShapeClick} isMask={false} />
-						)
+						return <Shape shape={shape} selectedShapeId={drawing.state.selectedShapeId} onShapeClick={drawing.actions.handleShapeClick} />
 					}}
 				</For>
 
+				{/* current rectangle */}
 				{drawing.state.currentPoints.length === 2 &&
 					renderShape(
 						{
@@ -104,6 +105,7 @@ export const DrawingLayer: Component = () => {
 						false,
 					)}
 
+				{/* currentPath */}
 				{drawing.state.currentPath && drawing.state.selectedTool === 'pen' && (
 					<path
 						d={drawing.state.currentPath}

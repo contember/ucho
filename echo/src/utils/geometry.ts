@@ -1,4 +1,4 @@
-import type  { Point } from '~/types'
+import type { Point } from '~/types'
 
 export const getRectFromPoints = (points: Point[]) => {
 	if (points.length !== 2) return null
@@ -9,4 +9,12 @@ export const getRectFromPoints = (points: Point[]) => {
 		width: Math.abs(end.x - start.x),
 		height: Math.abs(end.y - start.y),
 	}
+}
+
+export const getPathFromPoints = (points: Point[]) => {
+	if (points.length < 2) return null
+	return `M ${points[0].x} ${points[0].y} ${points
+		.slice(1)
+		.map(point => `L ${point.x} ${point.y}`)
+		.join(' ')}`
 }
