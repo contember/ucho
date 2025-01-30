@@ -1,4 +1,4 @@
-import { Component, For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
+import { type Component, For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { Button } from '~/components/atoms/Button'
 import { XIcon } from '~/components/icons'
 import { ExternalLinkIcon } from '~/components/icons/ExternalLinkIcon'

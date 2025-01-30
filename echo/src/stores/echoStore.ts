@@ -1,6 +1,6 @@
 import { createEffect, onCleanup } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import { DrawingTool, FeedbackData, Notification, Point, Screenshot, Shape, TextConfig } from '~/types'
+import type { DrawingTool, FeedbackData, Notification, Point, Screenshot, Shape, TextConfig } from '~/types'
 import { debounce } from '~/utils/debounce'
 import { clearPageState, getPageKey, getStoredPagesCount, loadPageState, savePageState } from '~/utils/storage'
 

@@ -1,7 +1,7 @@
-import { StylesConfig } from '~/types'
-import { zIndex } from '../../../styles/zIndex'
+import { zIndex } from '~/styles'
+import type { EnrichedStylesConfig } from '~/types'
 
-export const notificationStyles = (config: StylesConfig) => `
+export const notificationStyles = (config: EnrichedStylesConfig) => `
     .echo-notification {
         position: absolute;
         z-index: ${zIndex.notification};

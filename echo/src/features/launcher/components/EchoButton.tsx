@@ -1,4 +1,4 @@
-import { Component } from 'solid-js'
+import type { Component } from 'solid-js'
 import { ContemberIcon } from '~/components/icons/ContemberIcon'
 import { useEchoStore } from '~/contexts'
 import { welcomeMessageStore } from '~/stores'

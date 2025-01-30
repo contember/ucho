@@ -1,4 +1,4 @@
-import { Point } from '~/types'
+import type { Point } from '~/types'
 
 export const getPointFromEvent = (e: MouseEvent | TouchEvent, { useClientCoords = false }: { useClientCoords?: boolean } = {}): Point => {
 	const isTouchEvent = typeof TouchEvent !== 'undefined' && e instanceof TouchEvent

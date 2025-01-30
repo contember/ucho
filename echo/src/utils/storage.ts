@@ -1,5 +1,5 @@
-import { DrawingState, FeedbackState } from '~/stores/echoStore'
-import { Shape } from '~/types'
+import type { DrawingState, FeedbackState } from '~/stores/echoStore'
+import type { Shape } from '~/types'
 
 interface StoredPageState {
 	feedback: {

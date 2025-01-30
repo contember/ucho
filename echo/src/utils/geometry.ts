@@ -1,4 +1,4 @@
-import { Point } from '~/types'
+import type  { Point } from '~/types'
 
 export const getRectFromPoints = (points: Point[]) => {
 	if (points.length !== 2) return null

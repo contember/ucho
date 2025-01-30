@@ -1,4 +1,4 @@
-import { Component, For, onCleanup, onMount } from 'solid-js'
+import { type Component, For, onCleanup, onMount } from 'solid-js'
 import { drawingConfig } from '~/config/drawingConfig'
 import { useEchoStore } from '~/contexts'
 import { renderShape } from '~/utils/shape'

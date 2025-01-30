@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from 'solid-js'
 import { useEchoStore } from '~/contexts'
-import { Point } from '~/types'
+import type { Point } from '~/types'
 
 export const useDrag = () => {
 	const store = useEchoStore()

@@ -32,7 +32,7 @@ export const welcomeMessageStyles = (config: EnrichedStylesConfig) => {
 
     .echo-welcome-message:hover {
         transform: translateY(-2px) scale(1.02);
-        background: ${lighterPrimaryColor};
+        background: ${config.primaryColorLightest};
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15),
                    0 12px 40px ${config.primaryColor}50;
     }
@@ -88,7 +88,7 @@ export const welcomeMessageStyles = (config: EnrichedStylesConfig) => {
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background: ${lighterPrimaryColor};
+		background: ${config.primaryColorLightest};
 		z-index: -1;
 		border-radius: 12px;
 	}

@@ -1,4 +1,4 @@
-import { Component } from 'solid-js'
+import type { Component } from 'solid-js'
 import { XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
 import { welcomeMessageStore } from '~/stores/welcomeMessageStore'

@@ -29,8 +29,8 @@ export const echoLauncherButtonStyles = (config: EnrichedStylesConfig) => {
 	        height: 48px;
 	        
 	        box-shadow: 
-	            2px 2px 10px var(--dark-shadow-color), /* Dark shadow */
-	            -8px -8px 16px var(--light-shadow-color); /* Light shadow */
+	            2px 2px 10px var(--dark-shadow-color),
+	            -8px -8px 16px var(--light-shadow-color);
 	        
 	        transition: all 0.3s ease-out;
 		}

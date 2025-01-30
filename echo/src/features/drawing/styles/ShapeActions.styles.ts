@@ -1,7 +1,7 @@
 import { zIndex } from '~/styles/zIndex'
-import { StylesConfig } from '~/types'
+import type { EnrichedStylesConfig } from '~/types'
 
-export const shapeActionsStyles = (config: StylesConfig) => `
+export const shapeActionsStyles = (config: EnrichedStylesConfig) => `
     .echo-shape-actions {
         position: fixed;
         z-index: ${zIndex.shapeActions};

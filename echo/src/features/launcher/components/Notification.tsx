@@ -1,4 +1,4 @@
-import { Component } from 'solid-js'
+import type { Component } from 'solid-js'
 import { Button } from '~/components/atoms'
 import { CheckCircleIcon, XCircleIcon, XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'

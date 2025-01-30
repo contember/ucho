@@ -1,7 +1,7 @@
-import { StylesConfig } from '~/types'
-import { zIndex } from '../../../styles/zIndex'
+import type { EnrichedStylesConfig } from '~/types'
+import { zIndex } from '~/styles'
 
-export const savedPagesDropdownStyles = (config: StylesConfig) => `
+export const savedPagesDropdownStyles = (config: EnrichedStylesConfig) => `
 	.echo-saved-pages-dropdown {
 		position: absolute;
 		bottom: calc(100% + 16px);

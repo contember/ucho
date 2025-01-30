@@ -1,6 +1,5 @@
-import { Component } from 'solid-js'
-import { JSX } from 'solid-js'
-import { EnrichedStylesConfig } from '~/types'
+import type { Component, JSX } from 'solid-js'
+import type { EnrichedStylesConfig } from '~/types'
 
 type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
 	variant?: 'primary' | 'secondary'
