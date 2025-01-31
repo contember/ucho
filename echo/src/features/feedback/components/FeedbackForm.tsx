@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js'
 import { Button } from '~/components/atoms/Button'
-import { ChevronRightIcon, MessageIcon, TrashIcon, XIcon } from '~/components/icons'
+import { ChevronRightIcon, MessageIcon, XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
 import { isMobileDevice } from '~/utils'
 import { getConsoleBuffer } from '~/utils/console'
