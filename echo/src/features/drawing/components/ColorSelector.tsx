@@ -20,7 +20,6 @@ export const ColorSelector: Component = () => {
 			<div class="echo-color-selector">
 				<button
 					class="echo-drawing-toolbar-button"
-					data-selected={false}
 					title="Color"
 					style={{
 						'background-color': store.drawing.state.selectedColor,

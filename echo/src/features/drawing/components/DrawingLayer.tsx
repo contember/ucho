@@ -1,7 +1,6 @@
 import { type Component, For, onCleanup, onMount } from 'solid-js'
-import { drawingConfig } from '~/config/drawingConfig'
 import { useEchoStore } from '~/contexts'
-import { generateCutoutPath, getPenCursor } from '../utils/svg'
+import { generateCutoutPath } from '~/utils/svg'
 import { DrawingTooltip } from './DrawingTooltip'
 import { Shape } from './Shape'
 import { ShapeActions } from './ShapeActions'
@@ -24,20 +23,12 @@ export const DrawingLayer: Component = () => {
 		drawingLayerContainerRef?.removeEventListener('touchend', store.drawing.methods.handleEnd)
 	})
 
-	const getCursor = () => {
-		const tool = drawingConfig[store.drawing.state.selectedTool]
-		if (tool.id === 'path') {
-			return `url('${getPenCursor(store.drawing.state.selectedColor)}') 24 24, auto`
-		}
-		return tool.cursor
-	}
-
 	return (
 		<div
 			ref={drawingLayerContainerRef}
 			class="echo-drawing-layer-container"
 			style={{
-				cursor: getCursor(),
+				cursor: store.drawing.state.cursor,
 			}}
 		>
 			<DrawingTooltip />

@@ -1,6 +1,6 @@
 import { type Component, For } from 'solid-js'
 import { HighlightIcon, PenIcon } from '~/components/icons'
-import { drawingConfig } from '~/config/drawingConfig'
+import { toolConfig } from '~/config/drawingConfig'
 import { useEchoStore } from '~/contexts/EchoContext'
 import type { IconProps } from '~/types'
 import { ColorSelector } from './ColorSelector'
@@ -12,7 +12,7 @@ const ToolIcon: Record<string, Component<IconProps>> = {
 
 export const DrawingToolbar: Component = () => {
 	const store = useEchoStore()
-	const tools = Object.values(drawingConfig)
+	const tools = Object.values(toolConfig)
 
 	return (
 		<div class="echo-drawing-toolbar" data-hide-when-drawing="true">

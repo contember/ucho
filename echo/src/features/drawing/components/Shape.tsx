@@ -1,5 +1,5 @@
 import { Component, Show, createMemo } from 'solid-js'
-import { drawingConfig } from '~/config/drawingConfig'
+import { toolConfig } from '~/config/drawingConfig'
 import type { Shape as ShapeType } from '~/types'
 import { getPathFromPoints, getRectFromPoints } from '~/utils/geometry'
 
@@ -38,12 +38,10 @@ const RectangleShape: Component<ShapeProps & { isSelected: boolean }> = props =>
 				height={rect()!.height}
 				fill="transparent"
 				stroke={props.color}
-				stroke-width={drawingConfig.rectangle.strokeWidth.active}
+				stroke-width={toolConfig.rectangle.strokeWidth.active}
 				vector-effect="non-scaling-stroke"
 				stroke-dasharray={props.isSelected ? '5,5' : 'none'}
-				style={{
-					cursor: props.isSelected ? 'move' : 'pointer',
-				}}
+				cursor={props.isSelected ? 'move' : 'pointer'}
 				onClick={() => props.onShapeClick?.(props.id)}
 			/>
 		</Show>
@@ -61,14 +59,11 @@ const PathShape: Component<ShapeProps & { isSelected: boolean }> = props => {
 				d={path()!}
 				fill="none"
 				stroke={props.color}
-				stroke-width={drawingConfig.path.strokeWidth.active}
+				stroke-width={toolConfig.path.strokeWidth.active}
 				vector-effect="non-scaling-stroke"
 				stroke-linecap="round"
-				stroke-dasharray={props.isSelected ? '5,5' : 'none'}
-				style={{
-					cursor: props.isSelected ? 'move' : 'pointer',
-					opacity: drawingConfig.path.opacity.normal,
-				}}
+				opacity={props.isSelected ? 0.6 : 1}
+				cursor={props.isSelected ? 'move' : 'pointer'}
 				onClick={() => props.onShapeClick?.(props.id)}
 			/>
 		</Show>

@@ -3,7 +3,7 @@ import type { DrawingTool } from '~/types'
 interface ToolConfig {
 	id: DrawingTool
 	label: string
-	cursor: string
+	getCursor: (color: string) => string
 	strokeWidth: {
 		active: number
 		normal: number
@@ -16,11 +16,11 @@ interface ToolConfig {
 	hysteresis?: number
 }
 
-export const drawingConfig: Record<DrawingTool, ToolConfig> = {
+export const toolConfig: Record<DrawingTool, ToolConfig> = {
 	rectangle: {
 		id: 'rectangle',
 		label: 'Highlight',
-		cursor: 'crosshair',
+		getCursor: () => 'crosshair',
 		strokeWidth: {
 			active: 2,
 			normal: 2,
@@ -34,7 +34,8 @@ export const drawingConfig: Record<DrawingTool, ToolConfig> = {
 	path: {
 		id: 'path',
 		label: 'Pen',
-		cursor: 'none', // custom SVG cursor
+		getCursor: (color: string) =>
+			`url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="${color.replace('#', '%23')}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="8"/></svg>') 24 24, auto`,
 		strokeWidth: {
 			active: 6,
 			normal: 6,

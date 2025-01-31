@@ -1,8 +1,13 @@
 import { createStore } from 'solid-js/store'
-import { getDistance, getPointFromEvent } from '~/features/drawing/utils/events'
+import { toolConfig } from '~/config/drawingConfig'
 import type { DrawingTool, Point, Shape } from '~/types'
+import { getDistance, getPointFromEvent } from '~/utils/events'
 
 const MOVEMENT_THRESHOLD = 5 // pixels
+
+const computeCursor = (tool: DrawingTool, color: string) => {
+	return toolConfig[tool].getCursor(color)
+}
 
 export interface DrawingState {
 	isDrawing: boolean
@@ -19,6 +24,7 @@ export interface DrawingState {
 	dragStartPos: Point | null
 	initialClickPos: Point | null
 	dragOffset: Point | null
+	cursor: string
 }
 
 export interface DrawingStore {
@@ -60,9 +66,15 @@ export const createDrawingStore = (
 		dragStartPos: null,
 		initialClickPos: null,
 		dragOffset: null,
+		cursor: computeCursor('rectangle', primaryColor),
 	})
 
 	const wrappedSetState = (newState: Partial<DrawingState>, isClearing = false) => {
+		if (newState.selectedTool || newState.selectedColor) {
+			const tool = newState.selectedTool || state.selectedTool
+			const color = newState.selectedColor || state.selectedColor
+			newState.cursor = computeCursor(tool, color)
+		}
 		setState(newState)
 		onStateChange?.(newState, isClearing)
 	}
