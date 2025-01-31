@@ -1,6 +1,6 @@
-import { createEffect, onCleanup } from 'solid-js'
-import type { FeedbackData, TextConfig } from '~/types'
+import type { FullEchoOptions, TextConfig } from '~/types'
 import { debounce } from '~/utils/debounce'
+import { registerMutationObserver, registerWindowEventListener } from '~/utils/listener'
 import { clearPageState, getPageKey, getStoredPagesCount, loadPageState, savePageState } from '~/utils/storage'
 import { type DrawingStore, createDrawingStore } from './drawingStore'
 import { type FeedbackStore, createFeedbackStore } from './feedbackStore'
@@ -16,13 +16,7 @@ export interface EchoStore {
 	}
 }
 
-interface EchoStoreConfig {
-	primaryColor: string
-	onSubmit: (data: FeedbackData) => Promise<void>
-	text: TextConfig
-}
-
-export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
+export const createEchoStore = (config: FullEchoOptions): EchoStore => {
 	let currentPageKey = getPageKey()
 	const savedState = loadPageState(currentPageKey)
 
@@ -63,25 +57,23 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 		}
 	}
 
-	createEffect(() => {
-		const observer = new MutationObserver(() => {
+	registerWindowEventListener({
+		event: 'popstate',
+		callback: handleUrlChange,
+	})
+
+	registerMutationObserver({
+		target: document.documentElement,
+		options: {
+			childList: true,
+			subtree: true,
+		},
+		callback: () => {
 			const newPageKey = getPageKey()
 			if (newPageKey !== currentPageKey) {
 				handleUrlChange()
 			}
-		})
-
-		observer.observe(document.documentElement, {
-			subtree: true,
-			childList: true,
-		})
-
-		window.addEventListener('popstate', handleUrlChange)
-
-		onCleanup(() => {
-			observer.disconnect()
-			window.removeEventListener('popstate', handleUrlChange)
-		})
+		},
 	})
 
 	const reset = () => {
@@ -126,7 +118,7 @@ export const createEchoStore = (config: EchoStoreConfig): EchoStore => {
 		feedback,
 		drawing,
 		widget,
-		text: config.text,
+		text: config.textConfig,
 		methods: {
 			reset,
 		},

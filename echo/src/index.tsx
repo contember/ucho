@@ -4,6 +4,8 @@ import { type EchoOptions, type FeedbackData } from './types'
 import { cleanupConsole, getConsoleBuffer, setupConsole } from './utils/console'
 import { validateOptions } from './utils/validateEchoOptions'
 import './styles.css'
+import { defaultText } from './config/defaultText'
+import { deepMerge } from './utils/common'
 
 let activeInstance: (() => void) | null = null
 
@@ -22,14 +24,15 @@ export function initEcho(options: EchoOptions): () => void {
 		validateOptions(options)
 		setupConsole()
 
-		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig } = options
+		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig = {} } = options
+		const mergedTextConfig = deepMerge(defaultText, textConfig)
 
 		const dispose = render(
 			() => (
 				<Echo
 					position={position}
 					primaryColor={primaryColor}
-					textConfig={textConfig}
+					textConfig={mergedTextConfig}
 					onSubmit={async data => {
 						try {
 							await onSubmit({

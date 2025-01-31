@@ -1,8 +1,9 @@
-import { type Component, For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
+import { type Component, For, Show, createMemo, createSignal } from 'solid-js'
 import { Button } from '~/components/atoms/Button'
 import { XIcon } from '~/components/icons'
 import { ExternalLinkIcon } from '~/components/icons/ExternalLinkIcon'
 import { useEchoStore } from '~/contexts'
+import { registerMutationObserver, registerWindowEventListener } from '~/utils/listener'
 import { clearPageState, getStoredPages } from '~/utils/storage'
 
 export const SavedPagesDropdown: Component = () => {
@@ -10,34 +11,35 @@ export const SavedPagesDropdown: Component = () => {
 	const [pages, setPages] = createSignal(getStoredPages())
 	const [currentPath, setCurrentPath] = createSignal(window.location.pathname)
 
-	onMount(() => {
-		const handleStorageChange = () => {
-			const storedPages = getStoredPages()
-			setPages(storedPages)
-			store.widget.setState({ pagesCount: storedPages.length })
-		}
+	const handleStorageChange = () => {
+		const storedPages = getStoredPages()
+		setPages(storedPages)
+		store.widget.setState({ pagesCount: storedPages.length })
+	}
 
-		const handleUrlChange = () => {
-			setCurrentPath(window.location.pathname)
-		}
+	const handleUrlChange = () => {
+		setCurrentPath(window.location.pathname)
+	}
 
-		window.addEventListener('echo-storage-change', handleStorageChange)
-		window.addEventListener('popstate', handleUrlChange)
+	registerWindowEventListener({
+		event: 'echo-storage-change',
+		callback: handleStorageChange,
+	})
 
-		const observer = new MutationObserver(() => {
-			setCurrentPath(window.location.pathname)
-		})
+	registerWindowEventListener({
+		event: 'popstate',
+		callback: handleUrlChange,
+	})
 
-		observer.observe(document.documentElement, {
-			subtree: true,
+	registerMutationObserver({
+		target: document.documentElement,
+		options: {
 			childList: true,
-		})
-
-		onCleanup(() => {
-			window.removeEventListener('echo-storage-change', handleStorageChange)
-			window.removeEventListener('popstate', handleUrlChange)
-			observer.disconnect()
-		})
+			subtree: true,
+		},
+		callback: () => {
+			setCurrentPath(window.location.pathname)
+		},
 	})
 
 	const handleNavigate = (path: string, latestQuery?: string) => {

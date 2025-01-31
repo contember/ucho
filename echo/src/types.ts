@@ -62,6 +62,10 @@ export type EchoOptions = {
 	textConfig?: Partial<TextConfig>
 }
 
+export type FullEchoOptions = Required<EchoOptions> & {
+	textConfig: TextConfig
+}
+
 export const POSITIONS: Record<Position, { [key: string]: string }> = {
 	'top-left': {
 		top: '20px',

@@ -1,21 +1,23 @@
-import { type Component, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
+import { type Component, createMemo, createSignal } from 'solid-js'
 import { Button } from '~/components/atoms'
 import { TrashIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts'
 import type { Point } from '~/types'
 import { getRectFromPoints } from '~/utils/geometry'
+import { registerWindowEventListener } from '~/utils/listener'
 
 export const ShapeActions: Component = () => {
 	const store = useEchoStore()
 	let actionsRef: HTMLDivElement | undefined
 	const [scrollPosition, setScrollPosition] = createSignal({ x: window.scrollX, y: window.scrollY })
 
-	onMount(() => {
-		const handleScroll = () => {
-			setScrollPosition({ x: window.scrollX, y: window.scrollY })
-		}
-		window.addEventListener('scroll', handleScroll)
-		onCleanup(() => window.removeEventListener('scroll', handleScroll))
+	const handleScroll = () => {
+		setScrollPosition({ x: window.scrollX, y: window.scrollY })
+	}
+
+	registerWindowEventListener({
+		event: 'scroll',
+		callback: handleScroll,
 	})
 
 	const handleDelete = () => {

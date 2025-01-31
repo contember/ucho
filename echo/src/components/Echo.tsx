@@ -1,30 +1,28 @@
-import { type Component, JSXElement, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+import { type Component, JSXElement, createEffect, createSignal, onCleanup } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { EchoProvider } from '~/contexts'
 import { useEchoStore } from '~/contexts/EchoContext'
-import type { EchoOptions } from '~/types'
+import type { FullEchoOptions } from '~/types'
 import { getContrastColor } from '~/utils/color'
+import { registerKeyListener, registerMutationObserver, registerWindowEventListener } from '~/utils/listener'
 import staticStyles from './../styles.css?inline'
-import { EchoLayout } from './EchoLayout'
+import { DrawingToolbar } from './molecules/DrawingToolbar'
+import { EchoLauncherButton } from './molecules/EchoLauncherButton'
+import { Notification } from './molecules/Notification'
+import { WelcomeMessage } from './molecules/WelcomeMessage'
+import { DrawingLayer } from './organisms/DrawingLayer'
+import { FeedbackForm } from './organisms/FeedbackForm'
 
-export const Echo: Component<EchoOptions> = props => {
+export const Echo: Component<FullEchoOptions> = props => {
 	return (
 		<Portal useShadow mount={document.body}>
-			<EchoRoot {...props}>
-				<EchoLayout />
-			</EchoRoot>
+			<EchoProvider {...props}>
+				<EchoRoot>
+					<EchoStyles primaryColor={props.primaryColor!} />
+					<EchoInterface />
+				</EchoRoot>
+			</EchoProvider>
 		</Portal>
-	)
-}
-
-const EchoRoot: Component<EchoOptions & { children: JSXElement }> = props => {
-	return (
-		<EchoProvider primaryColor={props.primaryColor!} onSubmit={props.onSubmit} textConfig={props.textConfig}>
-			<EchoRootInner primaryColor={props.primaryColor!}>
-				<EchoStyles primaryColor={props.primaryColor!} />
-				{props.children}
-			</EchoRootInner>
-		</EchoProvider>
 	)
 }
 
@@ -51,9 +49,28 @@ const EchoStyles: Component<{ primaryColor: string }> = props => {
 	)
 }
 
-const EchoRootInner: Component<{
-	primaryColor: string
-	children: any
+const EchoInterface: Component = () => {
+	const store = useEchoStore()
+
+	return (
+		<>
+			<div class="echo-launcher" data-hidden={store.widget.state.isOpen}>
+				<EchoLauncherButton />
+				<WelcomeMessage />
+				<Notification />
+			</div>
+
+			<div class="echo-overlay" data-hidden={!store.widget.state.isOpen}>
+				<FeedbackForm />
+				<DrawingToolbar />
+				<DrawingLayer />
+			</div>
+		</>
+	)
+}
+
+const EchoRoot: Component<{
+	children: JSXElement
 }> = props => {
 	let rootRef: HTMLDivElement | undefined
 	const store = useEchoStore()
@@ -73,27 +90,26 @@ const EchoRootInner: Component<{
 		})
 	}
 
-	onMount(() => {
-		window.addEventListener('resize', updateHeight)
-		updateHeight()
+	registerWindowEventListener({
+		event: 'resize',
+		callback: updateHeight,
+		onMount: updateHeight,
 	})
 
-	onCleanup(() => {
-		window.removeEventListener('resize', updateHeight)
+	registerKeyListener('Escape', () => {
+		store.widget.setState({ isOpen: false })
 	})
 
-	createEffect(() => {
-		const observer = new MutationObserver(() => {
-			updateHeight()
-		})
-		observer.observe(document.documentElement, {
+	registerMutationObserver({
+		target: document.documentElement,
+		options: {
 			childList: true,
 			subtree: true,
 			attributes: true,
-		})
-		onCleanup(() => {
-			observer.disconnect()
-		})
+		},
+		callback: () => {
+			updateHeight()
+		},
 	})
 
 	return (
