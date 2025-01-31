@@ -1,6 +1,19 @@
-# Echo Widget
+# Echo
 
-A lightweight feedback widget built with Solid.js that allows users to capture screenshots, annotate them, and submit feedback.
+A lightweight tool for capturing user feedback with screenshots, annotations, and debug information. Built with Solid.js and designed to seamlessly integrate into any web application.
+
+## Features
+
+- 📸 **Screenshot Capture**: Automatically capture the current page state
+- ✏️ **Drawing Tools**: Annotate screenshots with various drawing tools
+- 🎨 **Customizable UI**: Configurable colors, position and text
+- 🌐 **Framework Agnostic**: Works with any web application
+- 🎯 **Easy Integration**: Simple setup with NPM or direct script inclusion
+- 🎨 **Drawing Features**:
+  - Multiple colors for annotations
+  - WIP: Different shapes and tools
+- 📱 **Responsive Design**: WIP: Works seamlessly on desktop and mobile devices
+- 🔍 **Console tracking**: Captures last 1000 console entries
 
 ## Usage
 
@@ -10,40 +23,6 @@ A lightweight feedback widget built with Solid.js that allows users to capture s
 import { initEcho } from '@contember/echo';
 
 initEcho({
-  // Optional: widget position (default: 'bottom-right')
-  position: 'bottom-right',
-  
-  // Optional: primary color for buttons and UI elements
-  primaryColor: '#007AFF',
-
-  // Optional: customize all text elements in the widget
-  textConfig: {
-    welcomeMessage: {
-      text: 'Click here to leave feedback',
-      closeAriaLabel: 'Close welcome message',
-    },
-    feedbackForm: {
-      title: 'Send Feedback',
-      placeholder: "What's on your mind? We'd love to hear your feedback...",
-      screenshotAlt: 'Screenshot Preview',
-      submitButton: 'Send Feedback',
-      minimizeTitle: 'Minimize',
-      expandTitle: 'Expand',
-      closeTitle: 'Close',
-      showFormTitle: 'Show Feedback Form',
-    },
-    notification: {
-      successTitle: 'Thank you for your feedback!',
-      errorTitle: 'Something went wrong.',
-      errorMessage: 'Failed to send feedback. Please try again.',
-      hideTitle: 'Hide notification',
-    },
-    drawingTooltip: {
-      text: 'Click & drag to draw',
-    },
-  },
-  
-  // Required: callback function when feedback is submitted
   onSubmit: async (data) => {
     console.log('Feedback submitted:', data);
     // Handle the feedback data (send to server, etc.)
@@ -58,40 +37,6 @@ initEcho({
   import { initEcho } from "https://esm.sh/@contember/echo";
 
   initEcho({
-    // Optional: widget position (default: 'bottom-right')
-    position: 'bottom-right',
-    
-    // Optional: primary color for buttons and UI elements
-    primaryColor: '#007AFF',
-
-    // Optional: customize all text elements in the widget
-    textConfig: {
-      welcomeMessage: {
-        text: 'Click here to leave feedback',
-        closeAriaLabel: 'Close welcome message',
-      },
-      feedbackForm: {
-        title: 'Send Feedback',
-        placeholder: "What's on your mind? We'd love to hear your feedback...",
-        screenshotAlt: 'Screenshot Preview',
-        submitButton: 'Send Feedback',
-        minimizeTitle: 'Minimize',
-        expandTitle: 'Expand',
-        closeTitle: 'Close',
-        showFormTitle: 'Show Feedback Form',
-      },
-      notification: {
-        successTitle: 'Thank you for your feedback!',
-        errorTitle: 'Something went wrong.',
-        errorMessage: 'Failed to send feedback. Please try again.',
-        hideTitle: 'Hide notification',
-      },
-      drawingTooltip: {
-        text: 'Click & drag to draw',
-      },
-    },
-
-    // Required: callback function when feedback is submitted
     onSubmit: async (data) => {
       console.log('Feedback submitted:', data);
       // Handle the feedback data (send to server, etc.)
@@ -99,3 +44,43 @@ initEcho({
   });
 </script>
 ```
+
+## Configuration Options
+
+| Option | Type | Required | Default | Description |
+|--------|------|----------|---------|-------------|
+| `position` | string | No | 'bottom-right' | WIP: Position on the page. Available positions: 'top-left', 'top-center', 'top-right', 'middle-left', 'middle-right', 'bottom-left', 'bottom-center', 'bottom-right' |
+| `primaryColor` | string | No | '#6227dc' | Primary color for UI elements |
+| `textConfig` | object | No | english | Customize all text elements in the interface |
+| `onSubmit` | function | Yes | - | Callback function when feedback is submitted |
+
+## Feedback Data Structure
+
+The `onSubmit` callback receives a data object with the following structure:
+
+```typescript
+interface FeedbackData {
+  comment: string;          // User's written feedback
+  screenshot: string;       // Base64 encoded screenshot
+  metadata: {
+    url: string;            // Current page URL
+    userAgent: string;      // Browser user agent
+    timestamp: number;      // Submission timestamp
+    browserInfo: {
+      width: number;            // Width of viewport
+      height: number;           // Height of viewport
+      screenWidth: number;      // Width of device
+      screenHeight: number;     // Height of device 
+    };
+  };
+  console: Array<{                    // Last 1000 console entries (logs, warnings, errors, uncaught errors, unhandled promise rejections)
+    type: 'log' | 'warn' | 'error';   // Type of console entry
+    message: string;                  // Content of the console message
+    timestamp: string;                // When the message was logged
+  }>;
+}
+```
+
+## License
+
+Apache-2.0 - see [LICENSE](LICENSE) for details.
