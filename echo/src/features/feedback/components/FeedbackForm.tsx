@@ -51,25 +51,14 @@ export const FeedbackForm: Component = () => {
 					<h3 class="echo-feedback-title">{store.text.feedbackForm.title}</h3>
 					<div class="echo-feedback-header-actions">
 						<Button
-							variant="secondary"
-							size="sm"
-							onClick={() => {
-								store.feedback.setState({ comment: '' }, true)
-								store.drawing.setState({ shapes: [] }, true)
-							}}
-							title="Clear feedback and drawings"
-						>
-							<TrashIcon size={20} />
-						</Button>
-						<Button
+							title="Hide form"
 							variant="secondary"
 							size="sm"
 							onClick={() => store.feedback.setState({ isMinimized: !store.feedback.state.isMinimized })}
-							title="Hide form"
 						>
 							<ChevronRightIcon size={20} />
 						</Button>
-						<Button variant="secondary" size="sm" onClick={() => store.widget.setState({ isOpen: false })} title="Close form">
+						<Button title="Close form" variant="secondary" size="sm" onClick={() => store.widget.setState({ isOpen: false })}>
 							<XIcon size={20} />
 						</Button>
 					</div>
@@ -77,10 +66,10 @@ export const FeedbackForm: Component = () => {
 
 				<form class="echo-feedback-form" onSubmit={handleSubmit}>
 					<textarea
-						value={store.feedback.state.comment}
-						onInput={e => store.feedback.setState({ comment: e.currentTarget.value })}
-						placeholder={store.text.feedbackForm.placeholder}
 						class="echo-feedback-form-textarea"
+						value={store.feedback.state.comment}
+						placeholder={store.text.feedbackForm.placeholder}
+						onInput={e => store.feedback.setState({ comment: e.currentTarget.value })}
 						required
 					/>
 
@@ -93,9 +82,9 @@ export const FeedbackForm: Component = () => {
 			{/* Maximize button */}
 			<button
 				class="echo-feedback-maximize"
-				onClick={() => store.feedback.setState({ isMinimized: false })}
 				title="Show form"
 				data-hide-when-drawing="true"
+				onClick={() => store.feedback.setState({ isMinimized: false })}
 			>
 				<MessageIcon stroke="white" />
 			</button>
