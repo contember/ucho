@@ -23,7 +23,6 @@ export const DrawingTooltip: Component = () => {
 				style={{
 					top: `${store.drawing.state.mousePosition.y + 20}px`,
 					left: `${store.drawing.state.mousePosition.x + 10}px`,
-					transform: 'none',
 				}}
 			>
 				{store.text.drawingTooltip.text}

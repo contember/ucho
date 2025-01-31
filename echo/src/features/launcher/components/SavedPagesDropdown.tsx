@@ -70,7 +70,7 @@ export const SavedPagesDropdown: Component = () => {
 			<div class="echo-saved-pages-dropdown">
 				<div class="echo-saved-pages-header">
 					<h3>Saved Feedback</h3>
-					<Button variant="secondary" size="sm" onClick={() => store.widget.setState({ isPagesDropdownOpen: false })} title="Close">
+					<Button title="Close" variant="secondary" size="sm" onClick={() => store.widget.setState({ isPagesDropdownOpen: false })}>
 						<XIcon size={20} />
 					</Button>
 				</div>
@@ -89,16 +89,16 @@ export const SavedPagesDropdown: Component = () => {
 									<div class="echo-saved-pages-actions">
 										{!isCurrent() && (
 											<Button
+												class="echo-saved-pages-link"
+												title="Open page"
 												variant="secondary"
 												size="sm"
-												class="echo-saved-pages-link"
 												onClick={() => handleNavigate(page.path, page.state.latestQuery)}
-												title="Open page"
 											>
 												<ExternalLinkIcon />
 											</Button>
 										)}
-										<Button variant="secondary" size="md" class="echo-saved-pages-delete" onClick={() => handleDelete(page.path)}>
+										<Button class="echo-saved-pages-delete" variant="secondary" size="md" onClick={() => handleDelete(page.path)}>
 											Delete
 										</Button>
 									</div>

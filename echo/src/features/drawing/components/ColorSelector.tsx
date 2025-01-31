@@ -30,10 +30,10 @@ export const ColorSelector: Component = () => {
 						<For each={[store.widget.state.primaryColor, ...COLORS]}>
 							{color => (
 								<button
-									onClick={() => store.drawing.setState({ selectedColor: color })}
 									class="echo-color-swatch-button"
-									data-selected={store.drawing.state.selectedColor === color}
 									title={`Select ${color} color`}
+									data-selected={store.drawing.state.selectedColor === color}
+									onClick={() => store.drawing.setState({ selectedColor: color })}
 									style={{
 										'background-color': color,
 									}}

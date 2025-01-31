@@ -21,10 +21,10 @@ export const DrawingToolbar: Component = () => {
 					const Icon = ToolIcon[tool.id]
 					return (
 						<button
-							onClick={() => store.drawing.setState({ selectedTool: tool.id })}
 							class="echo-drawing-toolbar-button"
-							data-selected={store.drawing.state.selectedTool === tool.id}
 							title={tool.label}
+							data-selected={store.drawing.state.selectedTool === tool.id}
+							onClick={() => store.drawing.setState({ selectedTool: tool.id })}
 						>
 							<Icon class="echo-drawing-toolbar-icon" />
 						</button>
