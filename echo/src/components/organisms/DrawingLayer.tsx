@@ -1,9 +1,9 @@
 import { type Component, For, onCleanup, onMount } from 'solid-js'
 import { useEchoStore } from '~/contexts'
 import { generateCutoutPath } from '~/utils/svg'
-import { DrawingTooltip } from './DrawingTooltip'
-import { Shape } from './Shape'
-import { ShapeActions } from './ShapeActions'
+import { Shape } from '../atoms/Shape'
+import { DrawingTooltip } from '../molecules/DrawingTooltip'
+import { ShapeActions } from '../molecules/ShapeActions'
 
 export const DrawingLayer: Component = () => {
 	const store = useEchoStore()

@@ -1,4 +1,3 @@
-export * from './MessageIcon'
 export * from './ChevronRightIcon'
 export * from './ContemberIcon'
 export * from './HighlightIcon'
