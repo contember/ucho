@@ -34,13 +34,13 @@ export const WelcomeMessage: Component = () => {
 			}}
 		>
 			<span class="echo-welcome-message-pulsar" />
-			{store.text.welcomeMessage.text}
+			{store.widget.state.text.welcomeMessage.text}
 			<div
 				class="echo-welcome-message-close"
 				onClick={hideMessage}
 				role="button"
 				tabindex="0"
-				aria-label={store.text.welcomeMessage.closeAriaLabel}
+				aria-label={store.widget.state.text.welcomeMessage.closeAriaLabel}
 				onKeyDown={e => e.key === 'Enter' && hideMessage(e)}
 			>
 				<XIcon size={16} strokeWidth={3} />

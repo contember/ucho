@@ -13,7 +13,7 @@ export const FeedbackForm: Component = () => {
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 
-		const screenshot = await captureScreenshot({ annotations: store.drawing.state.shapes })
+		const screenshot = await captureScreenshot()
 
 		const data = {
 			comment: store.feedback.state.comment,
@@ -40,7 +40,7 @@ export const FeedbackForm: Component = () => {
 			})
 			store.widget.methods.postSubmit({ show: true, type: 'success', message: '' })
 		} catch (error) {
-			store.widget.methods.postSubmit({ show: true, type: 'error', message: store.text.notification.errorMessage })
+			store.widget.methods.postSubmit({ show: true, type: 'error', message: store.widget.state.text.notification.errorMessage })
 		}
 	}
 
@@ -63,7 +63,7 @@ export const FeedbackForm: Component = () => {
 		>
 			<form class="echo-feedback-content" onSubmit={handleSubmit}>
 				<div class="echo-feedback-header">
-					<h3 class="echo-feedback-title">{store.text.feedbackForm.title}</h3>
+					<h3 class="echo-feedback-title">{store.widget.state.text.feedbackForm.title}</h3>
 					<div class="echo-feedback-header-actions">
 						<Button type="button" title="Hide form" variant="secondary" size="sm" onClick={minimize}>
 							<ChevronRightIcon size={20} />
@@ -77,13 +77,13 @@ export const FeedbackForm: Component = () => {
 				<textarea
 					class="echo-feedback-form-textarea"
 					value={store.feedback.state.comment}
-					placeholder={store.text.feedbackForm.placeholder}
+					placeholder={store.widget.state.text.feedbackForm.placeholder}
 					onInput={e => store.feedback.setState({ comment: e.currentTarget.value })}
 					required
 				/>
 
 				<Button type="submit" variant="primary" size="lg" style={{ width: '100%' }}>
-					{store.text.feedbackForm.submitButton}
+					{store.widget.state.text.feedbackForm.submitButton}
 				</Button>
 			</form>
 		</div>

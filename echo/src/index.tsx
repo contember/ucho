@@ -1,11 +1,11 @@
 import { render } from 'solid-js/web'
 import { Echo } from './components/Echo'
-import { type EchoOptions, type FeedbackData } from './types'
-import { cleanupConsole, getConsoleBuffer, setupConsole } from './utils/console'
-import { validateOptions } from './utils/validateEchoOptions'
-import './styles.css'
 import { defaultText } from './config/defaultText'
+import { type EchoOptions, type FeedbackData } from './types'
 import { deepMerge } from './utils/common'
+import { cleanupConsole, getConsoleBuffer, setupConsole } from './utils/console'
+import { validateOptions } from './utils/validators'
+import './styles.css'
 
 let activeInstance: (() => void) | null = null
 

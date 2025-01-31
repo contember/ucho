@@ -1,5 +1,6 @@
 import { createStore } from 'solid-js/store'
-import type { Screenshot } from '~/types'
+import type { FullEchoOptions, Screenshot } from '~/types'
+import { loadPageState } from '~/utils'
 
 export interface FeedbackState {
 	comment: string
@@ -14,11 +15,12 @@ export interface FeedbackStore {
 }
 
 export const createFeedbackStore = (
-	initialComment = '',
+	config: FullEchoOptions,
+	currentPageKey: string,
 	onStateChange?: (state: Partial<FeedbackState>, isClearing?: boolean) => void,
 ): FeedbackStore => {
 	const [state, setState] = createStore<FeedbackState>({
-		comment: initialComment,
+		comment: loadPageState(currentPageKey)?.feedback?.comment || '',
 		screenshot: undefined,
 		isCapturing: false,
 		isMinimized: false,

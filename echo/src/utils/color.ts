@@ -3,9 +3,9 @@ export const calculateLuminance = (hexColor: string): number => {
 	const color = hexColor.replace('#', '')
 
 	// Convert hex to RGB
-	const r = Number.parseInt(color.substr(0, 2), 16) / 255
-	const g = Number.parseInt(color.substr(2, 2), 16) / 255
-	const b = Number.parseInt(color.substr(4, 2), 16) / 255
+	const r = Number.parseInt(color.slice(0, 2), 16) / 255
+	const g = Number.parseInt(color.slice(2, 2), 16) / 255
+	const b = Number.parseInt(color.slice(4, 2), 16) / 255
 
 	// Calculate relative luminance using sRGB coefficients
 	return 0.2126 * r + 0.7152 * g + 0.0722 * b

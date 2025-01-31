@@ -1,6 +1,7 @@
 import { createStore } from 'solid-js/store'
 import { toolConfig } from '~/config/drawingConfig'
-import type { DrawingTool, Point, Shape } from '~/types'
+import type { DrawingTool, FullEchoOptions, Point, Shape } from '~/types'
+import { loadPageState } from '~/utils'
 import { getDistance, getPointFromEvent } from '~/utils/events'
 
 const MOVEMENT_THRESHOLD = 5 // pixels
@@ -48,7 +49,8 @@ export interface DrawingStore {
 }
 
 export const createDrawingStore = (
-	primaryColor: string,
+	config: FullEchoOptions,
+	currentPageKey: string,
 	onStateChange?: (state: Partial<DrawingState>, isClearing?: boolean) => void,
 ): DrawingStore => {
 	const [state, setState] = createStore<DrawingState>({
@@ -59,14 +61,14 @@ export const createDrawingStore = (
 		selectedTool: 'rectangle',
 		showTooltip: true,
 		mousePosition: { x: 0, y: 0 },
-		selectedColor: primaryColor,
-		shapes: [],
+		selectedColor: config.primaryColor,
+		shapes: loadPageState(currentPageKey)?.drawing?.shapes || [],
 		hasDrawn: false,
 		isDragging: false,
 		dragStartPos: null,
 		initialClickPos: null,
 		dragOffset: null,
-		cursor: computeCursor('rectangle', primaryColor),
+		cursor: computeCursor('rectangle', config.primaryColor),
 	})
 
 	const wrappedSetState = (newState: Partial<DrawingState>, isClearing = false) => {

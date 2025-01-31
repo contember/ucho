@@ -3,7 +3,7 @@ import { Button } from '~/components/atoms/Button'
 import { XIcon } from '~/components/icons'
 import { ExternalLinkIcon } from '~/components/icons/ExternalLinkIcon'
 import { useEchoStore } from '~/contexts'
-import { registerMutationObserver, registerWindowEventListener } from '~/utils/listener'
+import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import { clearPageState, getStoredPages } from '~/utils/storage'
 
 export const SavedPagesDropdown: Component = () => {

@@ -1,6 +1,6 @@
-import type { FullEchoOptions, TextConfig } from '~/types'
+import type { FullEchoOptions } from '~/types'
 import { debounce } from '~/utils/debounce'
-import { registerMutationObserver, registerWindowEventListener } from '~/utils/listener'
+import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import { clearPageState, getPageKey, getStoredPagesCount, loadPageState, savePageState } from '~/utils/storage'
 import { type DrawingStore, createDrawingStore } from './drawingStore'
 import { type FeedbackStore, createFeedbackStore } from './feedbackStore'
@@ -10,7 +10,6 @@ export interface EchoStore {
 	feedback: FeedbackStore
 	drawing: DrawingStore
 	widget: WidgetStore
-	text: TextConfig
 	methods: {
 		reset: () => void
 	}
@@ -18,8 +17,6 @@ export interface EchoStore {
 
 export const createEchoStore = (config: FullEchoOptions): EchoStore => {
 	let currentPageKey = getPageKey()
-	const savedState = loadPageState(currentPageKey)
-
 	const debouncedSave = debounce((pageKey: string, isClearing = false) => {
 		const shouldSaveState = isClearing || feedback.state.comment.trim().length > 0 || drawing.state.shapes.length > 0
 		if (shouldSaveState) {
@@ -31,15 +28,15 @@ export const createEchoStore = (config: FullEchoOptions): EchoStore => {
 		}
 	}, 1000)
 
-	const feedback = createFeedbackStore(savedState?.feedback.comment || '', (state, isClearing) => {
+	const feedback = createFeedbackStore(config, currentPageKey, (state, isClearing) => {
 		debouncedSave(currentPageKey, isClearing)
 	})
 
-	const drawing = createDrawingStore(config.primaryColor, (state, isClearing) => {
+	const drawing = createDrawingStore(config, currentPageKey, (state, isClearing) => {
 		debouncedSave(currentPageKey, isClearing)
 	})
 
-	const widget = createWidgetStore(config.primaryColor, config.onSubmit)
+	const widget = createWidgetStore(config, currentPageKey)
 
 	const handleUrlChange = () => {
 		const newPageKey = getPageKey()
@@ -118,7 +115,6 @@ export const createEchoStore = (config: FullEchoOptions): EchoStore => {
 		feedback,
 		drawing,
 		widget,
-		text: config.textConfig,
 		methods: {
 			reset,
 		},

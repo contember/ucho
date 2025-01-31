@@ -4,7 +4,7 @@ import { TrashIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts'
 import type { Point } from '~/types'
 import { getRectFromPoints } from '~/utils/geometry'
-import { registerWindowEventListener } from '~/utils/listener'
+import { registerWindowEventListener } from '~/utils/listeners'
 
 export const ShapeActions: Component = () => {
 	const store = useEchoStore()

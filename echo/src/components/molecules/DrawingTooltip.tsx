@@ -25,7 +25,7 @@ export const DrawingTooltip: Component = () => {
 					left: `${store.drawing.state.mousePosition.x + 10}px`,
 				}}
 			>
-				{store.text.drawingTooltip.text}
+				{store.widget.state.text.drawingTooltip.text}
 			</div>
 		</Show>
 	)

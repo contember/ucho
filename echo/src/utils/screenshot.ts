@@ -1,9 +1,5 @@
 import html2canvas from 'html2canvas'
-import type { Screenshot, Shape } from '~/types'
-
-interface CaptureScreenshotConfig {
-	annotations: Shape[]
-}
+import type { Screenshot } from '~/types'
 
 const createCanvas = (width: number, height: number): HTMLCanvasElement => {
 	const canvas = document.createElement('canvas')
@@ -16,29 +12,7 @@ const shouldIgnoreElement = (element: Element): boolean => {
 	return element.hasAttribute('data-hide-when-drawing')
 }
 
-// const drawAnnotations = (ctx: CanvasRenderingContext2D, annotations: Shape[]): void => {
-// 	for (const annotation of annotations) {
-// 		ctx.strokeStyle = annotation.color
-// 		ctx.lineWidth = DEFAULT_CONFIG.strokeWidth
-// 		ctx.lineCap = 'round'
-
-// 		if (annotation.type === 'path' && annotation.points.length > 1) {
-// 			const pathData = `M ${annotation.points[0].x} ${annotation.points[0].y} ${annotation.points
-// 				.slice(1)
-// 				.map(point => `L ${point.x} ${point.y}`)
-// 				.join(' ')}`
-// 			const path = new Path2D(pathData)
-// 			ctx.stroke(path)
-// 		} else if (annotation.type === 'rectangle' && annotation.points.length === 2) {
-// 			const [startPoint, endPoint] = annotation.points
-// 			const width = Math.abs(endPoint.x - startPoint.x)
-// 			const height = Math.abs(endPoint.y - startPoint.y)
-// 			ctx.strokeRect(Math.min(startPoint.x, endPoint.x), Math.min(startPoint.y, endPoint.y), width, height)
-// 		}
-// 	}
-// }
-
-export const captureScreenshot = async ({ annotations }: CaptureScreenshotConfig): Promise<Screenshot | undefined> => {
+export const captureScreenshot = async (): Promise<Screenshot | undefined> => {
 	try {
 		const screenshot = await html2canvas(document.body, {
 			backgroundColor: null,
@@ -58,8 +32,6 @@ export const captureScreenshot = async ({ annotations }: CaptureScreenshotConfig
 		}
 
 		ctx.drawImage(screenshot, 0, 0)
-
-		// drawAnnotations(ctx, annotations)
 
 		return canvas.toDataURL() as Screenshot
 	} catch (error) {

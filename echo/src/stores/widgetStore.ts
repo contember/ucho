@@ -1,8 +1,9 @@
 import { createStore } from 'solid-js/store'
-import type { FeedbackData, Notification } from '~/types'
+import type { FeedbackData, FullEchoOptions, Notification, TextConfig } from '~/types'
 import { getStoredPagesCount } from '~/utils'
 
 export interface WidgetState {
+	text: TextConfig
 	isOpen: boolean
 	primaryColor: string
 	notification: Notification
@@ -24,10 +25,11 @@ export interface WidgetStore {
 	}
 }
 
-export const createWidgetStore = (primaryColor: string, onSubmit: (data: FeedbackData) => Promise<void>): WidgetStore => {
+export const createWidgetStore = (config: FullEchoOptions, currentPageKey: string): WidgetStore => {
 	const [state, setState] = createStore<WidgetState>({
+		text: config.textConfig,
 		isOpen: false,
-		primaryColor,
+		primaryColor: config.primaryColor,
 		notification: {
 			show: false,
 			type: null,
@@ -51,7 +53,7 @@ export const createWidgetStore = (primaryColor: string, onSubmit: (data: Feedbac
 			}, 5000)
 		},
 		onSubmit: (data: FeedbackData) => {
-			return onSubmit(data)
+			return config.onSubmit(data)
 		},
 	}
 

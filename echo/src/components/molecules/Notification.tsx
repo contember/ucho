@@ -13,9 +13,9 @@ export const Notification: Component = () => {
 	const getTitle = () => {
 		switch (store.widget.state.notification.type) {
 			case 'success':
-				return store.text.notification.successTitle
+				return store.widget.state.text.notification.successTitle
 			case 'error':
-				return store.text.notification.errorTitle
+				return store.widget.state.text.notification.errorTitle
 			default:
 				return ''
 		}
@@ -28,7 +28,13 @@ export const Notification: Component = () => {
 			data-empty={!store.widget.state.notification.type}
 			data-hidden={!store.widget.state.notification.show}
 		>
-			<Button class="echo-notification-hide" variant="secondary" size="sm" onClick={hideNotification} title={store.text.notification.hideTitle}>
+			<Button
+				class="echo-notification-hide"
+				variant="secondary"
+				size="sm"
+				onClick={hideNotification}
+				title={store.widget.state.text.notification.hideTitle}
+			>
 				<XIcon size={20} />
 			</Button>
 			<div class="echo-notification-icon">
