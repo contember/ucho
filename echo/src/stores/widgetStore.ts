@@ -1,5 +1,6 @@
 import { createStore } from 'solid-js/store'
 import type { FeedbackData, Notification } from '~/types'
+import { getStoredPagesCount } from '~/utils'
 
 export interface WidgetState {
 	isOpen: boolean
@@ -37,7 +38,7 @@ export const createWidgetStore = (primaryColor: string, onSubmit: (data: Feedbac
 			height: document.documentElement.scrollHeight,
 		},
 		isPagesDropdownOpen: false,
-		pagesCount: 0,
+		pagesCount: getStoredPagesCount(),
 		welcomeMessageIsClosing: false,
 	})
 

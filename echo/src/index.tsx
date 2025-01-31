@@ -3,6 +3,7 @@ import { Echo } from './components/Echo'
 import { type EchoOptions, type FeedbackData } from './types'
 import { cleanupConsole, getConsoleBuffer, setupConsole } from './utils/console'
 import { validateOptions } from './utils/validateEchoOptions'
+import './styles.css'
 
 let activeInstance: (() => void) | null = null
 

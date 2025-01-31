@@ -16,10 +16,10 @@ export const EchoLauncherButton: Component = () => {
 		}
 		minimizeTimeout = window.setTimeout(() => {
 			const hasSeenMessage = getFromStorage('welcome_message_shown', false)
-			if (!store.widget.state.isOpen && hasSeenMessage) {
+			if (!store.widget.state.isOpen && !store.widget.state.isPagesDropdownOpen && hasSeenMessage) {
 				setIsMinimized(true)
 			}
-		}, 5000) // Hide after 5 seconds of inactivity
+		}, 4000) // Hide after 4 seconds of inactivity
 	}
 
 	const handleEchoLauncherButtonEnter = () => {
@@ -41,6 +41,9 @@ export const EchoLauncherButton: Component = () => {
 			setIsMinimized(false)
 			resetHideTimeout()
 		}
+		if (store.widget.state.isPagesDropdownOpen) {
+			setIsMinimized(false)
+		}
 	})
 
 	const handleCountClick = (e: MouseEvent) => {
@@ -50,7 +53,7 @@ export const EchoLauncherButton: Component = () => {
 	}
 
 	return (
-		<div class="echo-launcher-button-wrapper">
+		<>
 			<button
 				class="echo-launcher-button"
 				data-hidden={store.widget.state.isOpen}
@@ -69,6 +72,6 @@ export const EchoLauncherButton: Component = () => {
 				)}
 			</button>
 			<SavedPagesDropdown />
-		</div>
+		</>
 	)
 }

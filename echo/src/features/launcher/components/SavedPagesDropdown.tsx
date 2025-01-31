@@ -61,7 +61,6 @@ export const SavedPagesDropdown: Component = () => {
 		if (path === '/') return '/'
 		const parts = path.split('/')
 		if (parts.length <= 4) return path
-
 		return `/${parts[1]}/.../${parts[parts.length - 1]}`
 	}
 
@@ -70,7 +69,7 @@ export const SavedPagesDropdown: Component = () => {
 			<div class="echo-saved-pages-dropdown">
 				<div class="echo-saved-pages-header">
 					<h3>Saved Feedback</h3>
-					<Button title="Close" variant="secondary" size="sm" onClick={() => store.widget.setState({ isPagesDropdownOpen: false })}>
+					<Button variant="secondary" size="sm" onClick={() => store.widget.setState({ isPagesDropdownOpen: false })}>
 						<XIcon size={20} />
 					</Button>
 				</div>
@@ -81,8 +80,8 @@ export const SavedPagesDropdown: Component = () => {
 							return (
 								<div class={`echo-saved-pages-item ${isCurrent() ? 'echo-saved-pages-item-current' : ''}`}>
 									<div class="echo-saved-pages-content">
-										<div class="echo-saved-pages-path">
-											<span title={page.path}>{formatPath(page.path)}</span>
+										<div class="echo-saved-pages-path" title={page.path}>
+											{formatPath(page.path)}
 										</div>
 										<div class="echo-saved-pages-preview">{page.state.feedback.comment}</div>
 									</div>
@@ -90,7 +89,6 @@ export const SavedPagesDropdown: Component = () => {
 										{!isCurrent() && (
 											<Button
 												class="echo-saved-pages-link"
-												title="Open page"
 												variant="secondary"
 												size="sm"
 												onClick={() => handleNavigate(page.path, page.state.latestQuery)}
@@ -98,7 +96,7 @@ export const SavedPagesDropdown: Component = () => {
 												<ExternalLinkIcon />
 											</Button>
 										)}
-										<Button class="echo-saved-pages-delete" variant="secondary" size="md" onClick={() => handleDelete(page.path)}>
+										<Button class="echo-saved-pages-delete" variant="secondary" size="sm" onClick={() => handleDelete(page.path)}>
 											Delete
 										</Button>
 									</div>
@@ -106,10 +104,10 @@ export const SavedPagesDropdown: Component = () => {
 							)
 						}}
 					</For>
+					<Show when={pages().length === 0}>
+						<div class="echo-saved-pages-empty">No saved feedback yet</div>
+					</Show>
 				</div>
-				<Show when={pages().length === 0}>
-					<div class="echo-saved-pages-empty">No saved feedback yet</div>
-				</Show>
 			</div>
 		</Show>
 	)

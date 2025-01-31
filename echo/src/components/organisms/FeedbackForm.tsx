@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js'
 import { Button } from '~/components/atoms/Button'
-import { ChevronRightIcon, MessageIcon, XIcon } from '~/components/icons'
+import { ChevronRightIcon, XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
 import { isMobileDevice } from '~/utils'
 import { getConsoleBuffer } from '~/utils/console'
@@ -44,50 +44,48 @@ export const FeedbackForm: Component = () => {
 		}
 	}
 
+	const minimize = (e: MouseEvent) => {
+		e.stopPropagation()
+		store.feedback.setState({ isMinimized: true })
+	}
+
+	const maximize = () => {
+		store.feedback.setState({ isMinimized: false })
+	}
+
 	return (
-		<>
-			<div class="echo-feedback" data-minimized={store.feedback.state.isMinimized} data-hide-when-drawing="true">
+		<div
+			class="echo-feedback"
+			data-minimized={store.feedback.state.isMinimized}
+			data-hide-when-drawing="true"
+			onClick={() => store.feedback.state.isMinimized && maximize()}
+			style={{ cursor: store.feedback.state.isMinimized ? 'pointer' : 'default' }}
+		>
+			<form class="echo-feedback-content" onSubmit={handleSubmit}>
 				<div class="echo-feedback-header">
 					<h3 class="echo-feedback-title">{store.text.feedbackForm.title}</h3>
 					<div class="echo-feedback-header-actions">
-						<Button
-							title="Hide form"
-							variant="secondary"
-							size="sm"
-							onClick={() => store.feedback.setState({ isMinimized: !store.feedback.state.isMinimized })}
-						>
+						<Button type="button" title="Hide form" variant="secondary" size="sm" onClick={minimize}>
 							<ChevronRightIcon size={20} />
 						</Button>
-						<Button title="Close form" variant="secondary" size="sm" onClick={() => store.widget.setState({ isOpen: false })}>
+						<Button type="button" title="Close form" variant="secondary" size="sm" onClick={() => store.widget.setState({ isOpen: false })}>
 							<XIcon size={20} />
 						</Button>
 					</div>
 				</div>
 
-				<form class="echo-feedback-form" onSubmit={handleSubmit}>
-					<textarea
-						class="echo-feedback-form-textarea"
-						value={store.feedback.state.comment}
-						placeholder={store.text.feedbackForm.placeholder}
-						onInput={e => store.feedback.setState({ comment: e.currentTarget.value })}
-						required
-					/>
+				<textarea
+					class="echo-feedback-form-textarea"
+					value={store.feedback.state.comment}
+					placeholder={store.text.feedbackForm.placeholder}
+					onInput={e => store.feedback.setState({ comment: e.currentTarget.value })}
+					required
+				/>
 
-					<Button type="submit" variant="primary" size="lg" style={{ width: '100%' }}>
-						{store.text.feedbackForm.submitButton}
-					</Button>
-				</form>
-			</div>
-
-			{/* Maximize button */}
-			<button
-				class="echo-feedback-maximize"
-				title="Show form"
-				data-hide-when-drawing="true"
-				onClick={() => store.feedback.setState({ isMinimized: false })}
-			>
-				<MessageIcon stroke="white" />
-			</button>
-		</>
+				<Button type="submit" variant="primary" size="lg" style={{ width: '100%' }}>
+					{store.text.feedbackForm.submitButton}
+				</Button>
+			</form>
+		</div>
 	)
 }

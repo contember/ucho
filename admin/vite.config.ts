@@ -9,10 +9,5 @@ export default defineConfig(() => {
 		optimizeDeps: {
 			force: true,
 		},
-		server: {
-			watch: {
-				ignored: ['!**/node_modules/@contember/echo/**'],
-			},
-		},
 	}
 })
