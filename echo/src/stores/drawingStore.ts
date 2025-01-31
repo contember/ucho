@@ -17,7 +17,6 @@ export interface DrawingState {
 	selectedColor: string
 	shapes: Shape[]
 	currentPoints: Point[]
-	currentPath: string
 	showTooltip: boolean
 	mousePosition: Point
 	hasDrawn: boolean
@@ -56,7 +55,6 @@ export const createDrawingStore = (
 	const [state, setState] = createStore<DrawingState>({
 		isDrawing: false,
 		currentPoints: [],
-		currentPath: '',
 		selectedShapeId: null,
 		selectedTool: 'rectangle',
 		showTooltip: true,
@@ -88,16 +86,12 @@ export const createDrawingStore = (
 				currentPoints: [initialPoint],
 				selectedShapeId: null,
 			})
-			if (state.selectedTool === 'path') {
-				wrappedSetState({ currentPath: `M${initialPoint.x},${initialPoint.y}` })
-			}
 		},
 		updateDrawing: (point: Point) => {
 			if (state.selectedTool === 'rectangle') {
 				wrappedSetState({ currentPoints: [state.currentPoints[0], point] })
 			} else if (state.selectedTool === 'path') {
 				wrappedSetState({
-					currentPath: `${state.currentPath} L${point.x},${point.y}`,
 					currentPoints: [...state.currentPoints, point],
 				})
 			}
@@ -112,7 +106,7 @@ export const createDrawingStore = (
 				}
 				wrappedSetState({ shapes: [...state.shapes, newShape] })
 			}
-			wrappedSetState({ isDrawing: false, currentPoints: [], currentPath: '' })
+			wrappedSetState({ isDrawing: false, currentPoints: [] })
 		},
 		handleShapeClick: (shapeId: string) => {
 			// wrappedSetState({

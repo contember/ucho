@@ -91,7 +91,6 @@ export const createEchoStore = (config: FullEchoOptions): EchoStore => {
 				isDrawing: false,
 				currentPoints: [],
 				shapes: [],
-				currentPath: '',
 				selectedShapeId: null,
 				selectedTool: 'rectangle',
 				showTooltip: true,

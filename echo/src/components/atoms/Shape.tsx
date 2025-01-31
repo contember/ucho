@@ -38,7 +38,8 @@ const RectangleShape: Component<ShapeProps & { isSelected: boolean }> = props =>
 				height={rect()!.height}
 				fill="transparent"
 				stroke={props.color}
-				stroke-width={toolConfig.rectangle.strokeWidth.active}
+				stroke-width={toolConfig.rectangle.strokeWidth}
+				opacity={props.isSelected ? toolConfig.rectangle.opacity.selected : toolConfig.rectangle.opacity.default}
 				vector-effect="non-scaling-stroke"
 				stroke-dasharray={props.isSelected ? '5,5' : 'none'}
 				cursor={props.isSelected ? 'move' : 'pointer'}
@@ -59,10 +60,10 @@ const PathShape: Component<ShapeProps & { isSelected: boolean }> = props => {
 				d={path()!}
 				fill="none"
 				stroke={props.color}
-				stroke-width={toolConfig.path.strokeWidth.active}
+				stroke-width={toolConfig.path.strokeWidth}
 				vector-effect="non-scaling-stroke"
 				stroke-linecap="round"
-				opacity={props.isSelected ? 0.6 : 1}
+				opacity={props.isSelected ? toolConfig.path.opacity.selected : toolConfig.path.opacity.default}
 				cursor={props.isSelected ? 'move' : 'pointer'}
 				onClick={() => props.onShapeClick?.(props.id)}
 			/>
