@@ -1,12 +1,22 @@
-import { type Component, Show } from 'solid-js'
+import { type Component, Show, createMemo } from 'solid-js'
 import { useEchoStore } from '~/contexts'
 import { isMobileDevice } from '~/utils/device'
 
 export const DrawingTooltip: Component = () => {
 	const store = useEchoStore()
 
+	const showTooltip = createMemo(() => {
+		return (
+			store.drawing.state.showTooltip &&
+			store.drawing.state.mousePosition.y &&
+			store.drawing.state.mousePosition.x &&
+			store.widget.state.isOpen &&
+			!isMobileDevice()
+		)
+	})
+
 	return (
-		<Show when={store.drawing.state.showTooltip && store.widget.state.isOpen && !isMobileDevice()}>
+		<Show when={showTooltip()}>
 			<div
 				class="echo-drawing-tooltip"
 				data-hide-when-drawing="true"
