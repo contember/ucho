@@ -6,8 +6,8 @@ import type { IconProps } from '~/types'
 import { ColorSelector } from './ColorSelector'
 
 const ToolIcon: Record<string, Component<IconProps>> = {
-	highlight: HighlightIcon,
-	pen: PenIcon,
+	rectangle: HighlightIcon,
+	path: PenIcon,
 }
 
 export const DrawingToolbar: Component = () => {
@@ -21,9 +21,9 @@ export const DrawingToolbar: Component = () => {
 					const Icon = ToolIcon[tool.id]
 					return (
 						<button
-							onClick={() => store.setDrawing({ selectedTool: tool.id })}
+							onClick={() => store.drawing.setState({ selectedTool: tool.id })}
 							class="echo-drawing-toolbar-button"
-							data-selected={store.drawing.selectedTool === tool.id}
+							data-selected={store.drawing.state.selectedTool === tool.id}
 							title={tool.label}
 						>
 							<Icon class="echo-drawing-toolbar-icon" />

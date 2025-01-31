@@ -89,7 +89,7 @@ export interface Point {
 
 export type ShapeType = 'rectangle' | 'path'
 
-export type DrawingTool = 'highlight' | 'pen'
+export type DrawingTool = 'rectangle' | 'path'
 
 export interface Shape {
 	id: string

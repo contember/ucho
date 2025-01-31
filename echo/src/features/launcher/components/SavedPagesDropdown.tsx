@@ -14,7 +14,7 @@ export const SavedPagesDropdown: Component = () => {
 		const handleStorageChange = () => {
 			const storedPages = getStoredPages()
 			setPages(storedPages)
-			store.setWidget({ pagesCount: storedPages.length })
+			store.widget.setState({ pagesCount: storedPages.length })
 		}
 
 		const handleUrlChange = () => {
@@ -43,7 +43,7 @@ export const SavedPagesDropdown: Component = () => {
 	const handleNavigate = (path: string, latestQuery?: string) => {
 		const targetUrl = latestQuery ? `${path}${latestQuery}` : path
 		window.location.href = targetUrl
-		store.setWidget({ isPagesDropdownOpen: false })
+		store.widget.setState({ isPagesDropdownOpen: false })
 	}
 
 	const handleDelete = (path: string) => {
@@ -54,7 +54,7 @@ export const SavedPagesDropdown: Component = () => {
 
 		const storedPages = getStoredPages()
 		setPages(storedPages)
-		store.setWidget({ pagesCount: storedPages.length })
+		store.widget.setState({ pagesCount: storedPages.length })
 	}
 
 	const formatPath = (path: string) => {
@@ -66,11 +66,11 @@ export const SavedPagesDropdown: Component = () => {
 	}
 
 	return (
-		<Show when={store.widget.isPagesDropdownOpen}>
+		<Show when={store.widget.state.isPagesDropdownOpen}>
 			<div class="echo-saved-pages-dropdown">
 				<div class="echo-saved-pages-header">
 					<h3>Saved Feedback</h3>
-					<Button variant="secondary" size="sm" onClick={() => store.setWidget({ isPagesDropdownOpen: false })} title="Close">
+					<Button variant="secondary" size="sm" onClick={() => store.widget.setState({ isPagesDropdownOpen: false })} title="Close">
 						<XIcon size={20} />
 					</Button>
 				</div>

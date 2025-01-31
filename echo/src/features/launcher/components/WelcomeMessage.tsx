@@ -1,7 +1,6 @@
 import type { Component } from 'solid-js'
 import { XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
-import { welcomeMessageStore } from '~/stores/welcomeMessageStore'
 import { getFromStorage, setToStorage } from '~/utils/storage'
 
 export const WelcomeMessage: Component = () => {
@@ -10,13 +9,13 @@ export const WelcomeMessage: Component = () => {
 
 	const hideMessage = (e: MouseEvent | KeyboardEvent) => {
 		e.stopPropagation()
-		welcomeMessageStore.setIsClosing(true)
+		store.widget.setState({ welcomeMessageIsClosing: true })
 		setToStorage('welcome_message_shown', true)
 	}
 
 	const openWidget = () => {
-		store.setWidget({ isOpen: true })
-		welcomeMessageStore.setIsClosing(true)
+		store.widget.setState({ isOpen: true })
+		store.widget.setState({ welcomeMessageIsClosing: true })
 		setToStorage('welcome_message_shown', true)
 	}
 
@@ -27,7 +26,7 @@ export const WelcomeMessage: Component = () => {
 	return (
 		<button
 			class="echo-welcome-message"
-			data-hidden={welcomeMessageStore.isClosing()}
+			data-hidden={store.widget.state.welcomeMessageIsClosing}
 			onClick={openWidget}
 			style={{
 				bottom: '80px',

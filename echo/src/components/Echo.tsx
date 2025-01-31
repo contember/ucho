@@ -101,7 +101,7 @@ const EchoRootInner: Component<{
 			// Restore original height
 			props.rootRef.style.height = originalHeight
 
-			store.setWidget({
+			store.widget.setState({
 				dimensions: {
 					width: document.documentElement.clientWidth,
 					height,
@@ -137,10 +137,10 @@ const EchoRootInner: Component<{
 		<div
 			ref={props.rootRef}
 			class="echo-root"
-			data-drawing={store.drawing.isDrawing}
+			data-drawing={store.drawing.state.isDrawing}
 			style={{
-				height: `${store.widget.dimensions.height}px`,
-				width: `${store.widget.dimensions.width}px`,
+				height: `${store.widget.state.dimensions.height}px`,
+				width: `${store.widget.state.dimensions.width}px`,
 			}}
 		>
 			<style>{createStyles({ primaryColor: props.primaryColor })}</style>

@@ -6,13 +6,13 @@ export const DrawingTooltip: Component = () => {
 	const store = useEchoStore()
 
 	return (
-		<Show when={store.drawing.showTooltip && store.widget.isOpen && !isMobileDevice()}>
+		<Show when={store.drawing.state.showTooltip && store.widget.state.isOpen && !isMobileDevice()}>
 			<div
 				class="echo-drawing-tooltip"
 				data-hide-when-drawing="true"
 				style={{
-					top: `${store.drawing.mousePosition.y + 20}px`,
-					left: `${store.drawing.mousePosition.x + 10}px`,
+					top: `${store.drawing.state.mousePosition.y + 20}px`,
+					left: `${store.drawing.state.mousePosition.x + 10}px`,
 					transform: 'none',
 				}}
 			>

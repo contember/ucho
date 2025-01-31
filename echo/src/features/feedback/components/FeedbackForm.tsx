@@ -13,10 +13,10 @@ export const FeedbackForm: Component = () => {
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 
-		const screenshot = await captureScreenshot({ annotations: store.drawing.shapes })
+		const screenshot = await captureScreenshot({ annotations: store.drawing.state.shapes })
 
 		const data = {
-			comment: store.feedback.comment,
+			comment: store.feedback.state.comment,
 			screenshot: screenshot,
 			metadata: {
 				url: window.location.href,
@@ -33,20 +33,20 @@ export const FeedbackForm: Component = () => {
 		}
 
 		try {
-			store.setWidget({ isOpen: false })
-			await store.widget.onSubmit({
+			store.widget.setState({ isOpen: false })
+			await store.widget.methods.onSubmit({
 				...data,
 				console: getConsoleBuffer(),
 			})
-			store.methods.postSubmit({ show: true, type: 'success', message: '' })
+			store.widget.methods.postSubmit({ show: true, type: 'success', message: '' })
 		} catch (error) {
-			store.methods.postSubmit({ show: true, type: 'error', message: store.text.notification.errorMessage })
+			store.widget.methods.postSubmit({ show: true, type: 'error', message: store.text.notification.errorMessage })
 		}
 	}
 
 	return (
 		<>
-			<div class="echo-feedback" data-minimized={store.feedback.isMinimized} data-hide-when-drawing="true">
+			<div class="echo-feedback" data-minimized={store.feedback.state.isMinimized} data-hide-when-drawing="true">
 				<div class="echo-feedback-header">
 					<h3 class="echo-feedback-title">{store.text.feedbackForm.title}</h3>
 					<div class="echo-feedback-header-actions">
@@ -54,17 +54,22 @@ export const FeedbackForm: Component = () => {
 							variant="secondary"
 							size="sm"
 							onClick={() => {
-								store.setFeedback({ comment: '' }, true)
-								store.setDrawing({ shapes: [] }, true)
+								store.feedback.setState({ comment: '' }, true)
+								store.drawing.setState({ shapes: [] }, true)
 							}}
 							title="Clear feedback and drawings"
 						>
 							<TrashIcon size={20} />
 						</Button>
-						<Button variant="secondary" size="sm" onClick={() => store.setFeedback({ isMinimized: !store.feedback.isMinimized })} title="Hide form">
+						<Button
+							variant="secondary"
+							size="sm"
+							onClick={() => store.feedback.setState({ isMinimized: !store.feedback.state.isMinimized })}
+							title="Hide form"
+						>
 							<ChevronRightIcon size={20} />
 						</Button>
-						<Button variant="secondary" size="sm" onClick={() => store.setWidget({ isOpen: false })} title="Close form">
+						<Button variant="secondary" size="sm" onClick={() => store.widget.setState({ isOpen: false })} title="Close form">
 							<XIcon size={20} />
 						</Button>
 					</div>
@@ -72,8 +77,8 @@ export const FeedbackForm: Component = () => {
 
 				<form class="echo-feedback-form" onSubmit={handleSubmit}>
 					<textarea
-						value={store.feedback.comment}
-						onInput={e => store.setFeedback({ comment: e.currentTarget.value })}
+						value={store.feedback.state.comment}
+						onInput={e => store.feedback.setState({ comment: e.currentTarget.value })}
 						placeholder={store.text.feedbackForm.placeholder}
 						class="echo-feedback-form-textarea"
 						required
@@ -88,7 +93,7 @@ export const FeedbackForm: Component = () => {
 			{/* Maximize button */}
 			<button
 				class="echo-feedback-maximize"
-				onClick={() => store.setFeedback({ isMinimized: false })}
+				onClick={() => store.feedback.setState({ isMinimized: false })}
 				title="Show form"
 				data-hide-when-drawing="true"
 			>

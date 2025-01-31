@@ -19,17 +19,17 @@ export const ShapeActions: Component = () => {
 	})
 
 	const handleDelete = () => {
-		if (store.drawing.selectedShapeId) {
-			store.setDrawing({
-				shapes: store.drawing.shapes.filter(shape => shape.id !== store.drawing.selectedShapeId),
+		if (store.drawing.state.selectedShapeId) {
+			store.drawing.setState({
+				shapes: store.drawing.state.shapes.filter(shape => shape.id !== store.drawing.state.selectedShapeId),
 				selectedShapeId: null,
 			})
 		}
 	}
 
 	const selectedShape = createMemo(() => {
-		if (!store.drawing.selectedShapeId) return null
-		return store.drawing.shapes.find(shape => shape.id === store.drawing.selectedShapeId)
+		if (!store.drawing.state.selectedShapeId) return null
+		return store.drawing.state.shapes.find(shape => shape.id === store.drawing.state.selectedShapeId)
 	})
 
 	const position = createMemo(() => {

@@ -1,2 +1,4 @@
 export * from './echoStore'
-export * from './welcomeMessageStore'
+export * from './drawingStore'
+export * from './feedbackStore'
+export * from './widgetStore'

@@ -9,7 +9,7 @@ export const Launcher: Component<LauncherProps> = props => {
 	const store = useEchoStore()
 
 	return (
-		<div class="echo-launcher" data-hidden={store.widget.isOpen}>
+		<div class="echo-launcher" data-hidden={store.widget.state.isOpen}>
 			{props.children}
 		</div>
 	)

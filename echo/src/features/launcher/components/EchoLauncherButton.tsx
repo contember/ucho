@@ -2,7 +2,6 @@ import type { Component } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
 import { ContemberIcon } from '~/components/icons/ContemberIcon'
 import { useEchoStore } from '~/contexts'
-import { welcomeMessageStore } from '~/stores'
 import { setToStorage } from '~/utils'
 import { SavedPagesDropdown } from './SavedPagesDropdown'
 
@@ -16,10 +15,10 @@ export const EchoLauncherButton: Component = () => {
 			window.clearTimeout(minimizeTimeout)
 		}
 		minimizeTimeout = window.setTimeout(() => {
-			if (!store.widget.isOpen) {
+			if (!store.widget.state.isOpen) {
 				setIsMinimized(true)
 			}
-		}, 3000) // Hide after 3 seconds of inactivity
+		}, 5000) // Hide after 5 seconds of inactivity
 	}
 
 	const handleEchoLauncherButtonEnter = () => {
@@ -31,13 +30,13 @@ export const EchoLauncherButton: Component = () => {
 	}
 
 	const handleClick = () => {
-		store.setWidget({ isOpen: !store.widget.isOpen })
-		welcomeMessageStore.setIsClosing(true)
+		store.widget.setState({ isOpen: !store.widget.state.isOpen })
+		// welcomeMessageStore.setIsClosing(true)
 		setToStorage('welcome_message_shown', true)
 	}
 
 	createEffect(() => {
-		if (!store.widget.isOpen) {
+		if (!store.widget.state.isOpen) {
 			setIsMinimized(false)
 			resetHideTimeout()
 		}
@@ -45,7 +44,7 @@ export const EchoLauncherButton: Component = () => {
 
 	const handleCountClick = (e: MouseEvent) => {
 		e.stopPropagation()
-		store.setWidget({ isPagesDropdownOpen: !store.widget.isPagesDropdownOpen })
+		store.widget.setState({ isPagesDropdownOpen: !store.widget.state.isPagesDropdownOpen })
 		setIsMinimized(false)
 	}
 
@@ -54,19 +53,17 @@ export const EchoLauncherButton: Component = () => {
 			<button
 				class="echo-launcher-button"
 				style={{
-					// left: isMinimized() ? '45px' : '0',
-					top: isMinimized() ? '45px' : '0',
-					opacity: isMinimized() ? '0.6' : '1',
+					left: isMinimized() ? '45px' : '0',
 				}}
 				onPointerEnter={handleEchoLauncherButtonEnter}
 				onPointerLeave={handleEchoLauncherButtonLeave}
 				onClick={handleClick}
-				data-hidden={store.widget.isOpen}
+				data-hidden={store.widget.state.isOpen}
 			>
 				<ContemberIcon stroke="white" fill="#ffffff" />
-				{store.widget.pagesCount > 0 && (
+				{store.widget.state.pagesCount > 0 && (
 					<span class="echo-launcher-button-count" onClick={handleCountClick}>
-						{store.widget.pagesCount}
+						{store.widget.state.pagesCount}
 					</span>
 				)}
 			</button>

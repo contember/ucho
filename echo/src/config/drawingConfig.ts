@@ -17,8 +17,8 @@ interface ToolConfig {
 }
 
 export const drawingConfig: Record<DrawingTool, ToolConfig> = {
-	highlight: {
-		id: 'highlight',
+	rectangle: {
+		id: 'rectangle',
 		label: 'Highlight',
 		cursor: 'crosshair',
 		strokeWidth: {
@@ -31,8 +31,8 @@ export const drawingConfig: Record<DrawingTool, ToolConfig> = {
 			normal: 1,
 		},
 	},
-	pen: {
-		id: 'pen',
+	path: {
+		id: 'path',
 		label: 'Pen',
 		cursor: 'none', // custom SVG cursor
 		strokeWidth: {
