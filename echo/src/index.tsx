@@ -1,23 +1,10 @@
 import { render } from 'solid-js/web'
 import { Echo } from './components/Echo'
-import { type EchoOptions, type FeedbackData, type Position } from './types'
+import { type EchoOptions, type FeedbackData } from './types'
 import { cleanupConsole, getConsoleBuffer, setupConsole } from './utils/console'
+import { validateOptions } from './utils/validateEchoOptions'
 
 let activeInstance: (() => void) | null = null
-
-const validateOptions = (options: EchoOptions): void => {
-	if (typeof options !== 'object' || options === null) {
-		throw new Error('Echo initialization failed: options must be an object')
-	}
-
-	if (typeof options.onSubmit !== 'function') {
-		throw new Error('Echo initialization failed: onSubmit must be a function')
-	}
-
-	if (options.primaryColor && !/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(options.primaryColor)) {
-		throw new Error('Echo initialization failed: primaryColor must be a valid hex color')
-	}
-}
 
 /**
  * Initialize the Echo feedback widget.
@@ -74,4 +61,4 @@ export function initEcho(options: EchoOptions): () => void {
 	}
 }
 
-export type { FeedbackData, EchoOptions, Position }
+export type { FeedbackData, EchoOptions }

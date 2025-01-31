@@ -60,7 +60,6 @@ export type EchoOptions = {
 	position?: Position
 	primaryColor?: `#${string}`
 	textConfig?: Partial<TextConfig>
-	children?: any
 }
 
 export const POSITIONS: Record<Position, { [key: string]: string }> = {

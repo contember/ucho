@@ -1,4 +1,4 @@
-import { type Component, createEffect, onCleanup, onMount } from 'solid-js'
+import { type Component, JSXElement, createEffect, onCleanup, onMount } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { EchoProvider } from '~/contexts'
 import { useEchoStore } from '~/contexts/EchoContext'
@@ -66,13 +66,12 @@ export const Echo: Component<EchoOptions> = props => {
 	)
 }
 
-const EchoRoot: Component<EchoOptions> = props => {
-	let rootRef: HTMLDivElement | undefined
+const EchoRoot: Component<EchoOptions & { children: JSXElement }> = props => {
 	let observer: MutationObserver | undefined
 
 	return (
 		<EchoProvider primaryColor={props.primaryColor!} onSubmit={props.onSubmit} textConfig={props.textConfig}>
-			<EchoRootInner rootRef={rootRef} observer={observer} primaryColor={props.primaryColor!}>
+			<EchoRootInner observer={observer} primaryColor={props.primaryColor!}>
 				{props.children}
 			</EchoRootInner>
 		</EchoProvider>
@@ -80,26 +79,26 @@ const EchoRoot: Component<EchoOptions> = props => {
 }
 
 const EchoRootInner: Component<{
-	rootRef: HTMLDivElement | undefined
 	observer: MutationObserver | undefined
 	primaryColor: string
 	children: any
 }> = props => {
+	let rootRef: HTMLDivElement | undefined
 	const store = useEchoStore()
 
 	const updateHeight = () => {
 		requestAnimationFrame(() => {
-			if (!props.rootRef) return
+			if (!rootRef) return
 
 			// Temporarily set root height to 0 to measure true document height
-			const originalHeight = props.rootRef.style.height
-			props.rootRef.style.height = '0px'
+			const originalHeight = rootRef.style.height
+			rootRef.style.height = '0px'
 
 			// Get the height without root's influence
 			const height = document.documentElement.scrollHeight
 
 			// Restore original height
-			props.rootRef.style.height = originalHeight
+			rootRef.style.height = originalHeight
 
 			store.widget.setState({
 				dimensions: {
@@ -135,7 +134,7 @@ const EchoRootInner: Component<{
 
 	return (
 		<div
-			ref={props.rootRef}
+			ref={rootRef}
 			class="echo-root"
 			data-drawing={store.drawing.state.isDrawing}
 			style={{
