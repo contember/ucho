@@ -1,12 +1,12 @@
 import { onCleanup } from 'solid-js'
 import { onMount } from 'solid-js'
 
-export const registerKeyListener = (key: string, callback: () => void) => {
+export const registerKeyListener = (key: string, callback: (e: KeyboardEvent) => void) => {
 	registerWindowEventListener({
 		event: 'keydown',
 		callback: e => {
 			if (e.key === key) {
-				callback()
+				callback(e)
 			}
 		},
 	})
