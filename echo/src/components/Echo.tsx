@@ -2,7 +2,7 @@ import { type Component, JSXElement, createEffect, createSignal } from 'solid-js
 import { Portal } from 'solid-js/web'
 import { EchoProvider } from '~/contexts'
 import { useEchoStore } from '~/contexts/EchoContext'
-import type { FullEchoOptions } from '~/types'
+import type { FullEchoConfig } from '~/types'
 import { getContrastColor } from '~/utils/color'
 import { registerKeyListener, registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import staticStyles from './../styles.css?inline'
@@ -13,7 +13,7 @@ import { WelcomeMessage } from './molecules/WelcomeMessage'
 import { DrawingLayer } from './organisms/DrawingLayer'
 import { FeedbackForm } from './organisms/FeedbackForm'
 
-export const Echo: Component<FullEchoOptions> = props => {
+export const Echo: Component<FullEchoConfig> = props => {
 	return (
 		<Portal useShadow mount={document.body}>
 			<EchoProvider {...props}>

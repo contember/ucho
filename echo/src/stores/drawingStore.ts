@@ -1,6 +1,6 @@
 import { createStore } from 'solid-js/store'
 import { toolConfig } from '~/config/drawingConfig'
-import type { DrawingTool, FullEchoOptions, Point, Shape } from '~/types'
+import type { DrawingTool, FullEchoConfig, Point, Shape } from '~/types'
 import { loadPageState } from '~/utils'
 import { getDistance, getPointFromEvent } from '~/utils/events'
 
@@ -48,7 +48,7 @@ export interface DrawingStore {
 }
 
 export const createDrawingStore = (
-	config: FullEchoOptions,
+	config: FullEchoConfig,
 	currentPageKey: string,
 	onStateChange?: (state: Partial<DrawingState>, isClearing?: boolean) => void,
 ): DrawingStore => {

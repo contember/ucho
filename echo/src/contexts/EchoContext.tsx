@@ -1,8 +1,8 @@
 import { type Component, JSXElement, createContext, useContext } from 'solid-js'
 import { type EchoStore, createEchoStore } from '~/stores'
-import type { FullEchoOptions } from '~/types'
+import type { FullEchoConfig } from '~/types'
 
-type EchoProviderProps = FullEchoOptions & {
+type EchoProviderProps = FullEchoConfig & {
 	children: JSXElement
 }
 

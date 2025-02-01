@@ -1,7 +1,7 @@
 import { render } from 'solid-js/web'
 import { Echo } from './components/Echo'
 import { defaultText } from './config/defaultText'
-import { type EchoOptions, type FeedbackData } from './types'
+import { type EchoConfig, type FeedbackData } from './types'
 import { deepMerge } from './utils/common'
 import { cleanupConsole, getConsoleBuffer, setupConsole } from './utils/console'
 import { validateOptions } from './utils/validators'
@@ -14,7 +14,7 @@ let activeInstance: (() => void) | null = null
  * @throws {Error} If initialization fails or invalid options are provided
  * @returns {() => void} Cleanup function to remove the widget
  */
-export function initEcho(options: EchoOptions): () => void {
+export function initEcho(options: EchoConfig): () => void {
 	if (activeInstance) {
 		console.warn('Echo widget is already initialized. Cleaning up previous instance...')
 		activeInstance()
@@ -65,4 +65,4 @@ export function initEcho(options: EchoOptions): () => void {
 	}
 }
 
-export type { FeedbackData, EchoOptions }
+export type { FeedbackData, EchoConfig }

@@ -1,6 +1,6 @@
-import type { EchoOptions } from '~/types'
+import type { EchoConfig } from '~/types'
 
-export const validateOptions = (options: EchoOptions): void => {
+export const validateOptions = (options: EchoConfig): void => {
 	if (typeof options !== 'object' || options === null) {
 		throw new Error('Echo initialization failed: options must be an object')
 	}

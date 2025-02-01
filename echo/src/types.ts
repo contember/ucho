@@ -55,14 +55,14 @@ export interface TextConfig {
 	}
 }
 
-export type EchoOptions = {
+export type EchoConfig = {
 	onSubmit: (data: FeedbackData) => Promise<void>
 	position?: Position
 	primaryColor?: `#${string}`
 	textConfig?: Partial<TextConfig>
 }
 
-export type FullEchoOptions = Required<EchoOptions> & {
+export type FullEchoConfig = Required<EchoConfig> & {
 	textConfig: TextConfig
 }
 

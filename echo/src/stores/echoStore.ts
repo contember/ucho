@@ -1,4 +1,4 @@
-import type { FullEchoOptions } from '~/types'
+import type { FullEchoConfig } from '~/types'
 import { debounce } from '~/utils/debounce'
 import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import { clearPageState, getPageKey, getStoredPagesCount, loadPageState, savePageState } from '~/utils/storage'
@@ -15,7 +15,7 @@ export interface EchoStore {
 	}
 }
 
-export const createEchoStore = (config: FullEchoOptions): EchoStore => {
+export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 	let currentPageKey = getPageKey()
 	const debouncedSave = debounce((pageKey: string, isClearing = false) => {
 		const shouldSaveState = isClearing || feedback.state.comment.trim().length > 0 || drawing.state.shapes.length > 0

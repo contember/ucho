@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store'
-import type { FeedbackData, FullEchoOptions, Notification, TextConfig } from '~/types'
+import type { FeedbackData, FullEchoConfig, Notification, TextConfig } from '~/types'
 import { getStoredPagesCount } from '~/utils'
 
 export interface WidgetState {
@@ -25,7 +25,7 @@ export interface WidgetStore {
 	}
 }
 
-export const createWidgetStore = (config: FullEchoOptions, currentPageKey: string): WidgetStore => {
+export const createWidgetStore = (config: FullEchoConfig, currentPageKey: string): WidgetStore => {
 	const [state, setState] = createStore<WidgetState>({
 		text: config.textConfig,
 		isOpen: false,

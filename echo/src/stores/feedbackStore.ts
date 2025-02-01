@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store'
-import type { FullEchoOptions, Screenshot } from '~/types'
+import type { FullEchoConfig, Screenshot } from '~/types'
 import { loadPageState } from '~/utils'
 
 export interface FeedbackState {
@@ -15,7 +15,7 @@ export interface FeedbackStore {
 }
 
 export const createFeedbackStore = (
-	config: FullEchoOptions,
+	config: FullEchoConfig,
 	currentPageKey: string,
 	onStateChange?: (state: Partial<FeedbackState>, isClearing?: boolean) => void,
 ): FeedbackStore => {
