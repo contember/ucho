@@ -1,4 +1,4 @@
-export type Screenshot = `data:image/webp;base64,${string}` | `data:image/png;base64,${string}`
+export type Screenshot = `data:image/png;base64,${string}`
 
 export interface BrowserInfo {
 	width: number
@@ -20,7 +20,7 @@ export interface ConsoleEntry {
 	timestamp: string
 }
 
-export interface FeedbackData {
+export interface FeedbackPayload {
 	comment: string
 	screenshot?: Screenshot
 	metadata: Metadata
@@ -56,7 +56,7 @@ export interface TextConfig {
 }
 
 export type EchoConfig = {
-	onSubmit: (data: FeedbackData) => Promise<void>
+	onSubmit: (data: FeedbackPayload) => Promise<void>
 	position?: Position
 	primaryColor?: `#${string}`
 	textConfig?: Partial<TextConfig>
@@ -108,16 +108,6 @@ export interface IconProps {
 	class?: string
 	style?: any
 	fill?: string
-}
-
-export interface StylesConfig {
-	primaryColor: string
-}
-
-export interface EnrichedStylesConfig extends StylesConfig {
-	primaryTextColor: string
-	primaryColorLighter: string
-	primaryColorLightest: string
 }
 
 export interface Notification {

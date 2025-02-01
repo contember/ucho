@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store'
-import type { FeedbackData, FullEchoConfig, Notification, TextConfig } from '~/types'
+import type { FeedbackPayload, FullEchoConfig, Notification, TextConfig } from '~/types'
 import { getStoredPagesCount } from '~/utils'
 
 export interface WidgetState {
@@ -21,7 +21,7 @@ export interface WidgetStore {
 	setState: (state: Partial<WidgetState>) => void
 	methods: {
 		postSubmit: (result: Notification) => void
-		onSubmit: (data: FeedbackData) => Promise<void>
+		onSubmit: (data: FeedbackPayload) => Promise<void>
 	}
 }
 
@@ -52,7 +52,7 @@ export const createWidgetStore = (config: FullEchoConfig, currentPageKey: string
 				setState({ notification: { show: false, type: result.type, message: result.message } })
 			}, 5000)
 		},
-		onSubmit: (data: FeedbackData) => {
+		onSubmit: (data: FeedbackPayload) => {
 			return config.onSubmit(data)
 		},
 	}

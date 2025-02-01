@@ -54,12 +54,12 @@ initEcho({
 | `textConfig` | object | No | english | Customize all text elements in the interface |
 | `onSubmit` | function | Yes | - | Callback function when feedback is submitted |
 
-## Feedback Data Structure
+## Feedback Payload Structure
 
 The `onSubmit` callback receives a data object with the following structure:
 
 ```typescript
-interface FeedbackData {
+interface FeedbackPayload {
   comment: string;          // User's written feedback
   screenshot: string;       // Base64 encoded screenshot
   metadata: {

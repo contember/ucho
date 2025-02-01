@@ -1,7 +1,7 @@
 import { render } from 'solid-js/web'
 import { Echo } from './components/Echo'
 import { defaultText } from './config/defaultText'
-import { type EchoConfig, type FeedbackData } from './types'
+import { type EchoConfig, type FeedbackPayload } from './types'
 import { deepMerge } from './utils/common'
 import { cleanupConsole, getConsoleBuffer, setupConsole } from './utils/console'
 import { validateOptions } from './utils/validators'
@@ -65,4 +65,4 @@ export function initEcho(options: EchoConfig): () => void {
 	}
 }
 
-export type { FeedbackData, EchoConfig }
+export type { FeedbackPayload, EchoConfig }
