@@ -3,9 +3,9 @@ import { createEffect, createSignal } from 'solid-js'
 import { ContemberIcon } from '~/components/icons/ContemberIcon'
 import { useEchoStore } from '~/contexts'
 import { getFromStorage, setToStorage } from '~/utils'
-import { SavedPagesDropdown } from './SavedPagesDropdown'
+import { StoredFeedback } from './StoredFeedback'
 
-export const EchoLauncherButton: Component = () => {
+export const LauncherButton: Component = () => {
 	const store = useEchoStore()
 	const [isMinimized, setIsMinimized] = createSignal(false)
 	let minimizeTimeout: number | undefined
@@ -16,7 +16,7 @@ export const EchoLauncherButton: Component = () => {
 		}
 		minimizeTimeout = window.setTimeout(() => {
 			const hasSeenMessage = getFromStorage('welcome_message_shown', false)
-			if (!store.widget.state.isOpen && !store.widget.state.isPagesDropdownOpen && hasSeenMessage) {
+			if (!store.widget.state.isOpen && !store.widget.state.isStoredFeedbackOpen && hasSeenMessage) {
 				setIsMinimized(true)
 			}
 		}, 4000) // Hide after 4 seconds of inactivity
@@ -41,14 +41,14 @@ export const EchoLauncherButton: Component = () => {
 			setIsMinimized(false)
 			resetHideTimeout()
 		}
-		if (store.widget.state.isPagesDropdownOpen) {
+		if (store.widget.state.isStoredFeedbackOpen) {
 			setIsMinimized(false)
 		}
 	})
 
 	const handleCountClick = (e: MouseEvent) => {
 		e.stopPropagation()
-		store.widget.setState({ isPagesDropdownOpen: !store.widget.state.isPagesDropdownOpen })
+		store.widget.setState({ isStoredFeedbackOpen: !store.widget.state.isStoredFeedbackOpen })
 		setIsMinimized(false)
 	}
 
@@ -71,7 +71,7 @@ export const EchoLauncherButton: Component = () => {
 					</span>
 				)}
 			</button>
-			<SavedPagesDropdown />
+			<StoredFeedback />
 		</>
 	)
 }

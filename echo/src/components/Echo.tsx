@@ -7,7 +7,7 @@ import { getContrastColor } from '~/utils/color'
 import { registerKeyListener, registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import staticStyles from './../styles.css?inline'
 import { DrawingToolbar } from './molecules/DrawingToolbar'
-import { EchoLauncherButton } from './molecules/EchoLauncherButton'
+import { LauncherButton } from './molecules/LauncherButton'
 import { Notification } from './molecules/Notification'
 import { WelcomeMessage } from './molecules/WelcomeMessage'
 import { DrawingLayer } from './organisms/DrawingLayer'
@@ -55,7 +55,7 @@ const EchoInterface: Component = () => {
 	return (
 		<>
 			<div class="echo-launcher" data-hidden={store.widget.state.isOpen}>
-				<EchoLauncherButton />
+				<LauncherButton />
 				<WelcomeMessage />
 				<Notification />
 			</div>

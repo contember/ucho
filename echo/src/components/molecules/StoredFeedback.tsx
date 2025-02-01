@@ -6,7 +6,7 @@ import { useEchoStore } from '~/contexts'
 import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import { clearPageState, getStoredPages } from '~/utils/storage'
 
-export const SavedPagesDropdown: Component = () => {
+export const StoredFeedback: Component = () => {
 	const store = useEchoStore()
 	const [pages, setPages] = createSignal(getStoredPages())
 	const [currentPath, setCurrentPath] = createSignal(window.location.pathname)
@@ -45,7 +45,7 @@ export const SavedPagesDropdown: Component = () => {
 	const handleNavigate = (path: string, latestQuery?: string) => {
 		const targetUrl = latestQuery ? `${path}${latestQuery}` : path
 		window.location.href = targetUrl
-		store.widget.setState({ isPagesDropdownOpen: false })
+		store.widget.setState({ isStoredFeedbackOpen: false })
 	}
 
 	const handleDelete = (path: string) => {
@@ -67,30 +67,30 @@ export const SavedPagesDropdown: Component = () => {
 	}
 
 	return (
-		<Show when={store.widget.state.isPagesDropdownOpen}>
-			<div class="echo-saved-pages-dropdown">
-				<div class="echo-saved-pages-header">
-					<h3>Saved Feedback</h3>
-					<Button variant="secondary" size="sm" onClick={() => store.widget.setState({ isPagesDropdownOpen: false })}>
+		<Show when={store.widget.state.isStoredFeedbackOpen}>
+			<div class="echo-stored-feedback">
+				<div class="echo-stored-feedback-header">
+					<h3>Unsubmitted Feedback</h3>
+					<Button variant="secondary" size="sm" onClick={() => store.widget.setState({ isStoredFeedbackOpen: false })}>
 						<XIcon size={20} />
 					</Button>
 				</div>
-				<div class="echo-saved-pages-list">
+				<div class="echo-stored-feedback-list">
 					<For each={pages()}>
 						{page => {
 							const isCurrent = createMemo(() => page.path === currentPath())
 							return (
-								<div class={`echo-saved-pages-item ${isCurrent() ? 'echo-saved-pages-item-current' : ''}`}>
-									<div class="echo-saved-pages-content">
-										<div class="echo-saved-pages-path" title={page.path}>
+								<div class={`echo-stored-feedback-item ${isCurrent() ? 'echo-stored-feedback-item-current' : ''}`}>
+									<div class="echo-stored-feedback-content">
+										<div class="echo-stored-feedback-path" title={page.path}>
 											{formatPath(page.path)}
 										</div>
-										<div class="echo-saved-pages-preview">{page.state.feedback.comment}</div>
+										<div class="echo-stored-feedback-preview">{page.state.feedback.comment}</div>
 									</div>
-									<div class="echo-saved-pages-actions">
+									<div class="echo-stored-feedback-actions">
 										{!isCurrent() && (
 											<Button
-												class="echo-saved-pages-link"
+												class="echo-stored-feedback-link"
 												variant="secondary"
 												size="sm"
 												onClick={() => handleNavigate(page.path, page.state.latestQuery)}
@@ -98,7 +98,7 @@ export const SavedPagesDropdown: Component = () => {
 												<ExternalLinkIcon />
 											</Button>
 										)}
-										<Button class="echo-saved-pages-delete" variant="secondary" size="sm" onClick={() => handleDelete(page.path)}>
+										<Button class="echo-stored-feedback-delete" variant="secondary" size="sm" onClick={() => handleDelete(page.path)}>
 											Delete
 										</Button>
 									</div>
@@ -107,7 +107,7 @@ export const SavedPagesDropdown: Component = () => {
 						}}
 					</For>
 					<Show when={pages().length === 0}>
-						<div class="echo-saved-pages-empty">No saved feedback yet</div>
+						<div class="echo-stored-feedback-empty">No unsubmitted feedback</div>
 					</Show>
 				</div>
 			</div>

@@ -11,7 +11,7 @@ export interface WidgetState {
 		width: number
 		height: number
 	}
-	isPagesDropdownOpen: boolean
+	isStoredFeedbackOpen: boolean
 	pagesCount: number
 	welcomeMessageIsClosing: boolean
 }
@@ -39,7 +39,7 @@ export const createWidgetStore = (config: FullEchoOptions, currentPageKey: strin
 			width: document.documentElement.clientWidth,
 			height: document.documentElement.scrollHeight,
 		},
-		isPagesDropdownOpen: false,
+		isStoredFeedbackOpen: false,
 		pagesCount: getStoredPagesCount(),
 		welcomeMessageIsClosing: false,
 	})
