@@ -1,4 +1,4 @@
-import type { Component } from 'solid-js'
+import { type Component, createEffect } from 'solid-js'
 import { Button } from '~/components/atoms/Button'
 import { ChevronRightIcon, XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
@@ -7,6 +7,7 @@ import { getConsoleBuffer } from '~/utils/console'
 import { captureScreenshot } from '~/utils/screenshot'
 
 export const FeedbackForm: Component = () => {
+	let textAreaRef: HTMLTextAreaElement | undefined
 	const store = useEchoStore()
 	const isMobile = isMobileDevice()
 
@@ -44,6 +45,12 @@ export const FeedbackForm: Component = () => {
 		}
 	}
 
+	createEffect(() => {
+		if (textAreaRef && store.widget.state.isOpen) {
+			textAreaRef.focus()
+		}
+	})
+
 	const minimize = (e: MouseEvent) => {
 		e.stopPropagation()
 		store.feedback.setState({ isMinimized: true })
@@ -75,6 +82,7 @@ export const FeedbackForm: Component = () => {
 				</div>
 
 				<textarea
+					ref={textAreaRef}
 					class="echo-feedback-form-textarea"
 					value={store.feedback.state.comment}
 					placeholder={store.widget.state.text.feedbackForm.placeholder}
