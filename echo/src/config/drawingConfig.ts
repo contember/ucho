@@ -1,6 +1,6 @@
 import type { DrawingTool } from '~/types'
 
-interface ToolConfig {
+type ToolConfig = {
 	id: DrawingTool
 	label: string
 	getCursor: (color: string) => string

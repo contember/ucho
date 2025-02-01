@@ -6,7 +6,7 @@ import { type DrawingStore, createDrawingStore } from './drawingStore'
 import { type FeedbackStore, createFeedbackStore } from './feedbackStore'
 import { type WidgetStore, createWidgetStore } from './widgetStore'
 
-export interface EchoStore {
+export type EchoStore = {
 	feedback: FeedbackStore
 	drawing: DrawingStore
 	widget: WidgetStore

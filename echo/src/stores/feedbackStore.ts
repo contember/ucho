@@ -2,14 +2,14 @@ import { createStore } from 'solid-js/store'
 import type { FullEchoConfig, Screenshot } from '~/types'
 import { loadPageState } from '~/utils'
 
-export interface FeedbackState {
+export type FeedbackState = {
 	comment: string
 	screenshot?: Screenshot
 	isCapturing: boolean
 	isMinimized: boolean
 }
 
-export interface FeedbackStore {
+export type FeedbackStore = {
 	state: FeedbackState
 	setState: (state: Partial<FeedbackState>, isClearing?: boolean) => void
 }

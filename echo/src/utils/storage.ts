@@ -1,7 +1,7 @@
 import { DrawingState, FeedbackState } from '~/stores'
 import type { Shape } from '~/types'
 
-interface StoredPageState {
+type StoredPageState = {
 	feedback: {
 		comment: string
 	}

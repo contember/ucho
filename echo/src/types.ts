@@ -1,26 +1,26 @@
 export type Screenshot = `data:image/png;base64,${string}`
 
-export interface BrowserInfo {
+export type BrowserInfo = {
 	width: number
 	height: number
 	screenWidth: number
 	screenHeight: number
 }
 
-export interface Metadata {
+export type Metadata = {
 	url: string
 	userAgent: string
 	timestamp: string
 	browserInfo: BrowserInfo
 }
 
-export interface ConsoleEntry {
+export type ConsoleEntry = {
 	type: 'log' | 'warn' | 'error'
 	message: string
 	timestamp: string
 }
 
-export interface FeedbackPayload {
+export type FeedbackPayload = {
 	comment: string
 	screenshot?: Screenshot
 	metadata: Metadata
@@ -29,7 +29,7 @@ export interface FeedbackPayload {
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
-export interface TextConfig {
+export type TextConfig = {
 	welcomeMessage: {
 		text: string
 		closeAriaLabel: string
@@ -85,7 +85,7 @@ export const POSITIONS: Record<Position, { [key: string]: string }> = {
 	},
 }
 
-export interface Point {
+export type Point = {
 	x: number
 	y: number
 }
@@ -94,14 +94,14 @@ export type ShapeType = 'rectangle' | 'path'
 
 export type DrawingTool = 'rectangle' | 'path'
 
-export interface Shape {
+export type Shape = {
 	id: string
 	type: ShapeType
 	color: string
 	points: Point[]
 }
 
-export interface IconProps {
+export type IconProps = {
 	size?: number
 	stroke?: string
 	strokeWidth?: number
@@ -110,7 +110,7 @@ export interface IconProps {
 	fill?: string
 }
 
-export interface Notification {
+export type Notification = {
 	show: boolean
 	type: 'success' | 'error' | null
 	message: string | null

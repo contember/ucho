@@ -2,7 +2,7 @@ import { createStore } from 'solid-js/store'
 import type { FeedbackPayload, FullEchoConfig, Notification, TextConfig } from '~/types'
 import { getStoredPagesCount } from '~/utils'
 
-export interface WidgetState {
+export type WidgetState = {
 	text: TextConfig
 	isOpen: boolean
 	primaryColor: string
@@ -16,7 +16,7 @@ export interface WidgetState {
 	welcomeMessageIsClosing: boolean
 }
 
-export interface WidgetStore {
+export type WidgetStore = {
 	state: WidgetState
 	setState: (state: Partial<WidgetState>) => void
 	methods: {

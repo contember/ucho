@@ -10,7 +10,7 @@ const computeCursor = (tool: DrawingTool, color: string) => {
 	return toolConfig[tool].getCursor(color)
 }
 
-export interface DrawingState {
+export type DrawingState = {
 	isDrawing: boolean
 	selectedShapeId: string | null
 	selectedTool: DrawingTool
@@ -27,7 +27,7 @@ export interface DrawingState {
 	cursor: string
 }
 
-export interface DrawingStore {
+export type DrawingStore = {
 	state: DrawingState
 	setState: (state: Partial<DrawingState>, isClearing?: boolean) => void
 	methods: {
