@@ -1,5 +1,6 @@
 import { EntitySubTree, Field, Link, RedirectOnPersist } from '@contember/interface'
 import { FeedbackItemForm } from '~/app/components/forms/feedback-item-form'
+import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '~/lib'
 import { Binding } from '~/lib/binding'
 import { BackButton } from '~/lib/buttons'
 import {
@@ -27,6 +28,16 @@ export const aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa = () => {
 				<Slots.Back>
 					<BackButton />
 				</Slots.Back>
+				<EntitySubTree entity="FeedbackItem" isCreating>
+					<AlertDialog>
+						<AlertDialogTrigger>
+							<AnchorButton>Create Feedback</AnchorButton>
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<FeedbackItemForm />
+						</AlertDialogContent>
+					</AlertDialog>
+				</EntitySubTree>
 				<DefaultDataGrid entities="FeedbackItem" toolbar={<DataGridQueryFilter />}>
 					<DataGridColumn>
 						<div className="flex gap-4" />
