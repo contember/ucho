@@ -27,6 +27,10 @@ export function initEcho(options: EchoConfig): () => void {
 		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig = {} } = options
 		const mergedTextConfig = deepMerge(defaultText, textConfig)
 
+		const container = document.createElement('div')
+		container.id = 'echo-container'
+		document.body.appendChild(container)
+
 		const dispose = render(
 			() => (
 				<Echo
@@ -46,11 +50,12 @@ export function initEcho(options: EchoConfig): () => void {
 					}}
 				/>
 			),
-			document.body,
+			container,
 		)
 
 		const cleanup = () => {
 			dispose()
+			container.remove()
 			cleanupConsole()
 			activeInstance = null
 		}
