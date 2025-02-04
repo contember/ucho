@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store'
-import type { FeedbackPayload, FullEchoConfig, Notification, TextConfig } from '~/types'
+import type { FullEchoConfig, Notification, TextConfig } from '~/types'
 import { getStoredPagesCount } from '~/utils'
 
 export type WidgetState = {
@@ -19,10 +19,6 @@ export type WidgetState = {
 export type WidgetStore = {
 	state: WidgetState
 	setState: (state: Partial<WidgetState>) => void
-	methods: {
-		postSubmit: (result: Notification) => void
-		onSubmit: (data: FeedbackPayload) => Promise<void>
-	}
 }
 
 export const createWidgetStore = (config: FullEchoConfig, currentPageKey: string): WidgetStore => {
@@ -44,22 +40,8 @@ export const createWidgetStore = (config: FullEchoConfig, currentPageKey: string
 		welcomeMessageIsClosing: false,
 	})
 
-	const methods = {
-		postSubmit: (result: Notification) => {
-			setState({ notification: { show: true, type: result.type, message: result.message } })
-
-			setTimeout(() => {
-				setState({ notification: { show: false, type: result.type, message: result.message } })
-			}, 5000)
-		},
-		onSubmit: (data: FeedbackPayload) => {
-			return config.onSubmit(data)
-		},
-	}
-
 	return {
 		state,
 		setState,
-		methods,
 	}
 }

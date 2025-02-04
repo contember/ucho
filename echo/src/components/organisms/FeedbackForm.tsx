@@ -35,13 +35,13 @@ export const FeedbackForm: Component = () => {
 
 		try {
 			store.widget.setState({ isOpen: false })
-			await store.widget.methods.onSubmit({
+			await store.methods.onSubmit({
 				...data,
 				console: getConsoleBuffer(),
 			})
-			store.widget.methods.postSubmit({ show: true, type: 'success', message: '' })
+			store.methods.postSubmit({ show: true, type: 'success', message: '' })
 		} catch (error) {
-			store.widget.methods.postSubmit({ show: true, type: 'error', message: store.widget.state.text.notification.errorMessage })
+			store.methods.postSubmit({ show: true, type: 'error', message: store.widget.state.text.notification.errorMessage })
 		}
 	}
 

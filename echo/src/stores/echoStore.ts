@@ -1,4 +1,5 @@
-import type { FullEchoConfig } from '~/types'
+import type { FeedbackPayload, FullEchoConfig } from '~/types'
+import { type Notification } from '~/types'
 import { debounce } from '~/utils/debounce'
 import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import { clearPageState, getPageKey, getStoredPagesCount, loadPageState, savePageState } from '~/utils/storage'
@@ -12,6 +13,8 @@ export type EchoStore = {
 	widget: WidgetStore
 	methods: {
 		reset: () => void
+		postSubmit: (result: Notification) => void
+		onSubmit: (data: FeedbackPayload) => Promise<void>
 	}
 }
 
@@ -116,6 +119,17 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 		widget,
 		methods: {
 			reset,
+			postSubmit: (result: Notification) => {
+				reset()
+				widget.setState({ notification: { show: true, type: result.type, message: result.message } })
+
+				setTimeout(() => {
+					widget.setState({ notification: { show: false, type: result.type, message: result.message } })
+				}, 5000)
+			},
+			onSubmit: (data: FeedbackPayload) => {
+				return config.onSubmit(data)
+			},
 		},
 	}
 }
