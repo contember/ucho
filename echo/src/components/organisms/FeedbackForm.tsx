@@ -2,21 +2,20 @@ import { type Component, createEffect } from 'solid-js'
 import { Button } from '~/components/atoms/Button'
 import { ChevronRightIcon, XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
-import { isMobileDevice } from '~/utils'
+import { FeedbackPayload } from '~/types'
 import { getConsoleBuffer } from '~/utils/console'
 import { captureScreenshot } from '~/utils/screenshot'
 
 export const FeedbackForm: Component = () => {
 	let textAreaRef: HTMLTextAreaElement | undefined
 	const store = useEchoStore()
-	const isMobile = isMobileDevice()
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 
 		const screenshot = await captureScreenshot()
 
-		const data = {
+		const data: FeedbackPayload = {
 			comment: store.feedback.state.comment,
 			screenshot: screenshot,
 			metadata: {
@@ -28,21 +27,12 @@ export const FeedbackForm: Component = () => {
 					height: window.innerHeight,
 					screenWidth: window.screen.width,
 					screenHeight: window.screen.height,
-					isMobile: isMobile,
 				},
 			},
+			console: getConsoleBuffer(),
 		}
 
-		try {
-			store.widget.setState({ isOpen: false })
-			await store.methods.onSubmit({
-				...data,
-				console: getConsoleBuffer(),
-			})
-			store.methods.postSubmit({ show: true, type: 'success', message: '' })
-		} catch (error) {
-			store.methods.postSubmit({ show: true, type: 'error', message: store.widget.state.text.notification.errorMessage })
-		}
+		store.methods.submit(data)
 	}
 
 	createEffect(() => {

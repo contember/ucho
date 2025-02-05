@@ -1,4 +1,4 @@
-import type { FeedbackPayload, FullEchoConfig } from '~/types'
+import type { EchoConfig, FeedbackPayload, FullEchoConfig } from '~/types'
 import { type Notification } from '~/types'
 import { debounce } from '~/utils/debounce'
 import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
@@ -13,8 +13,7 @@ export type EchoStore = {
 	widget: WidgetStore
 	methods: {
 		reset: () => void
-		postSubmit: (result: Notification) => void
-		onSubmit: (data: FeedbackPayload) => Promise<void>
+		submit: EchoConfig['onSubmit']
 	}
 }
 
@@ -113,22 +112,37 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 		})
 	}
 
+	const postSubmit = (result: Notification) => {
+		widget.setState({ notification: { show: true, type: result.type, message: result.message } })
+
+		setTimeout(() => {
+			widget.setState({ notification: { show: false, type: result.type, message: result.message } })
+		}, 5000)
+	}
+
 	return {
 		feedback,
 		drawing,
 		widget,
 		methods: {
 			reset,
-			postSubmit: (result: Notification) => {
-				reset()
-				widget.setState({ notification: { show: true, type: result.type, message: result.message } })
+			submit: async (data: FeedbackPayload) => {
+				widget.setState({ isOpen: false })
 
-				setTimeout(() => {
-					widget.setState({ notification: { show: false, type: result.type, message: result.message } })
-				}, 5000)
-			},
-			onSubmit: (data: FeedbackPayload) => {
-				return config.onSubmit(data)
+				try {
+					const response = await config.onSubmit(data)
+
+					if (response instanceof Response && !response.ok) {
+						postSubmit({ show: true, type: 'error', message: 'Submission failed' })
+						return response
+					}
+
+					reset()
+					postSubmit({ show: true, type: 'success', message: 'Feedback submitted' })
+					return response
+				} catch (error) {
+					postSubmit({ show: true, type: 'error', message: 'Submission failed' })
+				}
 			},
 		},
 	}

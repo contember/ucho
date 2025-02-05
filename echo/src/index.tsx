@@ -37,17 +37,12 @@ export function initEcho(options: EchoConfig): () => void {
 					position={position}
 					primaryColor={primaryColor}
 					textConfig={mergedTextConfig}
-					onSubmit={async data => {
-						try {
-							await onSubmit({
-								...data,
-								console: getConsoleBuffer(),
-							})
-						} catch (error) {
-							console.error('Error in Echo onSubmit handler:', error)
-							throw error
-						}
-					}}
+					onSubmit={async data =>
+						await onSubmit({
+							...data,
+							console: getConsoleBuffer(),
+						})
+					}
 				/>
 			),
 			container,

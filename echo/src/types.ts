@@ -56,7 +56,7 @@ export type TextConfig = {
 }
 
 export type EchoConfig = {
-	onSubmit: (data: FeedbackPayload) => Promise<void>
+	onSubmit: (data: FeedbackPayload) => Promise<Response | void>
 	position?: Position
 	primaryColor?: `#${string}`
 	textConfig?: Partial<TextConfig>
