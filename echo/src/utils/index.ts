@@ -1,7 +1,6 @@
 export * from './color'
 export * from './common'
 export * from './console'
-export * from './debounce'
 export * from './device'
 export * from './events'
 export * from './format'
