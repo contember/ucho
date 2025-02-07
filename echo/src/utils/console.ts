@@ -7,7 +7,27 @@ let originalOnUnhandledRejection: ((event: PromiseRejectionEvent) => void) | nul
 
 const createConsoleProxy = (type: ConsoleEntry['type'], originalFn: (...args: any[]) => void) => {
 	return (...args: any[]) => {
-		const message = args.map(arg => (typeof arg === 'string' ? arg : arg instanceof Error ? arg.stack || arg.message : JSON.stringify(arg))).join(' ')
+		const getStringValue = (arg: any): string => {
+			if (typeof arg === 'string') return arg
+			if (arg instanceof Error) return arg.stack || arg.message
+
+			try {
+				const seen = new WeakSet()
+				const replacer = (key: string, value: any) => {
+					if (typeof value === 'object' && value !== null) {
+						if (value instanceof Node) return `[${value.nodeName} Element]`
+						if (seen.has(value)) return '[Circular Reference]'
+						seen.add(value)
+					}
+					return value
+				}
+				return JSON.stringify(arg, replacer)
+			} catch (err) {
+				return '[Unable to stringify value]'
+			}
+		}
+
+		const message = args.map(getStringValue).join(' ')
 
 		consoleBuffer.push({
 			type,
