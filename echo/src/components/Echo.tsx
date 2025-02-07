@@ -1,24 +1,21 @@
-import { type Component, JSXElement, createEffect, createSignal } from 'solid-js'
+import { type Component, JSXElement, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 import { Portal } from 'solid-js/web'
-import { EchoProvider } from '~/contexts'
-import { useEchoStore } from '~/contexts/EchoContext'
+import { EchoProvider, useEchoStore } from '~/contexts'
+import { usePageHeight } from '~/hooks/usePageHeight'
 import type { FullEchoConfig } from '~/types'
-import { getContrastColor } from '~/utils/color'
-import { registerKeyListener, registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
+import { getContrastColor } from '~/utils'
+import { cleanupConsole, setupConsole } from '~/utils/console'
+import { patchEventTarget, unpatchEventTarget } from '~/utils/monkeyPatch'
 import staticStyles from './../styles.css?inline'
-import { DrawingToolbar } from './molecules/DrawingToolbar'
-import { LauncherButton } from './molecules/LauncherButton'
-import { Notification } from './molecules/Notification'
-import { WelcomeMessage } from './molecules/WelcomeMessage'
-import { DrawingLayer } from './organisms/DrawingLayer'
-import { FeedbackForm } from './organisms/FeedbackForm'
+import { DrawingToolbar, LauncherButton, Notification, WelcomeMessage } from './molecules'
+import { DrawingLayer, FeedbackForm } from './organisms'
 
 export const Echo: Component<FullEchoConfig> = props => {
 	return (
 		<Portal useShadow mount={document.body}>
 			<EchoProvider {...props}>
 				<EchoRoot>
-					<EchoStyles primaryColor={props.primaryColor!} />
+					<EchoStyles primaryColor={props.primaryColor} />
 					<EchoInterface />
 				</EchoRoot>
 			</EchoProvider>
@@ -31,11 +28,11 @@ const EchoStyles: Component<{ primaryColor: string }> = props => {
 
 	createEffect(() => {
 		const css = `
-				.echo-root {
-					--primary-color: ${props.primaryColor};
-					--primary-text-color: ${getContrastColor(props.primaryColor)};
-				}
-			`
+						.echo-root {
+							--primary-color: ${props.primaryColor};
+							--primary-text-color: ${getContrastColor(props.primaryColor)};
+						}
+					`
 		setDynamicStyles(css)
 	})
 
@@ -51,6 +48,15 @@ const EchoStyles: Component<{ primaryColor: string }> = props => {
 
 const EchoInterface: Component = () => {
 	const store = useEchoStore()
+	let dialogRef: HTMLDialogElement | undefined
+
+	createEffect(() => {
+		if (dialogRef && store.widget.state.isOpen) {
+			dialogRef.showModal()
+		} else {
+			dialogRef?.close()
+		}
+	})
 
 	return (
 		<>
@@ -60,68 +66,79 @@ const EchoInterface: Component = () => {
 				<Notification />
 			</div>
 
-			<div class="echo-overlay" data-hidden={!store.widget.state.isOpen}>
+			<EchoOverlay>
 				<FeedbackForm />
 				<DrawingToolbar />
 				<DrawingLayer />
-			</div>
+			</EchoOverlay>
 		</>
+	)
+}
+
+const EchoOverlay: Component<{ children: JSXElement }> = props => {
+	const [dialogRef, setDialogRef] = createSignal<HTMLDialogElement>()
+	const store = useEchoStore()
+
+	/* dimensions sync */
+	const dimensions = usePageHeight(() => dialogRef())
+	createEffect(() => {
+		if (dialogRef()) {
+			store.widget.setState({
+				dimensions: dimensions(),
+			})
+		}
+	})
+
+	/* dialog open/close sync */
+	createEffect(() => {
+		if (store.widget.state.isOpen) dialogRef()?.showModal()
+		else dialogRef()?.close()
+	})
+
+	return (
+		<dialog
+			ref={setDialogRef}
+			class="echo-overlay"
+			style={{
+				height: `${dimensions().height}px`,
+				width: `${dimensions().width}px`,
+			}}
+			data-hidden={!store.widget.state.isOpen}
+			onClose={() => store.widget.setState({ isOpen: false })}
+		>
+			{props.children}
+		</dialog>
 	)
 }
 
 const EchoRoot: Component<{
 	children: JSXElement
 }> = props => {
-	let rootRef: HTMLDivElement | undefined
 	const store = useEchoStore()
 
-	const updateHeight = () => {
-		requestAnimationFrame(() => {
-			if (!rootRef) return
+	onMount(() => {
+		setupConsole()
+		patchEventTarget(e => {
+			if (!store.widget.state.isOpen) return
 
-			rootRef.style.height = '0px'
-			rootRef.style.height = `${document.documentElement.scrollHeight}px`
-			store.widget.setState({
-				dimensions: {
-					width: document.documentElement.clientWidth,
-					height: document.documentElement.scrollHeight,
-				},
-			})
+			if (e.type === 'keydown') {
+				const keyEvent = e as KeyboardEvent
+				switch (keyEvent.key) {
+					case 'Escape':
+						e.stopImmediatePropagation()
+						break
+				}
+			}
 		})
-	}
-
-	registerWindowEventListener({
-		event: 'resize',
-		callback: updateHeight,
-		onMount: updateHeight,
 	})
 
-	registerKeyListener('Escape', () => {
-		store.widget.setState({ isOpen: false })
-	})
-
-	registerMutationObserver({
-		target: document.documentElement,
-		options: {
-			childList: true,
-			subtree: true,
-			attributes: true,
-		},
-		callback: () => {
-			updateHeight()
-		},
+	onCleanup(() => {
+		cleanupConsole()
+		unpatchEventTarget()
 	})
 
 	return (
-		<div
-			ref={rootRef}
-			class="echo-root"
-			data-drawing={store.drawing.state.isDrawing}
-			style={{
-				height: `${store.widget.state.dimensions.height}px`,
-				width: `${store.widget.state.dimensions.width}px`,
-			}}
-		>
+		<div class="echo-root" data-drawing={store.drawing.state.isDrawing}>
 			{props.children}
 		</div>
 	)

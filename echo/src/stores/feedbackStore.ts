@@ -3,7 +3,7 @@ import type { FullEchoConfig, Screenshot } from '~/types'
 import { loadPageState } from '~/utils'
 
 export type FeedbackState = {
-	comment: string
+	message: string
 	screenshot?: Screenshot
 	isCapturing: boolean
 	isMinimized: boolean
@@ -20,7 +20,7 @@ export const createFeedbackStore = (
 	onStateChange?: (state: Partial<FeedbackState>, isClearing?: boolean) => void,
 ): FeedbackStore => {
 	const [state, setState] = createStore<FeedbackState>({
-		comment: loadPageState(currentPageKey)?.feedback?.comment || '',
+		message: loadPageState(currentPageKey)?.feedback?.message || '',
 		screenshot: undefined,
 		isCapturing: false,
 		isMinimized: false,

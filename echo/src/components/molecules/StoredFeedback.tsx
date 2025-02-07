@@ -85,7 +85,7 @@ export const StoredFeedback: Component = () => {
 										<div class="echo-stored-feedback-path" title={page.path}>
 											{formatPath(page.path)}
 										</div>
-										<div class="echo-stored-feedback-preview">{page.state.feedback.comment}</div>
+										<div class="echo-stored-feedback-preview">{page.state.feedback.message}</div>
 									</div>
 									<div class="echo-stored-feedback-actions">
 										{!isCurrent() && (

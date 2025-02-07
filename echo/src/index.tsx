@@ -3,7 +3,6 @@ import { Echo } from './components/Echo'
 import { defaultText } from './config/defaultText'
 import { type EchoConfig, type FeedbackPayload } from './types'
 import { deepMerge } from './utils/common'
-import { cleanupConsole, getConsoleBuffer, setupConsole } from './utils/console'
 import { validateOptions } from './utils/validators'
 import './styles.css'
 
@@ -22,7 +21,6 @@ export function initEcho(options: EchoConfig): () => void {
 
 	try {
 		validateOptions(options)
-		setupConsole()
 
 		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig = {} } = options
 		const mergedTextConfig = deepMerge(defaultText, textConfig)
@@ -32,26 +30,13 @@ export function initEcho(options: EchoConfig): () => void {
 		document.body.appendChild(container)
 
 		const dispose = render(
-			() => (
-				<Echo
-					position={position}
-					primaryColor={primaryColor}
-					textConfig={mergedTextConfig}
-					onSubmit={async data =>
-						await onSubmit({
-							...data,
-							console: getConsoleBuffer(),
-						})
-					}
-				/>
-			),
+			() => <Echo position={position} primaryColor={primaryColor} textConfig={mergedTextConfig} onSubmit={onSubmit} />,
 			container,
 		)
 
 		const cleanup = () => {
 			dispose()
 			container.remove()
-			cleanupConsole()
 			activeInstance = null
 		}
 

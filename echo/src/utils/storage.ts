@@ -3,7 +3,7 @@ import type { Shape } from '~/types'
 
 type StoredPageState = {
 	feedback: {
-		comment: string
+		message: string
 	}
 	drawing: {
 		shapes: Shape[]
@@ -46,13 +46,13 @@ export const savePageState = (pageKey: string, state: { feedback: FeedbackState;
 		const existingData = localStorage.getItem(STORAGE_KEY)
 		const allPagesData = existingData ? JSON.parse(existingData) : {}
 
-		if (!state.feedback.comment && (!state.drawing.shapes || state.drawing.shapes.length === 0)) {
+		if (!state.feedback.message && (!state.drawing.shapes || state.drawing.shapes.length === 0)) {
 			delete allPagesData[pageKey]
 		} else {
 			const currentQuery = window.location.search || undefined
 			const essentialState: StoredPageState = {
 				feedback: {
-					comment: state.feedback.comment,
+					message: state.feedback.message,
 				},
 				drawing: {
 					shapes: state.drawing.shapes,

@@ -1,6 +1,6 @@
 import type { EchoConfig, FeedbackPayload, FullEchoConfig } from '~/types'
 import { type Notification } from '~/types'
-import { debounce } from '~/utils/debounce'
+import { debounce } from '~/utils/common'
 import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import { clearPageState, getPageKey, getStoredPagesCount, loadPageState, savePageState } from '~/utils/storage'
 import { type DrawingStore, createDrawingStore } from './drawingStore'
@@ -20,7 +20,7 @@ export type EchoStore = {
 export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 	let currentPageKey = getPageKey()
 	const debouncedSave = debounce((pageKey: string, isClearing = false) => {
-		const shouldSaveState = isClearing || feedback.state.comment.trim().length > 0 || drawing.state.shapes.length > 0
+		const shouldSaveState = isClearing || feedback.state.message.trim().length > 0 || drawing.state.shapes.length > 0
 		if (shouldSaveState) {
 			savePageState(pageKey, {
 				feedback: feedback.state,
@@ -47,7 +47,7 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 			const newState = loadPageState(currentPageKey)
 
 			feedback.setState({
-				comment: newState?.feedback.comment || '',
+				message: newState?.feedback.message || '',
 			})
 
 			drawing.setState({
@@ -80,7 +80,7 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 
 		feedback.setState(
 			{
-				comment: '',
+				message: '',
 				screenshot: undefined,
 				isCapturing: false,
 				isMinimized: false,

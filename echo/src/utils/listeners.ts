@@ -1,16 +1,6 @@
 import { onCleanup } from 'solid-js'
 import { onMount } from 'solid-js'
-
-export const registerKeyListener = (key: string, callback: (e: KeyboardEvent) => void) => {
-	registerWindowEventListener({
-		event: 'keydown',
-		callback: e => {
-			if (e.key === key) {
-				callback(e)
-			}
-		},
-	})
-}
+import { registerOriginalListener, removeOriginalListener } from './monkeyPatch'
 
 export const registerWindowEventListener: {
 	<K extends keyof WindowEventMap>(props: {
@@ -18,29 +8,37 @@ export const registerWindowEventListener: {
 		callback: (e: WindowEventMap[K]) => void
 		onMount?: () => void
 		onCleanup?: () => void
+		useOriginal?: boolean
 	}): void
 	(props: {
 		event: string
 		callback: (e: Event) => void
 		onMount?: () => void
 		onCleanup?: () => void
+		useOriginal?: boolean
 	}): void
 } = (props: any) => {
-	const { event, callback, onMount: mountCallback, onCleanup: cleanupCallback } = props
-	const handleEvent = (e: Event) => {
-		callback(e)
-	}
+	const { event, callback, onMount: mountCallback, onCleanup: cleanupCallback, useOriginal = true } = props
 
 	onMount(() => {
 		mountCallback?.()
-		window.addEventListener(event, handleEvent)
+		if (useOriginal) {
+			registerOriginalListener(window, event, callback)
+		} else {
+			window.addEventListener(event, callback)
+		}
 	})
 
 	onCleanup(() => {
 		cleanupCallback?.()
-		window.removeEventListener(event, handleEvent)
+		if (useOriginal) {
+			removeOriginalListener(window, event, callback)
+		} else {
+			window.removeEventListener(event, callback)
+		}
 	})
 }
+
 export const registerMutationObserver = (props: {
 	target: Node
 	options?: MutationObserverInit
@@ -60,4 +58,16 @@ export const registerMutationObserver = (props: {
 		cleanupCallback?.()
 		observer.disconnect()
 	})
+}
+
+export const createWrappedListener = (originalListener: EventListenerOrEventListenerObject, callback: (event: Event) => void) => {
+	return function (this: EventTarget, event: Event) {
+		callback(event)
+
+		if (typeof originalListener === 'function') {
+			originalListener.call(this, event)
+		} else {
+			originalListener.handleEvent(event)
+		}
+	}
 }

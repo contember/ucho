@@ -263,12 +263,18 @@
 /* Overlay */
 .echo-overlay {
     position: absolute;
-    z-index: var(--z-overlay);
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    max-height: none;
     border: 3px solid var(--primary-color);
+    background: transparent;
+}
+
+.echo-overlay::backdrop {
+    background: transparent;
 }
 
 /* Visibility States */

@@ -3,7 +3,7 @@ import { Button } from '~/components/atoms/Button'
 import { ChevronRightIcon, XIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
 import { FeedbackPayload } from '~/types'
-import { getConsoleBuffer } from '~/utils/console'
+import { collectMetadata } from '~/utils/metadata'
 import { captureScreenshot } from '~/utils/screenshot'
 
 export const FeedbackForm: Component = () => {
@@ -16,30 +16,13 @@ export const FeedbackForm: Component = () => {
 		const screenshot = await captureScreenshot()
 
 		const data: FeedbackPayload = {
-			comment: store.feedback.state.comment,
+			message: store.feedback.state.message,
 			screenshot: screenshot,
-			metadata: {
-				url: window.location.href,
-				userAgent: navigator.userAgent,
-				timestamp: new Date().toISOString(),
-				browserInfo: {
-					width: window.innerWidth,
-					height: window.innerHeight,
-					screenWidth: window.screen.width,
-					screenHeight: window.screen.height,
-				},
-			},
-			console: getConsoleBuffer(),
+			metadata: collectMetadata(),
 		}
 
 		store.methods.submit(data)
 	}
-
-	createEffect(() => {
-		if (textAreaRef && store.widget.state.isOpen) {
-			textAreaRef.focus()
-		}
-	})
 
 	const minimize = (e: MouseEvent) => {
 		e.stopPropagation()
@@ -49,6 +32,14 @@ export const FeedbackForm: Component = () => {
 	const maximize = () => {
 		store.feedback.setState({ isMinimized: false })
 	}
+
+	createEffect(() => {
+		if (store.widget.state.isOpen) {
+			requestAnimationFrame(() => {
+				textAreaRef?.focus()
+			})
+		}
+	})
 
 	return (
 		<div
@@ -74,9 +65,9 @@ export const FeedbackForm: Component = () => {
 				<textarea
 					ref={textAreaRef}
 					class="echo-feedback-form-textarea"
-					value={store.feedback.state.comment}
+					value={store.feedback.state.message}
 					placeholder={store.widget.state.text.feedbackForm.placeholder}
-					onInput={e => store.feedback.setState({ comment: e.currentTarget.value })}
+					onInput={e => store.feedback.setState({ message: e.currentTarget.value })}
 					required
 				/>
 

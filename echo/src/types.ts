@@ -5,13 +5,46 @@ export type BrowserInfo = {
 	height: number
 	screenWidth: number
 	screenHeight: number
+	language: string
+	languages: readonly string[]
+	doNotTrack: string | null
+	cookiesEnabled: boolean
+	hardwareConcurrency: number
+	deviceMemory?: number
+	maxTouchPoints: number
+	colorDepth: number
+	pixelRatio: number
+	availableWidth: number
+	availableHeight: number
+}
+
+export type NetworkInfo = {
+	effectiveType?: string
+	downlink?: number
+	rtt?: number
+	saveData?: boolean
+}
+
+export type LocationInfo = {
+	url: string
+	origin: string
+	pathname: string
+	searchParams: Record<string, string>
+	referrer: string
+}
+
+export type TimeInfo = {
+	timezone: string
+	localDateTime: string
 }
 
 export type Metadata = {
-	url: string
 	userAgent: string
-	timestamp: string
 	browserInfo: BrowserInfo
+	networkInfo: NetworkInfo
+	locationInfo: LocationInfo
+	timeInfo: TimeInfo
+	console: ConsoleEntry[]
 }
 
 export type ConsoleEntry = {
@@ -21,10 +54,9 @@ export type ConsoleEntry = {
 }
 
 export type FeedbackPayload = {
-	comment: string
+	message: string
 	screenshot?: Screenshot
 	metadata: Metadata
-	console: ConsoleEntry[]
 }
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
