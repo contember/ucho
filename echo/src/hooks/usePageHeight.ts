@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
 import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 
-export const usePageHeight = (element: HTMLElement | undefined) => {
+export const usePageHeight = (element: () => HTMLElement | undefined) => {
 	const [dimensions, setDimensions] = createSignal({
 		width: document.documentElement.clientWidth,
 		height: document.documentElement.scrollHeight,
@@ -9,10 +9,11 @@ export const usePageHeight = (element: HTMLElement | undefined) => {
 
 	const updateDimensions = () => {
 		requestAnimationFrame(() => {
-			if (!element) return
+			const el = element()
+			if (!el) return
 
-			element.style.height = '0px'
-			element.style.height = `${document.documentElement.scrollHeight}px`
+			el.style.height = '0px'
+			el.style.height = `${document.documentElement.scrollHeight}px`
 
 			setDimensions({
 				width: document.documentElement.clientWidth,
