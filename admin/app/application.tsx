@@ -4,7 +4,7 @@ import { SlotsProvider } from '@contember/react-slots'
 import { LogInIcon } from 'lucide-react'
 import { LoginWithEmail } from '~/lib/dev'
 import { Toaster } from '~/lib/toast'
-import { FeedbackWidget } from './components/feedback'
+import { Echo } from './components/Echo'
 import { Layout } from './components/layout'
 import { getConfig } from './config'
 
@@ -25,7 +25,7 @@ export const Application = () => {
 								</DevBar>
 							)}
 						</Toaster>
-						<FeedbackWidget />
+						<Echo />
 					</>
 				}
 			/>
