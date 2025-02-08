@@ -5,6 +5,7 @@ import { usePageHeight } from '~/hooks/usePageHeight'
 import type { FullEchoConfig } from '~/types'
 import { getContrastColor } from '~/utils'
 import { cleanupConsole, setupConsole } from '~/utils/console'
+import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import { patchEventTarget, unpatchEventTarget } from '~/utils/monkeyPatch'
 import staticStyles from './../styles.css?inline'
 import { DrawingToolbar, LauncherButton, Notification, WelcomeMessage } from './molecules'
@@ -136,6 +137,21 @@ const EchoRoot: Component<{
 		cleanupConsole()
 		unpatchEventTarget()
 	})
+
+	registerWindowEventListener({
+		event: 'popstate',
+		callback: () => store.methods.handleUrlChange(),
+	})
+	registerMutationObserver({
+		target: document.documentElement,
+		options: {
+			childList: true,
+			subtree: true,
+		},
+		callback: () => store.methods.handleUrlChange(),
+	})
+
+	onCleanup
 
 	return (
 		<div class="echo-root" data-drawing={store.drawing.state.isDrawing}>

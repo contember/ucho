@@ -1,7 +1,6 @@
 import type { EchoConfig, FeedbackPayload, FullEchoConfig } from '~/types'
 import { type Notification } from '~/types'
 import { debounce } from '~/utils/common'
-import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import { clearPageState, getPageKey, getStoredPagesCount, loadPageState, savePageState } from '~/utils/storage'
 import { type DrawingStore, createDrawingStore } from './drawingStore'
 import { type FeedbackStore, createFeedbackStore } from './feedbackStore'
@@ -14,6 +13,7 @@ export type EchoStore = {
 	methods: {
 		reset: () => void
 		submit: EchoConfig['onSubmit']
+		handleUrlChange: () => void
 	}
 }
 
@@ -61,25 +61,6 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 			})
 		}
 	}
-
-	registerWindowEventListener({
-		event: 'popstate',
-		callback: handleUrlChange,
-	})
-
-	registerMutationObserver({
-		target: document.documentElement,
-		options: {
-			childList: true,
-			subtree: true,
-		},
-		callback: () => {
-			const newPageKey = getPageKey()
-			if (newPageKey !== currentPageKey) {
-				handleUrlChange()
-			}
-		},
-	})
 
 	const reset = () => {
 		clearPageState(currentPageKey)
@@ -133,6 +114,7 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 		widget,
 		methods: {
 			reset,
+			handleUrlChange,
 			submit: async (data: FeedbackPayload) => {
 				widget.setState({ isOpen: false })
 
