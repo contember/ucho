@@ -8,8 +8,24 @@ import { clearPageState, getStoredPages } from '~/utils/storage'
 
 export const StoredFeedback: Component = () => {
 	const store = useEchoStore()
+	let dialogRef: HTMLDivElement | undefined
 	const [pages, setPages] = createSignal(getStoredPages())
 	const [currentPath, setCurrentPath] = createSignal(window.location.pathname)
+
+	const handleEscapeKey = (event: KeyboardEvent) => {
+		if (event.key === 'Escape' && store.widget.state.isStoredFeedbackOpen) {
+			store.widget.setState({ isStoredFeedbackOpen: false })
+		}
+	}
+
+	const handleOutsideClick = (event: MouseEvent) => {
+		if (!store.widget.state.isStoredFeedbackOpen || !dialogRef) return
+
+		const path = event.composedPath()
+		if (!path.includes(dialogRef)) {
+			store.widget.setState({ isStoredFeedbackOpen: false })
+		}
+	}
 
 	const handleStorageChange = () => {
 		const storedPages = getStoredPages()
@@ -42,6 +58,16 @@ export const StoredFeedback: Component = () => {
 		},
 	})
 
+	registerWindowEventListener({
+		event: 'keydown',
+		callback: handleEscapeKey,
+	})
+
+	registerWindowEventListener({
+		event: 'click',
+		callback: handleOutsideClick,
+	})
+
 	const handleNavigate = (path: string, latestQuery?: string) => {
 		const targetUrl = latestQuery ? `${path}${latestQuery}` : path
 		window.location.href = targetUrl
@@ -68,7 +94,7 @@ export const StoredFeedback: Component = () => {
 
 	return (
 		<Show when={store.widget.state.isStoredFeedbackOpen}>
-			<div class="echo-stored-feedback">
+			<div class="echo-stored-feedback" ref={dialogRef}>
 				<div class="echo-stored-feedback-header">
 					<h3>Unsubmitted Feedback</h3>
 					<Button variant="secondary" size="sm" onClick={() => store.widget.setState({ isStoredFeedbackOpen: false })}>

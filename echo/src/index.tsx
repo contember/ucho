@@ -22,7 +22,7 @@ export function initEcho(options: EchoConfig): () => void {
 	try {
 		validateOptions(options)
 
-		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig = {} } = options
+		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig = {}, customInputs = [] } = options
 		const mergedTextConfig = deepMerge(defaultText, textConfig)
 
 		const container = document.createElement('div')
@@ -30,7 +30,7 @@ export function initEcho(options: EchoConfig): () => void {
 		document.body.appendChild(container)
 
 		const dispose = render(
-			() => <Echo position={position} primaryColor={primaryColor} textConfig={mergedTextConfig} onSubmit={onSubmit} />,
+			() => <Echo position={position} primaryColor={primaryColor} textConfig={mergedTextConfig} onSubmit={onSubmit} customInputs={customInputs} />,
 			container,
 		)
 

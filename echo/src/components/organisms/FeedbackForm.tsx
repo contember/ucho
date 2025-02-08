@@ -1,13 +1,14 @@
-import { type Component, createEffect } from 'solid-js'
+import { type Component, For, Show, createEffect } from 'solid-js'
 import { Button } from '~/components/atoms/Button'
+import { TextArea } from '~/components/atoms/inputs/TextArea'
 import { ChevronRightIcon, XIcon } from '~/components/icons'
+import { CustomInput } from '~/components/molecules/CustomInput'
 import { useEchoStore } from '~/contexts/EchoContext'
 import { FeedbackPayload } from '~/types'
 import { collectMetadata } from '~/utils/metadata'
 import { captureScreenshot } from '~/utils/screenshot'
 
 export const FeedbackForm: Component = () => {
-	let textAreaRef: HTMLTextAreaElement | undefined
 	const store = useEchoStore()
 
 	const handleSubmit = async (e: SubmitEvent) => {
@@ -19,6 +20,7 @@ export const FeedbackForm: Component = () => {
 			message: store.feedback.state.message,
 			screenshot: screenshot,
 			metadata: collectMetadata(),
+			customInputs: store.feedback.state.customInputValues,
 		}
 
 		store.methods.submit(data)
@@ -36,7 +38,7 @@ export const FeedbackForm: Component = () => {
 	createEffect(() => {
 		if (store.widget.state.isOpen) {
 			requestAnimationFrame(() => {
-				textAreaRef?.focus()
+				document.querySelector<HTMLTextAreaElement>('.echo-input-field')?.focus()
 			})
 		}
 	})
@@ -62,14 +64,29 @@ export const FeedbackForm: Component = () => {
 					</div>
 				</div>
 
-				<textarea
-					ref={textAreaRef}
-					class="echo-feedback-form-textarea"
+				<TextArea
+					config={{
+						type: 'textarea',
+						id: 'message',
+						placeholder: store.widget.state.text.feedbackForm.placeholder,
+					}}
 					value={store.feedback.state.message}
-					placeholder={store.widget.state.text.feedbackForm.placeholder}
-					onInput={e => store.feedback.setState({ message: e.currentTarget.value })}
-					required
+					onChange={value => store.feedback.setState({ message: value })}
 				/>
+
+				<Show when={store.widget.state.customInputs?.length}>
+					<div class="echo-inputs">
+						<For each={store.widget.state.customInputs}>
+							{input => (
+								<CustomInput
+									config={input}
+									value={store.feedback.state.customInputValues[input.id]}
+									onChange={value => store.feedback.setState({ customInputValues: { ...store.feedback.state.customInputValues, [input.id]: value } })}
+								/>
+							)}
+						</For>
+					</div>
+				</Show>
 
 				<Button type="submit" variant="primary" size="lg" style={{ width: '100%' }}>
 					{store.widget.state.text.feedbackForm.submitButton}

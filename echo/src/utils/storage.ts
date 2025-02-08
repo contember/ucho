@@ -1,9 +1,10 @@
 import { DrawingState, FeedbackState } from '~/stores'
-import type { Shape } from '~/types'
+import type { CustomInputValue, Shape } from '~/types'
 
 type StoredPageState = {
 	feedback: {
 		message: string
+		customInputValues?: Record<string, CustomInputValue>
 	}
 	drawing: {
 		shapes: Shape[]
@@ -46,13 +47,21 @@ export const savePageState = (pageKey: string, state: { feedback: FeedbackState;
 		const existingData = localStorage.getItem(STORAGE_KEY)
 		const allPagesData = existingData ? JSON.parse(existingData) : {}
 
-		if (!state.feedback.message && (!state.drawing.shapes || state.drawing.shapes.length === 0)) {
+		const hasCustomInputs = Object.values(state.feedback.customInputValues).some(value => {
+			if (Array.isArray(value)) {
+				return value.length > 0
+			}
+			return value !== ''
+		})
+
+		if (!state.feedback.message && (!state.drawing.shapes || state.drawing.shapes.length === 0) && !hasCustomInputs) {
 			delete allPagesData[pageKey]
 		} else {
 			const currentQuery = window.location.search || undefined
 			const essentialState: StoredPageState = {
 				feedback: {
 					message: state.feedback.message,
+					customInputValues: state.feedback.customInputValues,
 				},
 				drawing: {
 					shapes: state.drawing.shapes,

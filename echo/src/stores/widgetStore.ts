@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store'
-import type { FullEchoConfig, Notification, TextConfig } from '~/types'
+import type { CustomInputConfig, FullEchoConfig, Notification, Position, TextConfig } from '~/types'
 import { getStoredPagesCount } from '~/utils'
 
 export type WidgetState = {
@@ -14,6 +14,8 @@ export type WidgetState = {
 	isStoredFeedbackOpen: boolean
 	pagesCount: number
 	welcomeMessageIsClosing: boolean
+	position: Position
+	customInputs?: CustomInputConfig[]
 }
 
 export type WidgetStore = {
@@ -38,6 +40,8 @@ export const createWidgetStore = (config: FullEchoConfig, currentPageKey: string
 		isStoredFeedbackOpen: false,
 		pagesCount: getStoredPagesCount(),
 		welcomeMessageIsClosing: false,
+		position: config.position,
+		customInputs: config.customInputs,
 	})
 
 	return {

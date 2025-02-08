@@ -20,7 +20,13 @@ export type EchoStore = {
 export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 	let currentPageKey = getPageKey()
 	const debouncedSave = debounce((pageKey: string, isClearing = false) => {
-		const shouldSaveState = isClearing || feedback.state.message.trim().length > 0 || drawing.state.shapes.length > 0
+		const hasCustomInputs = Object.values(feedback.state.customInputValues).some(value => {
+			if (Array.isArray(value)) {
+				return value.length > 0
+			}
+			return value !== ''
+		})
+		const shouldSaveState = !isClearing || feedback.state.message.trim().length > 0 || drawing.state.shapes.length > 0 || hasCustomInputs
 		if (shouldSaveState) {
 			savePageState(pageKey, {
 				feedback: feedback.state,
@@ -84,6 +90,7 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 				screenshot: undefined,
 				isCapturing: false,
 				isMinimized: false,
+				customInputValues: {},
 			},
 			true,
 		)

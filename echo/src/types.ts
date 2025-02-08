@@ -57,6 +57,7 @@ export type FeedbackPayload = {
 	message: string
 	screenshot?: Screenshot
 	metadata: Metadata
+	customInputs?: Record<string, CustomInputValue>
 }
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
@@ -87,11 +88,54 @@ export type TextConfig = {
 	}
 }
 
+export type CustomInputValue = string | string[]
+
+export type CustomInputBase = {
+	id: string
+	label?: string
+	required?: boolean
+	defaultValue?: CustomInputValue
+}
+
+export type TextInputConfig = CustomInputBase & {
+	type: 'text'
+	placeholder?: string
+}
+
+export type TextAreaConfig = CustomInputBase & {
+	type: 'textarea'
+	placeholder?: string
+}
+
+export type SelectOption = {
+	value: string
+	label: string
+}
+
+export type SelectInputConfig = CustomInputBase & {
+	type: 'select'
+	options: SelectOption[]
+	placeholder?: string
+}
+
+export type RadioInputConfig = CustomInputBase & {
+	type: 'radio'
+	options: SelectOption[]
+}
+
+export type CheckboxInputConfig = CustomInputBase & {
+	type: 'checkbox'
+	options: SelectOption[]
+}
+
+export type CustomInputConfig = TextInputConfig | TextAreaConfig | SelectInputConfig | RadioInputConfig | CheckboxInputConfig
+
 export type EchoConfig = {
 	onSubmit: (data: FeedbackPayload) => Promise<Response | void>
 	position?: Position
 	primaryColor?: `#${string}`
 	textConfig?: Partial<TextConfig>
+	customInputs?: CustomInputConfig[]
 }
 
 export type FullEchoConfig = Required<EchoConfig> & {

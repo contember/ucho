@@ -14,6 +14,7 @@ export const EchoProvider: Component<EchoProviderProps> = props => {
 		onSubmit: props.onSubmit,
 		textConfig: props.textConfig,
 		position: props.position,
+		customInputs: props.customInputs,
 	})
 
 	return <EchoContext.Provider value={store}>{props.children}</EchoContext.Provider>
