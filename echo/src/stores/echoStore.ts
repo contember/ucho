@@ -1,9 +1,9 @@
-import type { EchoConfig, FeedbackPayload, FullEchoConfig } from '~/types'
-import { type Notification } from '~/types'
-import { debounce } from '~/utils/common'
-import { clearPageState, getPageKey, getStoredPagesCount, loadPageState, savePageState } from '~/utils/storage'
-import { type DrawingStore, createDrawingStore } from './drawingStore'
-import { type FeedbackStore, createFeedbackStore } from './feedbackStore'
+import type { DrawingTool, EchoConfig, FeedbackPayload, FullEchoConfig } from '~/types'
+import { createNotificationManager } from '~/utils/notifications'
+import { createDebouncedStateSaver } from '~/utils/stateManagement'
+import { clearPageState, getPageKey, loadPageState } from '~/utils/storage'
+import { type DrawingState, type DrawingStore, createDrawingStore } from './drawingStore'
+import { type FeedbackState, type FeedbackStore, createFeedbackStore } from './feedbackStore'
 import { type WidgetStore, createWidgetStore } from './widgetStore'
 
 export type EchoStore = {
@@ -13,99 +13,88 @@ export type EchoStore = {
 	methods: {
 		reset: () => void
 		submit: EchoConfig['onSubmit']
-		handleUrlChange: () => void
+		handlePageChange: (newPageKey: string) => void
 	}
 }
 
 export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 	let currentPageKey = getPageKey()
-	const debouncedSave = debounce((pageKey: string, isClearing = false) => {
-		const hasCustomInputs = Object.values(feedback.state.customInputValues).some(value => {
-			if (Array.isArray(value)) {
-				return value.length > 0
-			}
-			return value !== ''
-		})
-		const shouldSaveState = !isClearing || feedback.state.message.trim().length > 0 || drawing.state.shapes.length > 0 || hasCustomInputs
-		if (shouldSaveState) {
-			savePageState(pageKey, {
-				feedback: feedback.state,
-				drawing: drawing.state,
-			})
-			widget.setState({ pagesCount: getStoredPagesCount() })
-		}
-	}, 1000)
+
+	const widget = createWidgetStore(config, currentPageKey)
+	const debouncedSave = createDebouncedStateSaver(widget)
+	const notifications = createNotificationManager(widget)
 
 	const feedback = createFeedbackStore(config, currentPageKey, (state, isClearing) => {
-		debouncedSave(currentPageKey, isClearing)
+		debouncedSave(
+			currentPageKey,
+			{
+				feedback: state as FeedbackState,
+				drawing: drawing.state,
+			},
+			isClearing,
+		)
 	})
 
 	const drawing = createDrawingStore(config, currentPageKey, (state, isClearing) => {
-		debouncedSave(currentPageKey, isClearing)
+		debouncedSave(
+			currentPageKey,
+			{
+				feedback: feedback.state,
+				drawing: state as DrawingState,
+			},
+			isClearing,
+		)
 	})
 
-	const widget = createWidgetStore(config, currentPageKey)
+	const handlePageChange = (newPageKey: string) => {
+		currentPageKey = newPageKey
+		const newState = loadPageState(currentPageKey)
 
-	const handleUrlChange = () => {
-		const newPageKey = getPageKey()
-		if (newPageKey !== currentPageKey) {
-			currentPageKey = newPageKey
-			const newState = loadPageState(currentPageKey)
+		feedback.setState({
+			message: newState?.feedback.message || '',
+			customInputValues: newState?.feedback.customInputValues || {},
+		})
 
-			feedback.setState({
-				message: newState?.feedback.message || '',
-			})
-
-			drawing.setState({
-				shapes: newState?.drawing.shapes || [],
-			})
-		}
+		drawing.setState({
+			shapes: newState?.drawing.shapes || [],
+		})
 	}
 
 	const reset = () => {
 		clearPageState(currentPageKey)
 
-		feedback.setState(
-			{
+		const initialState = {
+			feedback: {
 				message: '',
 				screenshot: undefined,
 				isCapturing: false,
 				isMinimized: false,
 				customInputValues: {},
-			},
-			true,
-		)
-
-		drawing.setState(
-			{
+			} as FeedbackState,
+			drawing: {
 				isDrawing: false,
 				currentPoints: [],
 				shapes: [],
 				selectedShapeId: null,
-				selectedTool: 'rectangle',
+				selectedTool: 'rectangle' as DrawingTool,
+				selectedColor: config.primaryColor,
 				showTooltip: true,
 				mousePosition: { x: 0, y: 0 },
 				hasDrawn: false,
-				selectedColor: config.primaryColor,
 				isDragging: false,
 				dragStartPos: null,
 				initialClickPos: null,
 				dragOffset: null,
+				cursor: drawing.state.cursor,
+			} as DrawingState,
+			widget: {
+				isOpen: false,
 			},
-			true,
-		)
+		}
 
-		widget.setState({
-			isOpen: false,
-		})
-	}
-
-	const postSubmit = (result: Notification) => {
-		widget.setState({ notification: { show: true, type: result.type, message: result.message } })
-
-		setTimeout(() => {
-			widget.setState({ notification: { show: false, type: result.type, message: result.message } })
-		}, 5000)
+		feedback.setState(initialState.feedback, true)
+		drawing.setState(initialState.drawing, true)
+		widget.setState(initialState.widget)
 	}
 
 	return {
@@ -114,7 +103,7 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 		widget,
 		methods: {
 			reset,
-			handleUrlChange,
+			handlePageChange,
 			submit: async (data: FeedbackPayload) => {
 				widget.setState({ isOpen: false })
 
@@ -122,15 +111,15 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 					const response = await config.onSubmit(data)
 
 					if (response instanceof Response && !response.ok) {
-						postSubmit({ show: true, type: 'error', message: 'Submission failed' })
+						notifications.show({ type: 'error', message: 'Submission failed' })
 						return response
 					}
 
 					reset()
-					postSubmit({ show: true, type: 'success', message: 'Feedback submitted' })
+					notifications.show({ type: 'success', message: 'Feedback submitted' })
 					return response
 				} catch (error) {
-					postSubmit({ show: true, type: 'error', message: 'Submission failed' })
+					notifications.show({ type: 'error', message: 'Submission failed' })
 				}
 			},
 		},

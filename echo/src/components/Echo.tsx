@@ -2,11 +2,12 @@ import { type Component, JSXElement, createEffect, createSignal, onCleanup, onMo
 import { Portal } from 'solid-js/web'
 import { EchoProvider, useEchoStore } from '~/contexts'
 import { usePageHeight } from '~/hooks/usePageHeight'
+import { usePageStateSync } from '~/hooks/usePageStateSync'
 import type { FullEchoConfig } from '~/types'
 import { getContrastColor } from '~/utils'
 import { cleanupConsole, setupConsole } from '~/utils/console'
-import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
 import { patchEventTarget, unpatchEventTarget } from '~/utils/monkeyPatch'
+import { getPageKey } from '~/utils/storage'
 import staticStyles from './../styles.css?inline'
 import { DrawingToolbar, LauncherButton, Notification, WelcomeMessage } from './molecules'
 import { DrawingLayer, FeedbackForm } from './organisms'
@@ -117,6 +118,10 @@ const EchoRoot: Component<{
 }> = props => {
 	const store = useEchoStore()
 
+	usePageStateSync({
+		onUrlChange: newPageKey => store.methods.handlePageChange(newPageKey),
+	})
+
 	onMount(() => {
 		setupConsole()
 		patchEventTarget(e => {
@@ -137,21 +142,6 @@ const EchoRoot: Component<{
 		cleanupConsole()
 		unpatchEventTarget()
 	})
-
-	registerWindowEventListener({
-		event: 'popstate',
-		callback: () => store.methods.handleUrlChange(),
-	})
-	registerMutationObserver({
-		target: document.documentElement,
-		options: {
-			childList: true,
-			subtree: true,
-		},
-		callback: () => store.methods.handleUrlChange(),
-	})
-
-	onCleanup
 
 	return (
 		<div class="echo-root" data-drawing={store.drawing.state.isDrawing}>
