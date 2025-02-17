@@ -41,38 +41,38 @@
     --primary-color-lighter: color-mix(in srgb, var(--primary-color) 100%, white 40%);
     --primary-color-lightest: color-mix(in srgb, var(--primary-color) 7%, white 100%);
     --hover-color: color-mix(in srgb, var(--primary-color) 80%, #fff);
-    
+
     /* Shadows */
     --shadow-color-dark: rgba(0, 0, 0, 0.6);
     --shadow-color-light: rgba(255, 255, 255, 0.1);
     --shadow-color-medium: rgba(0, 0, 0, 0.2);
-    
+
     /* Base Shadows */
     --shadow-sm: 0 1px 3px;
     --shadow-md: 0 4px 10px;
     --shadow-lg: 0 10px 20px;
-    
+
     /* Composite Shadows */
     --shadow-black-sm: var(--shadow-sm) rgba(0, 0, 0, 0.5);
     --shadow-black-md: var(--shadow-md) rgba(0, 0, 0, 0.5);
     --shadow-black-lg: var(--shadow-lg) rgba(0, 0, 0, 0.5);
-    
+
     --shadow-black-lightened-sm: var(--shadow-sm) var(--shadow-color-medium);
     --shadow-black-lightened-md: var(--shadow-md) var(--shadow-color-medium);
     --shadow-black-lightened-lg: var(--shadow-lg) var(--shadow-color-medium);
-    
+
     --shadow-primary-sm: var(--shadow-sm) color-mix(in srgb, var(--primary-color) 60%, transparent 80%);
     --shadow-primary-md: var(--shadow-md) color-mix(in srgb, var(--primary-color) 50%, transparent 80%);
     --shadow-primary-lg: var(--shadow-lg) color-mix(in srgb, var(--primary-color) 40%, transparent 80%);
-    
+
     --shadow-primary-lighter-sm: var(--shadow-sm) color-mix(in srgb, var(--primary-color-lighter) 70%, transparent 80%);
     --shadow-primary-lighter-md: var(--shadow-md) color-mix(in srgb, var(--primary-color-lighter) 60%, transparent 80%);
     --shadow-primary-lighter-lg: var(--shadow-lg) color-mix(in srgb, var(--primary-color-lighter) 50%, transparent 80%);
-    
+
     --shadow-primary-lightest-sm: var(--shadow-sm) color-mix(in srgb, var(--primary-color-lightest) 70%, transparent 80%);
     --shadow-primary-lightest-md: var(--shadow-md) color-mix(in srgb, var(--primary-color-lightest) 60%, transparent 80%);
     --shadow-primary-lightest-lg: var(--shadow-lg) color-mix(in srgb, var(--primary-color-lightest) 50%, transparent 80%);
-    
+
     --shadow-combined-sm: var(--shadow-primary-sm), var(--shadow-black-lightened-sm);
     --shadow-combined-md: var(--shadow-primary-md), var(--shadow-black-lightened-md);
     --shadow-combined-lg: var(--shadow-primary-lg), var(--shadow-black-lightened-lg);
@@ -304,7 +304,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    
+
     background: radial-gradient(
         circle at 40% 40%,
         var(--primary-color) 0%,
@@ -315,11 +315,11 @@
     border-radius: var(--radius-full);
     width: 48px;
     height: 48px;
-    
+
     box-shadow: var(--shadow-black-md);
-    
-    transition: all var(--duration-slow) var(--ease-default), 
-                left var(--duration-slower) var(--ease-smooth), 
+
+    transition: all var(--duration-slow) var(--ease-default),
+                left var(--duration-slower) var(--ease-smooth),
                 opacity var(--duration-slow) var(--ease-in-out);
 }
 
@@ -336,7 +336,7 @@
     position: absolute;
     top: calc(-1 * var(--spacing-xs));
     right: calc(-1 * var(--spacing-xs));
-    
+
     background: var(--primary-color-lightest);
     color: var(--primary-color-lighter);
 
@@ -375,9 +375,9 @@
     gap: var(--spacing-lg);
     background: white;
     border-radius: var(--radius-lg);
-    
+
     will-change: transform;
-    
+
     padding: var(--spacing-lg);
 }
 
