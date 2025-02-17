@@ -7,8 +7,8 @@ import { Navigation } from './navigation'
 
 export const Layout = Component(({ children }: PropsWithChildren) => (
 	<IdentityLoader>
-		{/* <LayoutComponent> */}
-		<LayoutBoxedComponent>
+		<LayoutComponent>
+			{/* <LayoutBoxedComponent> */}
 			<Slots.Logo>
 				<Link to="index">
 					<Logo />
@@ -28,7 +28,7 @@ export const Layout = Component(({ children }: PropsWithChildren) => (
 				</p>
 			</Slots.Footer>
 			{children}
-		</LayoutBoxedComponent>
-		{/* </LayoutComponent> */}
+			{/* </LayoutBoxedComponent> */}
+		</LayoutComponent>
 	</IdentityLoader>
 ))

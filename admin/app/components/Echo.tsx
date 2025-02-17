@@ -63,6 +63,16 @@ export const Echo = Component(() => {
 	useEffect(() => {
 		const dispose = initEcho({
 			onSubmit: async (data: FeedbackPayload) => {
+				if (data.screenshot) {
+					// Convert base64 to blob and create URL
+					const response = await fetch(data.screenshot)
+					const blob = await response.blob()
+					const url = URL.createObjectURL(blob)
+					window.open(url, '_blank')
+					// Clean up the URL after opening
+					URL.revokeObjectURL(url)
+				}
+
 				// const response = await fetch('https://clientcare.contember.com/echo/project/echo/task', {
 				// 	method: 'POST',
 				// 	body: JSON.stringify(data),
