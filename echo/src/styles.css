@@ -258,6 +258,7 @@
     z-index: var(--z-launcher);
     bottom: var(--spacing-xl);
     right: var(--spacing-xl);
+    pointer-events: none;
 }
 
 /* Overlay */
