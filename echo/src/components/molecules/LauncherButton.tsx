@@ -2,7 +2,7 @@ import { type Component } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
 import { ContemberIcon } from '~/components/icons'
 import { useEchoStore } from '~/contexts/EchoContext'
-import { getFromStorage } from '~/utils'
+import { getFromStorage, setToStorage } from '~/utils'
 import { StoredFeedback } from './StoredFeedback'
 
 export const LauncherButton: Component = () => {
@@ -23,15 +23,17 @@ export const LauncherButton: Component = () => {
 	}
 
 	const handleEchoLauncherButtonEnter = () => {
-		store.widget.setState({ welcomeMessageIsClosing: true })
+		setIsMinimized(false)
 	}
 
 	const handleEchoLauncherButtonLeave = () => {
-		store.widget.setState({ welcomeMessageIsClosing: true })
+		resetHideTimeout()
 	}
 
 	const handleClick = () => {
-		store.widget.setState({ isOpen: true })
+		store.widget.setState({ isOpen: !store.widget.state.isOpen })
+		store.widget.setState({ welcomeMessageIsClosing: true })
+		setToStorage('welcome_message_shown', true)
 	}
 
 	createEffect(() => {
@@ -44,9 +46,10 @@ export const LauncherButton: Component = () => {
 		}
 	})
 
-	const handleCountClick = (e: MouseEvent | KeyboardEvent) => {
+	const handleCountClick = (e: MouseEvent) => {
 		e.stopPropagation()
-		store.widget.setState({ isStoredFeedbackOpen: true })
+		store.widget.setState({ isStoredFeedbackOpen: !store.widget.state.isStoredFeedbackOpen })
+		setIsMinimized(false)
 	}
 
 	return (
@@ -72,7 +75,6 @@ export const LauncherButton: Component = () => {
 						role="button"
 						aria-label={`View ${store.widget.state.pagesCount} stored feedback items`}
 						tabindex="0"
-						onKeyDown={e => e.key === 'Enter' && handleCountClick(e)}
 					>
 						{store.widget.state.pagesCount}
 					</span>
