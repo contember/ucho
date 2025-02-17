@@ -44,6 +44,10 @@ const RectangleShape: Component<ShapeProps & { isSelected: boolean }> = props =>
 				stroke-dasharray={props.isSelected ? '5,5' : 'none'}
 				cursor={props.isSelected ? 'move' : 'pointer'}
 				onClick={() => props.onShapeClick?.(props.id)}
+				role="img"
+				aria-label={`Rectangle shape ${props.isSelected ? '(selected)' : ''}`}
+				tabindex={props.onShapeClick ? 0 : -1}
+				onKeyDown={e => e.key === 'Enter' && props.onShapeClick?.(props.id)}
 			/>
 		</Show>
 	)
@@ -66,6 +70,10 @@ const PathShape: Component<ShapeProps & { isSelected: boolean }> = props => {
 				opacity={props.isSelected ? toolConfig.path.opacity.selected : toolConfig.path.opacity.default}
 				cursor={props.isSelected ? 'move' : 'pointer'}
 				onClick={() => props.onShapeClick?.(props.id)}
+				role="img"
+				aria-label={`Freehand shape ${props.isSelected ? '(selected)' : ''}`}
+				tabindex={props.onShapeClick ? 0 : -1}
+				onKeyDown={e => e.key === 'Enter' && props.onShapeClick?.(props.id)}
 			/>
 		</Show>
 	)

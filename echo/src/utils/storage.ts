@@ -13,10 +13,16 @@ type StoredPageState = {
 }
 
 const STORAGE_PREFIX = 'echo_'
-const STORAGE_KEY = 'echo_page_state'
+const PAGES_KEY = 'echo-pages'
+
+export const formatPagePath = (path: string | undefined): string => {
+	if (!path || path === '/') return '/'
+	const parts = path.split('/')
+	return parts.length <= 4 ? path : `/${parts[1]}/.../${parts[parts.length - 1]}`
+}
 
 export const dispatchStorageChange = () => {
-	window.dispatchEvent(new CustomEvent('echo-storage-change'))
+	window.dispatchEvent(new Event('echo-storage-change'))
 }
 
 export const getStorageKey = (key: string): string => `${STORAGE_PREFIX}${key}`
@@ -39,94 +45,78 @@ export const setToStorage = <T>(key: string, value: T): void => {
 }
 
 export const getPageKey = () => {
-	return window.location.pathname
+	const pathname = window.location.pathname || '/'
+	const search = window.location.search
+	return `${pathname}${search}`
 }
 
 export const savePageState = (pageKey: string, state: { feedback: FeedbackState; drawing: DrawingState }) => {
 	try {
-		const existingData = localStorage.getItem(STORAGE_KEY)
-		const allPagesData = existingData ? JSON.parse(existingData) : {}
+		if (!state.feedback.hasUserInteracted && state.drawing.shapes.length < 1) return
 
-		const hasCustomInputs = Object.values(state.feedback.customInputValues).some(value => {
-			if (Array.isArray(value)) {
-				return value.length > 0
-			}
-			return value !== ''
-		})
+		const feedbackToSave = {
+			message: state.feedback.message,
+			customInputValues: state.feedback.customInputValues,
+		}
 
-		if (!state.feedback.message && (!state.drawing.shapes || state.drawing.shapes.length === 0) && !hasCustomInputs) {
-			delete allPagesData[pageKey]
-		} else {
-			const currentQuery = window.location.search || undefined
-			const essentialState: StoredPageState = {
-				feedback: {
-					message: state.feedback.message,
-					customInputValues: state.feedback.customInputValues,
-				},
+		const pages = getFromStorage<Record<string, StoredPageState>>(PAGES_KEY, {})
+		const formattedPath = formatPagePath(pageKey)
+
+		if (feedbackToSave || state.drawing.shapes.length > 0) {
+			pages[formattedPath] = {
+				...(pages[formattedPath] || {}),
+				...(feedbackToSave ? { feedback: feedbackToSave } : {}),
 				drawing: {
 					shapes: state.drawing.shapes,
 				},
-				latestQuery: currentQuery,
 			}
-			allPagesData[pageKey] = essentialState
+		} else {
+			delete pages[formattedPath]
 		}
 
-		localStorage.setItem(STORAGE_KEY, JSON.stringify(allPagesData))
+		setToStorage(PAGES_KEY, pages)
 		dispatchStorageChange()
 	} catch (error) {
-		console.error('Failed to save page state:', error)
+		console.warn('Failed to save page state:', error)
 	}
 }
 
-export const loadPageState = (pageKey: string): StoredPageState | null => {
+export const loadPageState = (pageKey: string): StoredPageState | undefined => {
 	try {
-		const existingData = localStorage.getItem(STORAGE_KEY)
-		if (!existingData) return null
-
-		const allPagesData = JSON.parse(existingData)
-		return allPagesData[pageKey] || null
+		return getFromStorage<Record<string, StoredPageState>>(PAGES_KEY, {})[pageKey]
 	} catch (error) {
 		console.error('Failed to load page state:', error)
-		return null
+		return undefined
 	}
 }
 
 export const clearPageState = (pageKey: string) => {
 	try {
-		const existingData = localStorage.getItem(STORAGE_KEY)
-		if (!existingData) return
-
-		const allPagesData = JSON.parse(existingData)
+		const allPagesData = getFromStorage<Record<string, StoredPageState>>(PAGES_KEY, {})
 		delete allPagesData[pageKey]
-		localStorage.setItem(STORAGE_KEY, JSON.stringify(allPagesData))
+		setToStorage(PAGES_KEY, allPagesData)
 		dispatchStorageChange()
 	} catch (error) {
 		console.error('Failed to clear page state:', error)
 	}
 }
 
-export const getStoredPagesCount = (): number => {
+export const getStoredPagesCount = () => {
 	try {
-		const existingData = localStorage.getItem(STORAGE_KEY)
-		if (!existingData) return 0
-
-		const allPagesData = JSON.parse(existingData)
-		return Object.keys(allPagesData).length
+		const data = getFromStorage<Record<string, StoredPageState>>(PAGES_KEY, {})
+		return Object.keys(data).length
 	} catch (error) {
 		console.error('Failed to get stored pages count:', error)
 		return 0
 	}
 }
 
-export const getStoredPages = (): { path: string; state: StoredPageState }[] => {
+export const getStoredPages = () => {
 	try {
-		const existingData = localStorage.getItem(STORAGE_KEY)
-		if (!existingData) return []
-
-		const allPagesData = JSON.parse(existingData)
+		const allPagesData = getFromStorage<Record<string, StoredPageState>>(PAGES_KEY, {})
 		return Object.entries(allPagesData).map(([path, state]) => ({
-			path,
-			state: state as StoredPageState,
+			path: formatPagePath(path),
+			state,
 		}))
 	} catch (error) {
 		console.error('Failed to get stored pages:', error)

@@ -1,39 +1,27 @@
 import html2canvas from 'html2canvas'
 import type { Screenshot } from '~/types'
 
-const createCanvas = (width: number, height: number): HTMLCanvasElement => {
-	const canvas = document.createElement('canvas')
-	canvas.width = width
-	canvas.height = height
-	return canvas
-}
-
 const shouldIgnoreElement = (element: Element): boolean => {
 	return element.hasAttribute('data-hide-when-drawing')
 }
 
 export const captureScreenshot = async (): Promise<Screenshot | undefined> => {
 	try {
-		const screenshot = await html2canvas(document.body, {
-			backgroundColor: null,
+		const style = document.createElement('style')
+		document.head.appendChild(style)
+		style.sheet?.insertRule('body > div:last-child img { display: inline-block; }')
+
+		const canvas = await html2canvas(document.body, {
 			logging: false,
 			useCORS: true,
-			scale: 1,
+			scale: window.devicePixelRatio,
 			allowTaint: true,
-			foreignObjectRendering: true,
-			ignoreElements: shouldIgnoreElement,
+			ignoreElements: element => shouldIgnoreElement(element),
 		})
 
-		const canvas = createCanvas(screenshot.width, screenshot.height)
-		const ctx = canvas.getContext('2d')
+		style.remove()
 
-		if (!ctx) {
-			throw new Error('Failed to get canvas context')
-		}
-
-		ctx.drawImage(screenshot, 0, 0)
-
-		return canvas.toDataURL() as Screenshot
+		return canvas.toDataURL('image/png') as Screenshot
 	} catch (error) {
 		console.error('Failed to capture screenshot:', error)
 		return undefined

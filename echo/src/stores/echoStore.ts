@@ -1,9 +1,9 @@
-import type { DrawingTool, EchoConfig, FeedbackPayload, FullEchoConfig } from '~/types'
+import type { DrawingTool, EchoConfig, FullEchoConfig } from '~/types'
 import { createNotificationManager } from '~/utils/notifications'
 import { createDebouncedStateSaver } from '~/utils/stateManagement'
 import { clearPageState, getPageKey, loadPageState } from '~/utils/storage'
-import { type DrawingState, type DrawingStore, createDrawingStore } from './drawingStore'
-import { type FeedbackState, type FeedbackStore, createFeedbackStore } from './feedbackStore'
+import { type DrawingStore, createDrawingStore } from './drawingStore'
+import { type FeedbackStore, createFeedbackStore } from './feedbackStore'
 import { type WidgetStore, createWidgetStore } from './widgetStore'
 
 export type EchoStore = {
@@ -17,6 +17,18 @@ export type EchoStore = {
 	}
 }
 
+const getDefaultCustomValues = (config: FullEchoConfig) => {
+	return (
+		config.customInputs?.reduce(
+			(acc, input) => {
+				acc[input.id] = input.defaultValue ?? (input.type === 'checkbox' ? [] : '')
+				return acc
+			},
+			{} as Record<string, any>,
+		) || {}
+	)
+}
+
 export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 	let currentPageKey = getPageKey()
 
@@ -24,23 +36,28 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 	const debouncedSave = createDebouncedStateSaver(widget)
 	const notifications = createNotificationManager(widget)
 
-	const feedback = createFeedbackStore(config, currentPageKey, (state, isClearing) => {
-		debouncedSave(
-			currentPageKey,
-			{
-				feedback: state as FeedbackState,
-				drawing: drawing.state,
-			},
-			isClearing,
-		)
-	})
+	const feedback = createFeedbackStore(
+		config,
+		currentPageKey,
+		(state, isClearing) => {
+			debouncedSave(
+				currentPageKey,
+				{
+					feedback: { ...feedback.state, ...state },
+					drawing: drawing.state,
+				},
+				isClearing,
+			)
+		},
+		config.customInputs,
+	)
 
 	const drawing = createDrawingStore(config, currentPageKey, (state, isClearing) => {
 		debouncedSave(
 			currentPageKey,
 			{
 				feedback: feedback.state,
-				drawing: state as DrawingState,
+				drawing: { ...drawing.state, ...state },
 			},
 			isClearing,
 		)
@@ -50,9 +67,15 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 		currentPageKey = newPageKey
 		const newState = loadPageState(currentPageKey)
 
+		const customInputValues = {
+			...getDefaultCustomValues(config),
+			...newState?.feedback.customInputValues,
+		}
+
 		feedback.setState({
 			message: newState?.feedback.message || '',
-			customInputValues: newState?.feedback.customInputValues || {},
+			customInputValues,
+			hasUserInteracted: false,
 		})
 
 		drawing.setState({
@@ -69,8 +92,9 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 				screenshot: undefined,
 				isCapturing: false,
 				isMinimized: false,
-				customInputValues: {},
-			} as FeedbackState,
+				hasUserInteracted: false,
+				customInputValues: getDefaultCustomValues(config),
+			},
 			drawing: {
 				isDrawing: false,
 				currentPoints: [],
@@ -86,7 +110,7 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 				initialClickPos: null,
 				dragOffset: null,
 				cursor: drawing.state.cursor,
-			} as DrawingState,
+			},
 			widget: {
 				isOpen: false,
 			},
@@ -104,7 +128,7 @@ export const createEchoStore = (config: FullEchoConfig): EchoStore => {
 		methods: {
 			reset,
 			handlePageChange,
-			submit: async (data: FeedbackPayload) => {
+			submit: async data => {
 				widget.setState({ isOpen: false })
 
 				try {

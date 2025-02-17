@@ -44,38 +44,56 @@ export const FeedbackForm: Component = () => {
 	})
 
 	return (
-		<div
+		<section
 			class="echo-feedback"
 			data-minimized={store.feedback.state.isMinimized}
 			data-hide-when-drawing="true"
 			onClick={() => store.feedback.state.isMinimized && maximize()}
 			style={{ cursor: store.feedback.state.isMinimized ? 'pointer' : 'default' }}
+			role="dialog"
+			aria-label="Feedback Form"
+			aria-expanded={!store.feedback.state.isMinimized}
 		>
-			<form class="echo-feedback-content" onSubmit={handleSubmit}>
-				<div class="echo-feedback-header">
-					<h3 class="echo-feedback-title">{store.widget.state.text.feedbackForm.title}</h3>
-					<div class="echo-feedback-header-actions">
-						<Button type="button" title="Hide form" variant="secondary" size="sm" onClick={minimize}>
+			<form class="echo-feedback-content" onSubmit={handleSubmit} aria-label="Submit Feedback">
+				<header class="echo-feedback-header">
+					<h3 class="echo-feedback-title" id="feedback-form-title">
+						{store.widget.state.text.feedbackForm.title}
+					</h3>
+					<div class="echo-feedback-header-actions" role="toolbar" aria-label="Form controls">
+						<Button type="button" title="Hide form" variant="secondary" size="sm" onClick={minimize} aria-label="Minimize feedback form">
 							<ChevronRightIcon size={20} />
 						</Button>
-						<Button type="button" title="Close form" variant="secondary" size="sm" onClick={() => store.widget.setState({ isOpen: false })}>
+						<Button
+							type="button"
+							title="Close form"
+							variant="secondary"
+							size="sm"
+							onClick={() => store.widget.setState({ isOpen: false })}
+							aria-label="Close feedback form"
+						>
 							<XIcon size={20} />
 						</Button>
 					</div>
-				</div>
+				</header>
 
-				<TextArea
-					config={{
-						type: 'textarea',
-						id: 'message',
-						placeholder: store.widget.state.text.feedbackForm.placeholder,
-					}}
-					value={store.feedback.state.message}
-					onChange={value => store.feedback.setState({ message: value })}
-				/>
+				<fieldset class="echo-input-options">
+					<legend class="visually-hidden">Feedback Message</legend>
+					<TextArea
+						config={{
+							type: 'textarea',
+							id: 'message',
+							placeholder: store.widget.state.text.feedbackForm.placeholder,
+							label: 'Feedback Message',
+							required: true,
+						}}
+						value={store.feedback.state.message}
+						onChange={value => store.feedback.setState({ message: value })}
+					/>
+				</fieldset>
 
 				<Show when={store.widget.state.customInputs?.length}>
-					<div class="echo-inputs">
+					<fieldset class="echo-input-options">
+						<legend class="visually-hidden">Additional Information</legend>
 						<For each={store.widget.state.customInputs}>
 							{input => (
 								<CustomInput
@@ -85,13 +103,13 @@ export const FeedbackForm: Component = () => {
 								/>
 							)}
 						</For>
-					</div>
+					</fieldset>
 				</Show>
 
-				<Button type="submit" variant="primary" size="lg" style={{ width: '100%' }}>
+				<Button type="submit" variant="primary" size="lg" style={{ width: '100%' }} aria-label="Submit feedback">
 					{store.widget.state.text.feedbackForm.submitButton}
 				</Button>
 			</form>
-		</div>
+		</section>
 	)
 }

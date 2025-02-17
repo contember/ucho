@@ -76,6 +76,7 @@ export const createDrawingStore = (
 			newState.cursor = computeCursor(tool, color)
 		}
 		setState(newState)
+		/* TODO: restrict changes (cursor movement, etc) from triggering onStateChange */
 		onStateChange?.(newState, isClearing)
 	}
 

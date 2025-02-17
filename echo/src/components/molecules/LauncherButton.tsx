@@ -1,8 +1,8 @@
-import type { Component } from 'solid-js'
+import { type Component } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
-import { ContemberIcon } from '~/components/icons/ContemberIcon'
-import { useEchoStore } from '~/contexts'
-import { getFromStorage, setToStorage } from '~/utils'
+import { ContemberIcon } from '~/components/icons'
+import { useEchoStore } from '~/contexts/EchoContext'
+import { getFromStorage } from '~/utils'
 import { StoredFeedback } from './StoredFeedback'
 
 export const LauncherButton: Component = () => {
@@ -23,17 +23,15 @@ export const LauncherButton: Component = () => {
 	}
 
 	const handleEchoLauncherButtonEnter = () => {
-		setIsMinimized(false)
+		store.widget.setState({ welcomeMessageIsClosing: true })
 	}
 
 	const handleEchoLauncherButtonLeave = () => {
-		resetHideTimeout()
+		store.widget.setState({ welcomeMessageIsClosing: true })
 	}
 
 	const handleClick = () => {
-		store.widget.setState({ isOpen: !store.widget.state.isOpen })
-		store.widget.setState({ welcomeMessageIsClosing: true })
-		setToStorage('welcome_message_shown', true)
+		store.widget.setState({ isOpen: true })
 	}
 
 	createEffect(() => {
@@ -46,10 +44,9 @@ export const LauncherButton: Component = () => {
 		}
 	})
 
-	const handleCountClick = (e: MouseEvent) => {
+	const handleCountClick = (e: MouseEvent | KeyboardEvent) => {
 		e.stopPropagation()
-		store.widget.setState({ isStoredFeedbackOpen: !store.widget.state.isStoredFeedbackOpen })
-		setIsMinimized(false)
+		store.widget.setState({ isStoredFeedbackOpen: true })
 	}
 
 	return (
@@ -61,12 +58,22 @@ export const LauncherButton: Component = () => {
 				onPointerEnter={handleEchoLauncherButtonEnter}
 				onPointerLeave={handleEchoLauncherButtonLeave}
 				style={{
-					transform: `translateX(${isMinimized() ? '45px' : '0'})`
+					transform: `translateX(${isMinimized() ? '45px' : '0'})`,
 				}}
+				aria-label="Open feedback form"
+				aria-expanded={store.widget.state.isOpen}
+				role="button"
 			>
-				<ContemberIcon stroke="white" fill="#ffffff" />
+				<ContemberIcon stroke="white" fill="#ffffff" aria-hidden="true" />
 				{store.widget.state.pagesCount > 0 && (
-					<span class="echo-launcher-button-count" onClick={handleCountClick}>
+					<span
+						class="echo-launcher-button-count"
+						onClick={handleCountClick}
+						role="button"
+						aria-label={`View ${store.widget.state.pagesCount} stored feedback items`}
+						tabindex="0"
+						onKeyDown={e => e.key === 'Enter' && handleCountClick(e)}
+					>
 						{store.widget.state.pagesCount}
 					</span>
 				)}

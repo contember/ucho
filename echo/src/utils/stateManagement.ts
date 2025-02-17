@@ -11,14 +11,7 @@ export type PageState = {
 
 export const createDebouncedStateSaver = (widget: WidgetStore) => {
 	return debounce((pageKey: string, state: PageState, isClearing = false) => {
-		const hasCustomInputs = Object.values(state.feedback.customInputValues).some(value => {
-			if (Array.isArray(value)) {
-				return value.length > 0
-			}
-			return value !== ''
-		})
-
-		const shouldSaveState = !isClearing || state.feedback.message.trim().length > 0 || state.drawing.shapes.length > 0 || hasCustomInputs
+		const shouldSaveState = !isClearing || state.feedback.message.trim().length > 0 || state.drawing.shapes.length > 0
 
 		if (shouldSaveState) {
 			savePageState(pageKey, state)

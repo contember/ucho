@@ -8,6 +8,7 @@ export type FeedbackState = {
 	isCapturing: boolean
 	isMinimized: boolean
 	customInputValues: Record<string, CustomInputValue>
+	hasUserInteracted: boolean
 }
 
 export type FeedbackStore = {
@@ -43,11 +44,20 @@ export const createFeedbackStore = (
 		isCapturing: false,
 		isMinimized: false,
 		customInputValues: initialCustomValues,
+		hasUserInteracted: false,
 	})
 
 	const wrappedSetState = (newState: Partial<FeedbackState>, isClearing = false) => {
+		const isSystemChange = 'isCapturing' in newState || 'isMinimized' in newState || isClearing
+
+		if (!isSystemChange && !state.hasUserInteracted) {
+			setState({ hasUserInteracted: true })
+		}
+
 		setState(newState)
-		onStateChange?.(newState, isClearing)
+		if (state.hasUserInteracted || isSystemChange) {
+			onStateChange?.(newState, isClearing)
+		}
 	}
 
 	return {

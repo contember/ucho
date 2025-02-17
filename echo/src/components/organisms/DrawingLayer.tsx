@@ -30,6 +30,8 @@ export const DrawingLayer: Component = () => {
 			style={{
 				cursor: store.drawing.state.cursor,
 			}}
+			role="application"
+			aria-label="Drawing Canvas"
 		>
 			<DrawingTooltip />
 			<ShapeActions />
@@ -39,6 +41,8 @@ export const DrawingLayer: Component = () => {
 				height="100%"
 				class="echo-drawing-layer"
 				preserveAspectRatio="none"
+				role="img"
+				aria-label="Drawing Area"
 				onMouseDown={e => {
 					store.drawing.methods.handleStart(e)
 					store.drawing.setState({ showTooltip: false, hasDrawn: true })
@@ -72,6 +76,7 @@ export const DrawingLayer: Component = () => {
 					fill="rgba(33, 43, 55, 1)"
 					fill-opacity="0.2"
 					fill-rule="evenodd"
+					aria-hidden="true"
 				/>
 
 				{/* already drawn shapes */}

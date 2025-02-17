@@ -8,11 +8,15 @@ type InputWrapperProps = {
 
 export const InputWrapper: Component<InputWrapperProps> = props => {
 	return (
-		<div class="echo-input">
+		<div class="echo-input" role="group">
 			{props.label && (
 				<label class="echo-input-label">
-					{props.label}
-					{props.required && <span class="echo-input-required">*</span>}
+					<span>{props.label}</span>
+					{props.required && (
+						<span class="echo-input-required" aria-label="Required field">
+							*
+						</span>
+					)}
 				</label>
 			)}
 			{props.children}
