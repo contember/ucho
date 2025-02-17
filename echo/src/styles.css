@@ -320,8 +320,10 @@
     box-shadow: var(--shadow-black-md);
 
     transition: all var(--duration-slow) var(--ease-default),
-                left var(--duration-slower) var(--ease-smooth),
+                transform var(--duration-slower) var(--ease-smooth),
                 opacity var(--duration-slow) var(--ease-in-out);
+
+    will-change: transform;
 }
 
 .echo-launcher-button:hover {

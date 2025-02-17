@@ -61,7 +61,7 @@ export const LauncherButton: Component = () => {
 				onPointerEnter={handleEchoLauncherButtonEnter}
 				onPointerLeave={handleEchoLauncherButtonLeave}
 				style={{
-					left: isMinimized() ? '45px' : '0',
+					transform: `translateX(${isMinimized() ? '45px' : '0'})`
 				}}
 			>
 				<ContemberIcon stroke="white" fill="#ffffff" />
