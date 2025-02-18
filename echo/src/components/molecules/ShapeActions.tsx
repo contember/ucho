@@ -74,8 +74,9 @@ export const ShapeActions: Component = () => {
 			data-hide-when-drawing="true"
 			hidden={!position()}
 			style={{
-				left: position() ? `${position()?.x}px` : '0',
-				top: position() ? `${position()?.y}px` : '0',
+				top: 0,
+				left: 0,
+				transform: `translate(calc(${position()?.x}px - 50%), calc(${position()?.y}px - 125%))`,
 			}}
 		>
 			<Button onClick={handleDelete} size="sm" variant="secondary" title="Delete shape">
