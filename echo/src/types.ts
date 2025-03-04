@@ -95,6 +95,8 @@ export type CustomInputBase = {
 	label?: string
 	required?: boolean
 	defaultValue?: CustomInputValue
+	disabled?: boolean
+	autoFocus?: boolean
 }
 
 export type TextInputConfig = CustomInputBase & {
