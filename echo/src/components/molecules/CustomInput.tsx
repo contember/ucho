@@ -25,7 +25,7 @@ export const CustomInput: Component<CustomInputProps> = props => {
 		<Show when={props.config.type} keyed fallback={<div class="echo-input-error">Invalid input type</div>}>
 			<Switch fallback={<div class="echo-input-error">Unsupported input type: {props.config.type}</div>}>
 				<Match when={props.config.type === 'text'}>
-					<TextInput config={props.config as TextInputConfig} value={props.value as string} onChange={props.onChange} />
+					<TextInput {...props} value={props.value as string} config={props.config as TextInputConfig} />
 				</Match>
 				<Match when={props.config.type === 'textarea'}>
 					<TextArea config={props.config as TextAreaConfig} value={props.value as string} onChange={props.onChange} />

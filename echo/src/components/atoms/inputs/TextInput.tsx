@@ -20,6 +20,7 @@ export const TextInput: Component<TextInputProps> = props => {
 				value={props.value === undefined ? '' : props.value}
 				placeholder={props.config.placeholder}
 				required={props.config.required}
+				disabled={props.config.disabled}
 				onInput={handleTextChange}
 			/>
 		</InputWrapper>
