@@ -49,15 +49,6 @@ const EchoStyles: Component<{ primaryColor: string }> = props => {
 
 const EchoInterface: Component = () => {
 	const store = useEchoStore()
-	let dialogRef: HTMLDialogElement | undefined
-
-	createEffect(() => {
-		if (dialogRef && store.widget.state.isOpen) {
-			dialogRef.showModal()
-		} else {
-			dialogRef?.close()
-		}
-	})
 
 	return (
 		<>
