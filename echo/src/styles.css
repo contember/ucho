@@ -36,6 +36,7 @@
     --border-color: rgba(0, 0, 0, 0.1);
     --border-color-light: rgba(0, 0, 0, 0.05);
     --border-color-medium: rgba(0, 0, 0, 0.08);
+    --background-color: #fff;
 
     /* Color Mixins */
     --primary-color-lighter: color-mix(in srgb, var(--primary-color) 100%, white 40%);
@@ -338,7 +339,7 @@
 .echo-launcher-button-count {
     position: absolute;
     top: calc(-1 * var(--spacing-xs));
-    right: calc(-1 * var(--spacing-xs));
+    left: calc(-1 * var(--spacing-xs));
 
     background: var(--primary-color-lightest);
     color: var(--primary-color-lighter);
@@ -370,18 +371,20 @@
     position: fixed;
     bottom: var(--spacing-xl);
     right: var(--spacing-xl);
-    width: min(calc(100vw - var(--spacing-2xl)), 24rem);
+    width: min(calc(100vw - var(--spacing-xl) * 2), 24rem);
+    max-height: calc(100vh - var(--spacing-xl) * 2);
     z-index: var(--z-feedback-form);
     box-shadow: var(--shadow-black-lightened-lg);
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
-    background: white;
+    background: var(--background-color);
     border-radius: var(--radius-lg);
+    overflow-y: auto;
 
     will-change: transform;
 
-    padding: var(--spacing-lg);
+    padding: 0 var(--spacing-lg);
 }
 
 .echo-feedback[data-minimized="true"] {
@@ -416,6 +419,22 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: var(--spacing-lg) 0;
+    background-color: var(--background-color);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.echo-feedback-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg) 0;
+    background-color: var(--background-color);
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
 }
 
 .echo-feedback-title {
@@ -1102,6 +1121,15 @@ select.echo-input-field {
 	background-position: right 0.5rem center;
 	padding-right: 2.5rem;
 	cursor: pointer;
+}
+
+.echo-input-options-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xl);
+	border: none;
+	margin: 0;
+	padding: 0;
 }
 
 /* Input Options (Radio/Checkbox groups) */
