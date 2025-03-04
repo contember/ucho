@@ -1,15 +1,16 @@
 import { type EchoConfig, type FeedbackPayload, initEcho } from '@contember/echo'
-import { Component } from '@contember/interface'
-import { useEffect } from 'react'
+import { useIdentity } from '@contember/interface'
+import { useEffect, useMemo } from 'react'
 
-const customInputs: EchoConfig['customInputs'] = [
+const getCustomInputs = (userEmail: string | undefined): EchoConfig['customInputs'] => [
 	{
-		id: 'name',
+		id: 'email',
 		type: 'text',
-		label: 'Name',
+		label: 'Email',
 		required: false,
-		placeholder: 'Enter your name',
-		defaultValue: '',
+		placeholder: 'Your email address',
+		defaultValue: userEmail,
+		disabled: Boolean(userEmail),
 	},
 	{
 		id: 'category',
@@ -59,31 +60,64 @@ const customInputs: EchoConfig['customInputs'] = [
 	},
 ]
 
-export const Echo = Component(() => {
+// Handle feedback submission
+const handleSubmit = async (projectSlug: string, data: FeedbackPayload) => {
+	try {
+		if (data.screenshot) {
+			// Convert base64 to blob and create URL
+			const response = await fetch(data.screenshot)
+			const blob = await response.blob()
+			const url = URL.createObjectURL(blob)
+			window.open(url, '_blank')
+			// Clean up the URL after opening
+			URL.revokeObjectURL(url)
+		}
+
+		// Uncomment this to enable actual submission
+		// const response = await fetch(`https://clientcare.contember.com/echo/project/${projectSlug}/task`, {
+		// 	method: 'POST',
+		// 	body: JSON.stringify(data),
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 	},
+		// })
+		//
+		// return response
+
+		// Simulate successful submission for now
+		return new Response(null, { status: 200 })
+	} catch (error) {
+		console.error('Failed to submit feedback:', error)
+		return new Response(null, { status: 500 })
+	}
+}
+
+type EchoProps = {
+	projectSlug: string
+}
+
+export const Echo = ({ projectSlug }: EchoProps) => {
+	const identity = useIdentity()
+	const userEmail = identity?.person?.email || undefined
+
+	const customInputs = useMemo(() => getCustomInputs(userEmail), [userEmail])
+
 	useEffect(() => {
 		const dispose = initEcho({
-			onSubmit: async (data: FeedbackPayload) => {
-				if (data.screenshot) {
-					// Convert base64 to blob and create URL
-					const response = await fetch(data.screenshot)
-					const blob = await response.blob()
-					const url = URL.createObjectURL(blob)
-					window.open(url, '_blank')
-					// Clean up the URL after opening
-					URL.revokeObjectURL(url)
-				}
-
-				// const response = await fetch('https://clientcare.contember.com/echo/project/echo/task', {
-				// 	method: 'POST',
-				// 	body: JSON.stringify(data),
-				// })
-				// return response
-			},
+			onSubmit: data => handleSubmit(projectSlug, data),
 			customInputs,
+			primaryColor: '#6227dc',
+			position: 'bottom-right',
+			textConfig: {
+				welcomeMessage: {
+					closeAriaLabel: 'Close',
+					text: 'Click this button to share your thoughts or report issues.',
+				},
+			},
 		})
 
 		return dispose
-	}, [])
+	}, [customInputs, projectSlug])
 
 	return null
-})
+}
