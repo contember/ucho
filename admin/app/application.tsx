@@ -25,7 +25,7 @@ export const Application = () => {
 								</DevBar>
 							)}
 						</Toaster>
-						<Echo />
+						<Echo projectSlug="echo" />
 					</>
 				}
 			/>
