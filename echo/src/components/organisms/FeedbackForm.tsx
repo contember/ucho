@@ -76,7 +76,7 @@ export const FeedbackForm: Component = () => {
 					</div>
 				</header>
 
-				<fieldset class="echo-input-options">
+				<fieldset class="echo-input-options-wrapper">
 					<legend class="visually-hidden">Feedback Message</legend>
 					<TextArea
 						config={{
@@ -92,7 +92,7 @@ export const FeedbackForm: Component = () => {
 				</fieldset>
 
 				<Show when={store.widget.state.customInputs?.length}>
-					<fieldset class="echo-input-options">
+					<fieldset class="echo-input-options-wrapper">
 						<legend class="visually-hidden">Additional Information</legend>
 						<For each={store.widget.state.customInputs}>
 							{input => (
@@ -106,9 +106,11 @@ export const FeedbackForm: Component = () => {
 					</fieldset>
 				</Show>
 
-				<Button type="submit" variant="primary" size="lg" style={{ width: '100%' }} aria-label="Submit feedback">
-					{store.widget.state.text.feedbackForm.submitButton}
-				</Button>
+				<footer class="echo-feedback-footer">
+					<Button type="submit" variant="primary" size="lg" style={{ width: '100%' }} aria-label="Submit feedback">
+						{store.widget.state.text.feedbackForm.submitButton}
+					</Button>
+				</footer>
 			</form>
 		</section>
 	)
