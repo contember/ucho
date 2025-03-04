@@ -123,8 +123,24 @@ const EchoRoot: Component<{
 
 	onMount(() => {
 		setupConsole()
+
+		// Define events that shouldn't be affected by the patching
+		const skipEvents = [
+			// Mouse events
+			'click', 'mousedown', 'mouseup', 'mousemove', 'mouseenter', 'mouseleave',
+			// Touch events
+			'touchstart', 'touchmove', 'touchend', 'touchcancel',
+			// Pointer events
+			'pointerdown', 'pointermove', 'pointerup', 'pointercancel',
+			// Focus events
+			'focus', 'blur', 'focusin', 'focusout',
+			// Other common events that shouldn't be intercepted
+			'scroll', 'resize', 'input', 'change', 'submit'
+		]
+
 		patchEventTarget(e => {
-			if (!store.widget.state.isOpen) return
+			// Skip common events that shouldn't be affected
+			if (skipEvents.includes(e.type) || !store.widget.state.isOpen) return
 
 			if (e.type === 'keydown') {
 				const keyEvent = e as KeyboardEvent
