@@ -5,6 +5,8 @@ const originalRemoveEventListener = window.EventTarget.prototype.removeEventList
 
 let isPatched = false
 
+const listenerMap = new WeakMap<EventTarget, Map<EventListenerOrEventListenerObject, EventListener>>()
+
 export const registerOriginalListener = (
 	target: EventTarget,
 	type: string,
@@ -23,8 +25,6 @@ export const removeOriginalListener = (
 	originalRemoveEventListener.call(target, type, listener, options)
 }
 
-const listenerMap = new WeakMap<EventTarget, WeakMap<EventListenerOrEventListenerObject, EventListener>>()
-
 export const patchEventTarget = (callback: (event: Event) => void) => {
 	if (isPatched) {
 		return
@@ -36,12 +36,18 @@ export const patchEventTarget = (callback: (event: Event) => void) => {
 		listener: EventListenerOrEventListenerObject,
 		options?: boolean | AddEventListenerOptions,
 	) {
+		if (!listener) {
+			return originalAddEventListener.call(this, type, listener, options)
+		}
+
 		const wrappedListener = createWrappedListener(listener, callback)
 
 		if (!listenerMap.has(this)) {
-			listenerMap.set(this, new WeakMap())
+			listenerMap.set(this, new Map())
 		}
-		listenerMap.get(this)!.set(listener, wrappedListener as EventListener)
+
+		const targetMap = listenerMap.get(this)!
+		targetMap.set(listener, wrappedListener as EventListener)
 
 		originalAddEventListener.call(this, type, wrappedListener as EventListener, options)
 	}
@@ -51,10 +57,23 @@ export const patchEventTarget = (callback: (event: Event) => void) => {
 		listener: EventListenerOrEventListenerObject,
 		options?: boolean | EventListenerOptions,
 	) {
-		const wrappedListener = listenerMap.get(this)?.get(listener)
+		if (!listener || typeof this !== 'object') {
+			return originalRemoveEventListener.call(this, type, listener, options)
+		}
+
+		const targetMap = listenerMap.get(this)
+		if (!targetMap) {
+			return originalRemoveEventListener.call(this, type, listener, options)
+		}
+
+		const wrappedListener = targetMap.get(listener)
 		if (wrappedListener) {
 			originalRemoveEventListener.call(this, type, wrappedListener, options)
-			listenerMap.get(this)?.delete(listener)
+			targetMap.delete(listener)
+
+			if (targetMap.size === 0) {
+				listenerMap.delete(this)
+			}
 		} else {
 			originalRemoveEventListener.call(this, type, listener, options)
 		}
