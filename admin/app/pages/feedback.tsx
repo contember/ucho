@@ -1,6 +1,6 @@
 import { EntitySubTree, Field, Link, RedirectOnPersist } from '@contember/interface'
 import { FeedbackItemForm } from '~/app/components/forms/feedback-item-form'
-import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '~/lib'
+import { AlertDialog, AlertDialogContent, AlertDialogTrigger, Dialog, DialogContent, DialogTrigger } from '~/lib'
 import { Binding } from '~/lib/binding'
 import { BackButton } from '~/lib/buttons'
 import {
@@ -31,12 +31,20 @@ export const aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa = () => {
 				<EntitySubTree entity="FeedbackItem" isCreating>
 					<AlertDialog>
 						<AlertDialogTrigger>
-							<AnchorButton>Create Feedback</AnchorButton>
+							<AnchorButton>alert Create Feedback</AnchorButton>
 						</AlertDialogTrigger>
 						<AlertDialogContent>
 							<FeedbackItemForm />
 						</AlertDialogContent>
 					</AlertDialog>
+					<Dialog>
+						<DialogTrigger>
+							<AnchorButton>dialog Create Feedback</AnchorButton>
+						</DialogTrigger>
+						<DialogContent>
+							<FeedbackItemForm />
+						</DialogContent>
+					</Dialog>
 				</EntitySubTree>
 				<DefaultDataGrid entities="FeedbackItem" toolbar={<DataGridQueryFilter />}>
 					<DataGridColumn>
