@@ -450,30 +450,6 @@
     margin: calc(-1 * var(--spacing-sm)) calc(-1 * var(--spacing-sm)) calc(-1 * var(--spacing-sm)) 0;
 }
 
-.echo-feedback-form-textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    background-color: white;
-    color: var(--text-medium);
-    font-size: var(--font-sm);
-    transition: all var(--duration-base) var(--ease-default);
-    min-height: 120px;
-    resize: vertical;
-    font-family: inherit;
-}
-
-.echo-feedback-form-textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 15%, transparent);
-}
-
-.echo-feedback-form-textarea::placeholder {
-    color: var(--text-lighter);
-}
-
 /* Drawing States */
 [data-hide-when-drawing="true"] {
     opacity: 1;
@@ -1111,6 +1087,13 @@
 
 .echo-input-field::placeholder {
 	color: var(--text-lighter);
+}
+
+textarea.echo-input-field {
+	resize: vertical;
+	max-width: 100%;
+    max-height: 20rem;
+	box-sizing: border-box;
 }
 
 /* Select Styling */
