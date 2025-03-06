@@ -86,7 +86,7 @@ export const setupConsole = () => {
 	console.warn = createConsoleProxy('warn', originalConsole.warn)
 	console.error = createConsoleProxy('error', originalConsole.error)
 
-	window.addEventListener('error', event => {
+	window.addEventListener('error', (event: ErrorEvent) => {
 		const { message, filename, lineno, colno, error } = event
 		const errorMessage = error?.stack || error?.message || message
 		consoleBuffer.push({
