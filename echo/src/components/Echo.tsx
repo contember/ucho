@@ -118,15 +118,33 @@ const EchoRoot: Component<{
 		// Define events that shouldn't be affected by the patching
 		const skipEvents = [
 			// Mouse events
-			'click', 'mousedown', 'mouseup', 'mousemove', 'mouseenter', 'mouseleave',
+			'click',
+			'mousedown',
+			'mouseup',
+			'mousemove',
+			'mouseenter',
+			'mouseleave',
 			// Touch events
-			'touchstart', 'touchmove', 'touchend', 'touchcancel',
+			'touchstart',
+			'touchmove',
+			'touchend',
+			'touchcancel',
 			// Pointer events
-			'pointerdown', 'pointermove', 'pointerup', 'pointercancel',
+			'pointerdown',
+			'pointermove',
+			'pointerup',
+			'pointercancel',
 			// Focus events
-			'focus', 'blur', 'focusin', 'focusout',
+			'focus',
+			'blur',
+			'focusin',
+			'focusout',
 			// Other common events that shouldn't be intercepted
-			'scroll', 'resize', 'input', 'change', 'submit'
+			'scroll',
+			'resize',
+			'input',
+			'change',
+			'submit',
 		]
 
 		patchEventTarget(e => {
