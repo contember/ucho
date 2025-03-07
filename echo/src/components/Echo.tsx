@@ -6,14 +6,23 @@ import { usePageStateSync } from '~/hooks/usePageStateSync'
 import type { FullEchoConfig } from '~/types'
 import { getContrastColor } from '~/utils'
 import { cleanupConsole, setupConsole } from '~/utils/console'
-import { patchEventTarget, unpatchEventTarget } from '~/utils/monkeyPatch'
+import { isNodeInEchoShadowRoot, patchEventTarget, setShadowRoot, unpatchEventTarget } from '~/utils/monkeyPatch'
 import staticStyles from './../styles.css?inline'
 import { DrawingToolbar, LauncherButton, Notification, WelcomeMessage } from './molecules'
 import { DrawingLayer, FeedbackForm } from './organisms'
 
 export const Echo: Component<FullEchoConfig> = props => {
+	const [shadowRootRef, setShadowRootRef] = createSignal<HTMLElement>()
+
+	createEffect(() => {
+		const root = shadowRootRef()
+		if (root) {
+			setShadowRoot(root.shadowRoot)
+		}
+	})
+
 	return (
-		<Portal useShadow mount={document.body}>
+		<Portal ref={setShadowRootRef} useShadow mount={document.body}>
 			<EchoProvider {...props}>
 				<EchoRoot>
 					<EchoStyles primaryColor={props.primaryColor} />
@@ -103,6 +112,25 @@ const EchoOverlay: Component<{ children: JSXElement }> = props => {
 	)
 }
 
+const handlePatchedEventWhenOpen = (e: Event) => {
+	switch (e.type) {
+		default:
+			e.stopImmediatePropagation()
+			break
+	}
+}
+
+const handlePatchedEventWhenClosed = (e: Event) => {
+	switch (e.type) {
+		case 'dismissableLayer.focusOutside':
+		case 'dismissableLayer.pointerDownOutside':
+			e.stopImmediatePropagation()
+			break
+		default:
+			break
+	}
+}
+
 const EchoRoot: Component<{
 	children: JSXElement
 }> = props => {
@@ -115,50 +143,31 @@ const EchoRoot: Component<{
 	onMount(() => {
 		setupConsole()
 
-		// Define events that shouldn't be affected by the patching
-		const skipEvents = [
-			// Mouse events
-			'click',
-			'mousedown',
-			'mouseup',
-			'mousemove',
-			'mouseenter',
-			'mouseleave',
-			// Touch events
-			'touchstart',
-			'touchmove',
-			'touchend',
-			'touchcancel',
-			// Pointer events
-			'pointerdown',
-			'pointermove',
-			'pointerup',
-			'pointercancel',
-			// Focus events
-			'focus',
-			'blur',
-			'focusin',
-			'focusout',
-			// Other common events that shouldn't be intercepted
-			'scroll',
-			'resize',
-			'input',
-			'change',
-			'submit',
-		]
-
 		patchEventTarget(e => {
-			// Skip common events that shouldn't be affected
-			if (skipEvents.includes(e.type) || !store.widget.state.isOpen) return
-
-			if (e.type === 'keydown') {
-				const keyEvent = e as KeyboardEvent
-				switch (keyEvent.key) {
-					case 'Escape':
-						e.stopImmediatePropagation()
-						break
-				}
+			/* some events are document-wide or window-wide */
+			if (e.target instanceof Document || e.target instanceof Window) {
+				return
 			}
+
+			/* ignore events targeting elements that contain the shadow root */
+			if (e.target instanceof Element && e.target.shadowRoot && isNodeInEchoShadowRoot(e.target.shadowRoot)) {
+				return
+			}
+
+			/* ignore events targeting stuff inside the echo shadow root */
+			if (e.target instanceof Node && isNodeInEchoShadowRoot(e.target)) {
+				return
+			}
+
+			// Process the event based on widget state
+			// if (store.widget.state.isOpen) {
+			// 	console.log('intercepted event', e.type, e.target)
+			// 	handlePatchedEventWhenOpen(e)
+			// } else {
+			// 	if (e.type === 'mousemove' || e.type === 'pointermove') return
+			// 	console.log('intercepted event', e.type)
+			// 	handlePatchedEventWhenClosed(e)
+			// }
 		})
 	})
 

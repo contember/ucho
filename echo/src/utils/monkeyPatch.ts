@@ -4,25 +4,39 @@ const originalAddEventListener = window.EventTarget.prototype.addEventListener
 const originalRemoveEventListener = window.EventTarget.prototype.removeEventListener
 
 let isPatched = false
+let echoShadowRoot: ShadowRoot | null = null
 
 const listenerMap = new WeakMap<EventTarget, Map<EventListenerOrEventListenerObject, EventListener>>()
 
-export const registerOriginalListener = (
-	target: EventTarget,
-	type: string,
-	listener: EventListenerOrEventListenerObject,
-	options?: boolean | AddEventListenerOptions,
-) => {
-	originalAddEventListener.call(target, type, listener, options)
+export const setShadowRoot = (shadowRoot: ShadowRoot | null) => {
+	echoShadowRoot = shadowRoot
 }
 
-export const removeOriginalListener = (
-	target: EventTarget,
-	type: string,
-	listener: EventListenerOrEventListenerObject,
-	options?: boolean | EventListenerOptions,
-) => {
-	originalRemoveEventListener.call(target, type, listener, options)
+export const isNodeInEchoShadowRoot = (node: Node | null): boolean => {
+	if (!echoShadowRoot || !node) {
+		return false
+	}
+
+	if (node === echoShadowRoot) return true
+
+	const rootNode = node.getRootNode()
+	if (rootNode && rootNode.nodeName === '#document') {
+		const topLayer = (rootNode as Document).querySelector('#top-layer')
+		if (topLayer?.contains(node)) {
+			return true
+		}
+	}
+
+	let currentNode: Node | null = node
+	while (currentNode) {
+		if (currentNode.getRootNode() === echoShadowRoot) {
+			return true
+		}
+
+		currentNode = currentNode.parentNode
+	}
+
+	return false
 }
 
 export const patchEventTarget = (callback: (event: Event) => void) => {
@@ -36,7 +50,12 @@ export const patchEventTarget = (callback: (event: Event) => void) => {
 		listener: EventListenerOrEventListenerObject,
 		options?: boolean | AddEventListenerOptions,
 	) {
-		if (!listener) {
+		if (!listener || typeof listener !== 'function') {
+			return originalAddEventListener.call(this, type, listener, options)
+		}
+
+		const shouldWrap = this instanceof Node && !isNodeInEchoShadowRoot(this as Node)
+		if (!shouldWrap) {
 			return originalAddEventListener.call(this, type, listener, options)
 		}
 
@@ -58,6 +77,12 @@ export const patchEventTarget = (callback: (event: Event) => void) => {
 		options?: boolean | EventListenerOptions,
 	) {
 		if (!listener || typeof this !== 'object') {
+			return originalRemoveEventListener.call(this, type, listener, options)
+		}
+
+		const shouldUseOriginal = this instanceof Node && isNodeInEchoShadowRoot(this as Node)
+
+		if (shouldUseOriginal) {
 			return originalRemoveEventListener.call(this, type, listener, options)
 		}
 
@@ -87,4 +112,5 @@ export const unpatchEventTarget = () => {
 	window.EventTarget.prototype.addEventListener = originalAddEventListener
 	window.EventTarget.prototype.removeEventListener = originalRemoveEventListener
 	isPatched = false
+	echoShadowRoot = null
 }

@@ -64,18 +64,18 @@ export function initEcho(options: EchoConfig): () => void {
 		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig = {}, customInputs = [] } = options
 		const mergedTextConfig = deepMerge(defaultText, textConfig)
 
-		const container = document.createElement('div')
-		container.id = 'echo-container'
-		document.body.appendChild(container)
+		const mountPoint = document.createElement('div')
+		document.body.appendChild(mountPoint)
 
 		const dispose = render(
 			() => <Echo position={position} primaryColor={primaryColor} textConfig={mergedTextConfig} onSubmit={onSubmit} customInputs={customInputs} />,
-			container,
+			mountPoint,
 		)
+
+		mountPoint.remove()
 
 		const cleanup = () => {
 			dispose()
-			container.remove()
 			activeInstance = null
 		}
 
