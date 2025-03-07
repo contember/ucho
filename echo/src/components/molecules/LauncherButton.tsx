@@ -30,7 +30,7 @@ export const LauncherButton: Component = () => {
 		resetHideTimeout()
 	}
 
-	const handleClick = () => {
+	const handleClick = (e: MouseEvent) => {
 		store.widget.setState({ isOpen: !store.widget.state.isOpen })
 		store.widget.setState({ welcomeMessageIsClosing: true })
 		setToStorage('welcome_message_shown', true)
