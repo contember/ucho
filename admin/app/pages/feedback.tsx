@@ -38,13 +38,14 @@ export const aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa = () => {
 						</AlertDialogContent>
 					</AlertDialog>
 					<Dialog>
-						<DialogTrigger>
-							<AnchorButton>dialog Create Feedback</AnchorButton>
-						</DialogTrigger>
+						<DialogTrigger>dialog Create Feedback</DialogTrigger>
 						<DialogContent>
 							<FeedbackItemForm />
 						</DialogContent>
 					</Dialog>
+					<div>
+						<FeedbackItemForm />
+					</div>
 				</EntitySubTree>
 				<DefaultDataGrid entities="FeedbackItem" toolbar={<DataGridQueryFilter />}>
 					<DataGridColumn>
