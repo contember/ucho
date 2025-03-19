@@ -1,4 +1,4 @@
-import html2canvas from 'html2canvas'
+import html2canvas from 'html2canvas-pro'
 import type { Screenshot } from '~/types'
 
 const shouldIgnoreElement = (element: Element): boolean => {

@@ -13,11 +13,11 @@ export default defineConfig({
 			fileName: format => `echo.${format}.js`,
 		},
 		rollupOptions: {
-			external: ['solid-js', 'html2canvas'],
+			external: ['solid-js', 'html2canvas-pro'],
 			output: {
 				globals: {
 					'solid-js': 'Solid',
-					html2canvas: 'html2canvas',
+					'html2canvas-pro': 'html2canvas-pro',
 				},
 			},
 		},
