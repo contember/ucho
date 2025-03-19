@@ -112,24 +112,24 @@ const EchoOverlay: Component<{ children: JSXElement }> = props => {
 	)
 }
 
-const handlePatchedEventWhenOpen = (e: Event) => {
-	switch (e.type) {
-		default:
-			e.stopImmediatePropagation()
-			break
-	}
-}
+// const handlePatchedEventWhenOpen = (e: Event) => {
+// 	switch (e.type) {
+// 		default:
+// 			e.stopImmediatePropagation()
+// 			break
+// 	}
+// }
 
-const handlePatchedEventWhenClosed = (e: Event) => {
-	switch (e.type) {
-		case 'dismissableLayer.focusOutside':
-		case 'dismissableLayer.pointerDownOutside':
-			e.stopImmediatePropagation()
-			break
-		default:
-			break
-	}
-}
+// const handlePatchedEventWhenClosed = (e: Event) => {
+// 	switch (e.type) {
+// 		case 'dismissableLayer.focusOutside':
+// 		case 'dismissableLayer.pointerDownOutside':
+// 			e.stopImmediatePropagation()
+// 			break
+// 		default:
+// 			break
+// 	}
+// }
 
 const EchoRoot: Component<{
 	children: JSXElement
