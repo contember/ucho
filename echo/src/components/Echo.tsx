@@ -61,7 +61,14 @@ const EchoInterface: Component = () => {
 
 	return (
 		<>
-			<div class="echo-launcher" data-hidden={store.widget.state.isOpen}>
+			<div
+				class="echo-launcher"
+				style={{
+					...(store.widget.state.position.includes('top') ? { top: 'var(--spacing-xl)' } : { bottom: 'var(--spacing-xl)' }),
+					...(store.widget.state.position.includes('left') ? { left: 'var(--spacing-xl)' } : { right: 'var(--spacing-xl)' }),
+				}}
+				data-hidden={store.widget.state.isOpen}
+			>
 				<LauncherButton />
 				<WelcomeMessage />
 				<Notification />
