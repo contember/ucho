@@ -16,6 +16,7 @@ export type WidgetState = {
 	welcomeMessageIsClosing: boolean
 	position: Position
 	customInputs?: CustomInputConfig[]
+	disableMinimization: boolean
 }
 
 export type WidgetStore = {
@@ -42,6 +43,7 @@ export const createWidgetStore = (config: FullEchoConfig, currentPageKey: string
 		welcomeMessageIsClosing: false,
 		position: config.position,
 		customInputs: config.customInputs,
+		disableMinimization: config.disableMinimization,
 	})
 
 	return {

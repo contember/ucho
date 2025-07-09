@@ -28,6 +28,7 @@ let activeInstance: (() => void) | null = null
  *   },
  *   position: 'bottom-right',
  *   primaryColor: '#6227dc',
+ *   disableMinimization: false, // Optional: disable launcher button minimization
  *   customInputs: [
  *     {
  *       id: 'category',
@@ -48,6 +49,7 @@ let activeInstance: (() => void) | null = null
  * @param {string} [options.primaryColor='#6227dc'] - Primary color for UI elements (must be a valid hex color)
  * @param {Partial<TextConfig>} [options.textConfig] - Custom text configuration for UI elements
  * @param {CustomInputConfig[]} [options.customInputs] - Configuration for custom input fields
+ * @param {boolean} [options.disableMinimization=false] - Whether to disable the launcher button minimization after 4 seconds of inactivity
  *
  * @throws {Error} If initialization fails or invalid options are provided
  * @returns {() => void} Cleanup function that removes the widget when called
@@ -61,14 +63,23 @@ export function initEcho(options: EchoConfig): () => void {
 	try {
 		validateOptions(options)
 
-		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig = {}, customInputs = [] } = options
+		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig = {}, customInputs = [], disableMinimization = false } = options
 		const mergedTextConfig = deepMerge(defaultText, textConfig)
 
 		const mountPoint = document.createElement('div')
 		document.body.appendChild(mountPoint)
 
 		const dispose = render(
-			() => <Echo position={position} primaryColor={primaryColor} textConfig={mergedTextConfig} onSubmit={onSubmit} customInputs={customInputs} />,
+			() => (
+				<Echo
+					position={position}
+					primaryColor={primaryColor}
+					textConfig={mergedTextConfig}
+					onSubmit={onSubmit}
+					customInputs={customInputs}
+					disableMinimization={disableMinimization}
+				/>
+			),
 			mountPoint,
 		)
 

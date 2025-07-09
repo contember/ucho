@@ -15,6 +15,7 @@ export const EchoProvider: Component<EchoProviderProps> = props => {
 		textConfig: props.textConfig,
 		position: props.position,
 		customInputs: props.customInputs,
+		disableMinimization: props.disableMinimization,
 	})
 
 	return <EchoContext.Provider value={store}>{props.children}</EchoContext.Provider>

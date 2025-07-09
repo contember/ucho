@@ -14,6 +14,9 @@ export const LauncherButton: Component = () => {
 		if (minimizeTimeout) {
 			window.clearTimeout(minimizeTimeout)
 		}
+		if (store.widget.state.disableMinimization) {
+			return
+		}
 		minimizeTimeout = window.setTimeout(() => {
 			const hasSeenMessage = getFromStorage('welcome_message_shown', false)
 			if (!store.widget.state.isOpen && !store.widget.state.isStoredFeedbackOpen && hasSeenMessage) {
@@ -39,7 +42,9 @@ export const LauncherButton: Component = () => {
 	createEffect(() => {
 		if (!store.widget.state.isOpen) {
 			setIsMinimized(false)
-			resetHideTimeout()
+			if (!store.widget.state.disableMinimization) {
+				resetHideTimeout()
+			}
 		}
 		if (store.widget.state.isStoredFeedbackOpen) {
 			setIsMinimized(false)

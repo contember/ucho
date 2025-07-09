@@ -138,10 +138,12 @@ export type EchoConfig = {
 	primaryColor?: `#${string}`
 	textConfig?: Partial<TextConfig>
 	customInputs?: CustomInputConfig[]
+	disableMinimization?: boolean
 }
 
 export type FullEchoConfig = Required<EchoConfig> & {
 	textConfig: TextConfig
+	disableMinimization: boolean
 }
 
 export const POSITIONS: Record<Position, { [key: string]: string }> = {
