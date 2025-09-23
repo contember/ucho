@@ -6,7 +6,7 @@ import { usePageStateSync } from '~/hooks/usePageStateSync'
 import type { FullEchoConfig } from '~/types'
 import { getContrastColor } from '~/utils'
 import { cleanupConsole, setupConsole } from '~/utils/console'
-import { isNodeInEchoShadowRoot, patchEventTarget, setShadowRoot, unpatchEventTarget } from '~/utils/monkeyPatch'
+import { setShadowRoot } from '~/utils/monkeyPatch'
 import staticStyles from './../styles.css?inline'
 import { DrawingToolbar, LauncherButton, Notification, WelcomeMessage } from './molecules'
 import { DrawingLayer, FeedbackForm } from './organisms'
@@ -150,37 +150,37 @@ const EchoRoot: Component<{
 	onMount(() => {
 		setupConsole()
 
-		patchEventTarget(e => {
-			/* some events are document-wide or window-wide */
-			if (e.target instanceof Document || e.target instanceof Window) {
-				return
-			}
+		// patchEventTarget(e => {
+		// 	/* some events are document-wide or window-wide */
+		// 	if (e.target instanceof Document || e.target instanceof Window) {
+		// 		return
+		// 	}
 
-			/* ignore events targeting elements that contain the shadow root */
-			if (e.target instanceof Element && e.target.shadowRoot && isNodeInEchoShadowRoot(e.target.shadowRoot)) {
-				return
-			}
+		// 	/* ignore events targeting elements that contain the shadow root */
+		// 	if (e.target instanceof Element && e.target.shadowRoot && isNodeInEchoShadowRoot(e.target.shadowRoot)) {
+		// 		return
+		// 	}
 
-			/* ignore events targeting stuff inside the echo shadow root */
-			if (e.target instanceof Node && isNodeInEchoShadowRoot(e.target)) {
-				return
-			}
+		// 	/* ignore events targeting stuff inside the echo shadow root */
+		// 	if (e.target instanceof Node && isNodeInEchoShadowRoot(e.target)) {
+		// 		return
+		// 	}
 
-			// Process the event based on widget state
-			// if (store.widget.state.isOpen) {
-			// 	console.log('intercepted event', e.type, e.target)
-			// 	handlePatchedEventWhenOpen(e)
-			// } else {
-			// 	if (e.type === 'mousemove' || e.type === 'pointermove') return
-			// 	console.log('intercepted event', e.type)
-			// 	handlePatchedEventWhenClosed(e)
-			// }
-		})
+		// 	// Process the event based on widget state
+		// 	// if (store.widget.state.isOpen) {
+		// 	// 	console.log('intercepted event', e.type, e.target)
+		// 	// 	handlePatchedEventWhenOpen(e)
+		// 	// } else {
+		// 	// 	if (e.type === 'mousemove' || e.type === 'pointermove') return
+		// 	// 	console.log('intercepted event', e.type)
+		// 	// 	handlePatchedEventWhenClosed(e)
+		// 	// }
+		// })
 	})
 
 	onCleanup(() => {
 		cleanupConsole()
-		unpatchEventTarget()
+		// unpatchEventTarget()
 	})
 
 	return (
