@@ -8,9 +8,9 @@ export default defineConfig({
 	build: {
 		lib: {
 			entry: resolve(__dirname, 'src/index.tsx'),
-			name: 'Ucho',
+			name: 'Uchovat',
 			formats: ['es', 'umd'],
-			fileName: format => `ucho.${format}.js`,
+			fileName: format => `uchovat.${format}.js`,
 		},
 		rollupOptions: {
 			external: ['solid-js', 'html2canvas-pro'],
