@@ -9,27 +9,23 @@ A lightweight tool for capturing user feedback with screenshots, annotations, an
 ## Features
 
 - **Screenshot Capture**: Automatically capture the current page state
-- **Drawing Tools**: Annotate screenshots with various drawing tools
-- **Customizable UI**: Configurable colors, position and text
+- **Drawing Tools**: Annotate screenshots with rectangles and freehand paths in multiple colors
+- **Custom Inputs**: Add your own form fields (text, textarea, select, radio, checkbox)
+- **Customizable UI**: Configurable colors, position, and text
 - **Framework Agnostic**: Works with any web application
 - **Easy Integration**: Simple setup with NPM or direct script inclusion
-- **Drawing Features**:
-  - Multiple colors for annotations
-  - WIP: Different shapes and tools
-- **Responsive Design**: WIP: Works seamlessly on desktop and mobile devices
-- **Console tracking**: Captures last 1000 console entries
+- **Rich Metadata**: Captures browser info, network info, location, timezone, and console entries
 
 ## Usage
 
 ### Using as an NPM Package
 
 ```typescript
-import { initUcho } from '@contember/ucho'
+import { init } from '@contember/ucho'
 
-initUcho({
+init({
   onSubmit: async (data) => {
-    console.log('Feedback submitted:', data);
-    // Handle the feedback data (send to server, etc.)
+    console.log('Feedback submitted:', data)
   }
 })
 ```
@@ -38,50 +34,131 @@ initUcho({
 
 ```html
 <script type="module">
-  import { initUcho } from 'https://esm.sh/@contember/ucho'
+  import { init } from 'https://esm.sh/@contember/ucho'
 
-  initUcho({
+  init({
     onSubmit: async (data) => {
       console.log('Feedback submitted:', data)
-      // Handle the feedback data (send to server, etc.)
     }
   })
 </script>
+```
+
+### Using with React
+
+```tsx
+import { init } from '@contember/ucho'
+import { useEffect, useRef } from 'react'
+import type { Config } from '@contember/ucho'
+
+function useUcho(config: Config) {
+  const cleanupRef = useRef<(() => void) | null>(null)
+
+  useEffect(() => {
+    cleanupRef.current = init(config)
+    return () => {
+      cleanupRef.current?.()
+      cleanupRef.current = null
+    }
+  }, [config])
+}
 ```
 
 ## Configuration Options
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
-| `position` | string | No | 'bottom-right' | WIP: Position on the page. Available positions: 'top-left', 'top-center', 'top-right', 'middle-left', 'middle-right', 'bottom-left', 'bottom-center', 'bottom-right' |
-| `primaryColor` | string | No | '#6227dc' | Primary color for UI elements |
-| `textConfig` | object | No | english | Customize all text elements in the interface |
-| `onSubmit` | function | Yes | - | Callback function when feedback is submitted |
+| `onSubmit` | `(data: FeedbackPayload) => Promise<Response \| void>` | Yes | - | Callback function when feedback is submitted. Return a `Response` to enable success/error notifications |
+| `position` | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'` | No | `'bottom-right'` | Widget position on the page |
+| `primaryColor` | `` `#${string}` `` | No | `'#6227dc'` | Primary color for UI elements |
+| `textConfig` | `Partial<TextConfig>` | No | English defaults | Customize all text elements in the interface |
+| `customInputs` | `CustomInputConfig[]` | No | `[]` | Custom input fields added to the feedback form |
+| `disableMinimization` | `boolean` | No | `false` | Disable the launcher button minimization after inactivity |
+
+### Custom Inputs
+
+You can add custom form fields to the feedback form:
+
+```typescript
+init({
+  onSubmit: async (data) => { /* ... */ },
+  customInputs: [
+    {
+      id: 'category',
+      type: 'select',
+      label: 'Category',
+      options: [
+        { value: 'bug', label: 'Bug Report' },
+        { value: 'feature', label: 'Feature Request' },
+      ],
+    },
+    {
+      id: 'mood',
+      type: 'radio',
+      label: 'How are you feeling?',
+      options: [
+        { value: 'happy', label: 'Happy' },
+        { value: 'neutral', label: 'Neutral' },
+        { value: 'frustrated', label: 'Frustrated' },
+      ],
+    },
+  ],
+})
+```
+
+Supported input types: `text`, `textarea`, `select`, `radio`, `checkbox`.
 
 ## Feedback Payload Structure
 
-The `onSubmit` callback receives a data object with the following structure:
+The `onSubmit` callback receives a `FeedbackPayload` object:
 
 ```typescript
-interface FeedbackPayload {
-  comment: string;          // User's written feedback
-  screenshot: string;       // Base64 encoded screenshot
+type FeedbackPayload = {
+  message: string              // User's written feedback
+  screenshot?: string          // Base64 encoded PNG screenshot
+  customInputs?: Record<string, string | string[]>
   metadata: {
-    url: string;            // Current page URL
-    userAgent: string;      // Browser user agent
-    timestamp: number;      // Submission timestamp
+    userAgent: string
     browserInfo: {
-      width: number;            // Width of viewport
-      height: number;           // Height of viewport
-      screenWidth: number;      // Width of device
-      screenHeight: number;     // Height of device 
+      width: number            // Viewport width
+      height: number           // Viewport height
+      screenWidth: number
+      screenHeight: number
+      language: string
+      languages: readonly string[]
+      doNotTrack: string | null
+      cookiesEnabled: boolean
+      hardwareConcurrency: number
+      deviceMemory?: number
+      maxTouchPoints: number
+      colorDepth: number
+      pixelRatio: number
+      availableWidth: number
+      availableHeight: number
     }
+    networkInfo: {
+      effectiveType?: string
+      downlink?: number
+      rtt?: number
+      saveData?: boolean
+    }
+    locationInfo: {
+      url: string
+      origin: string
+      pathname: string
+      searchParams: Record<string, string>
+      referrer: string
+    }
+    timeInfo: {
+      timezone: string
+      localDateTime: string
+    }
+    console: Array<{
+      type: 'log' | 'warn' | 'error'
+      message: string
+      timestamp: string
+    }>
   }
-  console: Array<{                    // Last 1000 console entries (logs, warnings, errors, uncaught errors, unhandled promise rejections)
-    type: 'log' | 'warn' | 'error';   // Type of console entry
-    message: string;                  // Content of the console message
-    timestamp: string;                // When the message was logged
-  }>
 }
 ```
 
