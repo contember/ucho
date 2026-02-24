@@ -20,9 +20,9 @@
     "examples/react-spa": {
       "name": "ucho-react-example",
       "dependencies": {
-        "@contember/ucho": "../../",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
+        "uchovat": "../../",
       },
       "devDependencies": {
         "@types/react": "^19.0.0",
@@ -91,8 +91,6 @@
     "@biomejs/cli-win32-arm64": ["@biomejs/cli-win32-arm64@2.4.4", "", { "os": "win32", "cpu": "arm64" }, "sha512-trzCqM7x+Gn832zZHgr28JoYagQNX4CZkUZhMUac2YxvvyDRLJDrb5m9IA7CaZLlX6lTQmADVfLEKP1et1Ma4Q=="],
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.4.4", "", { "os": "win32", "cpu": "x64" }, "sha512-gnOHKVPFAAPrpoPt2t+Q6FZ7RPry/FDV3GcpU53P3PtLNnQjBmKyN2Vh/JtqXet+H4pme8CC76rScwdjDcT1/A=="],
-
-    "@contember/ucho": ["@root:", {}],
 
     "@dprint/darwin-arm64": ["@dprint/darwin-arm64@0.51.1", "", { "os": "darwin", "cpu": "arm64" }, "sha512-C7fkaz0/NGf/X4G9Cq65izdJgerND5jWShOaPiOgGs4A0CyCMKMLRd45m3xKIttuO8x0IQiZVixD22qmVglXmQ=="],
 
@@ -347,6 +345,8 @@
     "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
     "ucho-react-example": ["ucho-react-example@workspace:examples/react-spa"],
+
+    "uchovat": ["@root:", {}],
 
     "undici-types": ["undici-types@6.21.0", "", {}, "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="],
 
