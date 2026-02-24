@@ -1,45 +1,68 @@
+
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"organizeImports": {
-		"enabled": true
+	"$schema": "https://biomejs.dev/schemas/2.4.4/schema.json",
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
 	},
 	"files": {
-		"include": ["**/*.ts", "**/*.tsx"],
-		"ignore": ["node_modules/**", "dist/**", "client/src/**", "admin/lib/**"]
-	},
-	"formatter": {
-		"enabled": true,
-		"lineWidth": 150
-	},
-	"javascript": {
-		"formatter": {
-			"jsxQuoteStyle": "double",
-			"quoteStyle": "single",
-			"semicolons": "asNeeded",
-			"arrowParentheses": "asNeeded"
-		}
+		"includes": [
+			"**/*.ts",
+			"**/*.tsx",
+			"!**/node_modules",
+			"!**/dist",
+			"!**/client/src",
+			"!**/.react-router",
+			"!buresh"
+		]
 	},
 	"linter": {
 		"enabled": true,
 		"rules": {
 			"recommended": true,
+			"complexity": {
+				"noUselessFragments": "off",
+				"noStaticOnlyClass": "off",
+				"noBannedTypes": "off",
+				"useDateNow": "off",
+				"useArrowFunction": "off"
+			},
 			"correctness": {
-				"noChildrenProp": "off"
+				"noUnusedImports": "off",
+				"noChildrenProp": "off",
+				"noUnusedFunctionParameters": "off",
+				"noUnusedPrivateClassMembers": "off",
+				"noUnusedVariables": "off",
+				"noEmptyPattern": "off",
+				"useParseIntRadix": "off",
+				"useExhaustiveDependencies": "on",
+				"useHookAtTopLevel": "on",
+				"noVoidTypeReturn": "off"
 			},
 			"style": {
-				"useNodejsImportProtocol": "off",
 				"useImportType": "off",
-				"noNonNullAssertion": "off"
+				"useTemplate": "off",
+				"useExponentiationOperator": "off",
+				"noNonNullAssertion": "off",
+				"useExportType": "on"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "error"
 			},
 			"suspicious": {
-				"noConsoleLog": "error",
+				"noTemplateCurlyInString": "off",
+				"noShadowRestrictedNames": "off",
 				"noExplicitAny": "off",
 				"noConfusingVoidType": "off",
-				"noArrayIndexKey": "off"
+				"noArrayIndexKey": "off",
+				"noAssignInExpressions": "off",
+				"useIterableCallbackReturn": "off",
+				"noConsole": { "level": "error", "options": { "allow": ["info", "warn", "error", "debug", "log"] } }
 			},
-			"a11y": {
-				"all": false
-			}
+			"a11y": "off"
 		}
 	}
 }
