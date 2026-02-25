@@ -1,5 +1,4 @@
 export * from './chevron-right-icon'
-export * from './contember-icon'
 export * from './highlight-icon'
 export * from './pen-icon'
 export * from './trash-icon'

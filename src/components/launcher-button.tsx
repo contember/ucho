@@ -1,5 +1,5 @@
 import { type Component, createEffect, createSignal } from 'solid-js'
-import { ContemberIcon } from '~/components/icons'
+import uchoIcon from '~/assets/ucho-icon.png'
 import { useStore } from '~/contexts'
 import { getFromStorage, setToStorage } from '~/utils'
 import { StoredFeedback } from './stored-feedback'
@@ -73,7 +73,7 @@ export const LauncherButton: Component = () => {
 					aria-label="Open feedback form"
 					aria-expanded={store.widget.state.isOpen}
 				>
-					<ContemberIcon stroke="white" fill="#ffffff" aria-hidden="true" />
+					<img src={uchoIcon} alt="" aria-hidden="true" width={24} height={24} />
 				</button>
 				{store.widget.state.pagesCount > 0 && (
 					<button
