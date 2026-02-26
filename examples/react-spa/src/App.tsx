@@ -7,10 +7,10 @@ type Position = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
 const positions: Position[] = ['bottom-right', 'bottom-left', 'top-right', 'top-left']
 
 const colors = [
-	{ value: '#6227dc', label: 'Purple' },
+	{ value: '#B06BA3', label: 'Rose' },
+	{ value: '#7B68AE', label: 'Lavender' },
 	{ value: '#0ea5e9', label: 'Blue' },
 	{ value: '#10b981', label: 'Green' },
-	{ value: '#f43f5e', label: 'Red' },
 ] as const
 
 function useUcho(config: Config) {
@@ -27,7 +27,7 @@ function useUcho(config: Config) {
 
 export function App() {
 	const [position, setPosition] = useState<Position>('bottom-right')
-	const [color, setColor] = useState('#6227dc')
+	const [color, setColor] = useState('#B06BA3')
 
 	// Memoize config so the effect doesn't re-run on every render
 	const [config] = useState<Pick<Config, 'onSubmit' | 'customInputs'>>(() => ({
@@ -175,9 +175,9 @@ function Button({ active, children, onClick, style }: {
 			style={{
 				padding: '0.5rem 1rem',
 				border: '1px solid',
-				borderColor: active ? '#6227dc' : '#e5e7eb',
+				borderColor: active ? '#B06BA3' : '#e5e7eb',
 				borderRadius: 8,
-				background: active ? '#6227dc' : '#fff',
+				background: active ? '#B06BA3' : '#fff',
 				color: active ? '#fff' : undefined,
 				cursor: 'pointer',
 				fontSize: '0.85rem',
