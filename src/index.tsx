@@ -1,7 +1,6 @@
 import { render } from 'solid-js/web'
 import { Ucho } from './components/ucho'
 import { defaultText } from './config/default-text'
-import './styles.css'
 import { type Config, type FeedbackPayload } from './types'
 import { deepMerge } from './utils/common'
 import { validateOptions } from './utils/validators'
