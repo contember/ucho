@@ -8,8 +8,12 @@
     "solid",
     "contember"
   ],
-  "main": "dist/uchovat.umd.js",
-  "module": "dist/uchovat.es.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/uchovat.js"
+    }
+  },
   "types": "dist/index.d.ts",
   "workspaces": [
     "examples/*"

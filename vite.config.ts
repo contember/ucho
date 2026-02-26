@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import solid from 'vite-plugin-solid'
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -6,20 +6,15 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
 	plugins: [solid(), tsconfigPaths()],
 	build: {
+		cssMinify: true,
+		minify: true,
 		lib: {
 			entry: resolve(__dirname, 'src/index.tsx'),
-			name: 'Uchovat',
-			formats: ['es', 'umd'],
-			fileName: format => `uchovat.${format}.js`,
+			formats: ['es'],
+			fileName: () => 'uchovat.js',
 		},
 		rollupOptions: {
 			external: ['solid-js', 'html2canvas-pro'],
-			output: {
-				globals: {
-					'solid-js': 'Solid',
-					'html2canvas-pro': 'html2canvas-pro',
-				},
-			},
 		},
 	},
 })
