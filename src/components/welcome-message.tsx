@@ -8,8 +8,8 @@ const getWelcomeMessagePosition = (position: Position): Record<string, string> =
 	const isTop = position.includes('top')
 	const isLeft = position.includes('left')
 	return {
-		...(isTop ? { top: '80px' } : { bottom: '80px' }),
-		...(isLeft ? { left: '20px' } : { right: '20px' }),
+		...(isTop ? { top: '100px' } : { bottom: '105px' }),
+		...(isLeft ? { left: '20px' } : { right: '25px' }),
 	}
 }
 
