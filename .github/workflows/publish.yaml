@@ -1,6 +1,8 @@
 name: Publish
 
 on:
+  push:
+    tags: ['v*']
   workflow_dispatch:
     inputs:
       tag_name:
@@ -36,7 +38,10 @@ jobs:
         id: versions
         uses: ./.github/actions/extract-version
         with:
-          version: ${{ inputs.tag_name }}
+          version: ${{ inputs.tag_name || github.ref_name }}
+
+      - name: Set package version
+        run: npm version "${{ steps.versions.outputs.version }}" --no-git-tag-version
 
       - name: "Build app"
         run: bun run build
