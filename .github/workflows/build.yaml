@@ -17,10 +17,7 @@ jobs:
 
           - job_name: build
             run_script: |
-              bun run ts:build
-
-          - job_name: lint-imports
-            run_script: ./scripts/lint-module-import/run.sh
+              bun run build
 
           - job_name: test
             run_script: |

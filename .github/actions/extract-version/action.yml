@@ -1,0 +1,46 @@
+name: Extract version
+description: Extract version number and npm dist-tag from a git tag or ref
+
+inputs:
+  version:
+    description: "Version string (e.g. v0.2.0 or v0.2.0-beta.1)"
+    required: true
+
+outputs:
+  version:
+    description: "Semver version without the v prefix"
+    value: ${{ steps.parse.outputs.version }}
+  npmTag:
+    description: "npm dist-tag (latest, beta, alpha, etc.)"
+    value: ${{ steps.parse.outputs.npmTag }}
+
+runs:
+  using: composite
+  steps:
+    - id: parse
+      shell: bash
+      run: |
+        TAG="${{ inputs.version }}"
+        # Strip leading 'v' or 'refs/tags/v'
+        VERSION="${TAG#refs/tags/}"
+        VERSION="${VERSION#v}"
+
+        echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+        # Determine npm dist-tag from prerelease identifier
+        if [[ "$VERSION" == *-alpha* ]]; then
+          echo "npmTag=alpha" >> "$GITHUB_OUTPUT"
+        elif [[ "$VERSION" == *-beta* ]]; then
+          echo "npmTag=beta" >> "$GITHUB_OUTPUT"
+        elif [[ "$VERSION" == *-rc* ]]; then
+          echo "npmTag=rc" >> "$GITHUB_OUTPUT"
+        elif [[ "$VERSION" == *-* ]]; then
+          # Other prerelease — use the identifier before the dot
+          PRE="${VERSION#*-}"
+          PRE="${PRE%%.*}"
+          echo "npmTag=${PRE}" >> "$GITHUB_OUTPUT"
+        else
+          echo "npmTag=latest" >> "$GITHUB_OUTPUT"
+        fi
+
+        echo "Parsed version=${VERSION}, npmTag=$(grep npmTag "$GITHUB_OUTPUT" | tail -1 | cut -d= -f2)"
