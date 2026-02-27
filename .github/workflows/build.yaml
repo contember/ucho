@@ -12,7 +12,7 @@ jobs:
       matrix:
         include:
 
-          - job_name: eslint
+          - job_name: lint
             run_script: bun run lint
 
           - job_name: build
