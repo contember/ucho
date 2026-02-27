@@ -41,7 +41,7 @@ jobs:
           version: ${{ inputs.tag_name || github.ref_name }}
 
       - name: Set package version
-        run: npm version "${{ steps.versions.outputs.version }}" --no-git-tag-version
+        run: npm version "${{ steps.versions.outputs.version }}" --no-git-tag-version --allow-same-version
 
       - name: "Build app"
         run: bun run build
