@@ -25,7 +25,8 @@
     "dev": "vite build --watch",
     "dev:example": "concurrently \"bun run dev\" \"bun run --cwd examples/react-spa dev\"",
     "build": "tsc && vite build && tsc --emitDeclarationOnly",
-    "ts:watch": "tsc --watch"
+    "ts:watch": "tsc --watch",
+    "test": "bun test"
   },
   "dependencies": {
     "html2canvas-pro": "2.0.2",
