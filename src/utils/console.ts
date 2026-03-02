@@ -2,7 +2,7 @@ import type { ConsoleEntry } from '~/types'
 
 let consoleBuffer: ConsoleEntry[] = []
 let originalConsole: { log: typeof console.log; warn: typeof console.warn; error: typeof console.error } | null = null
-let originalOnUnhandledRejection: ((event: PromiseRejectionEvent) => void) | null = null
+let unhandledRejectionHandler: ((event: PromiseRejectionEvent) => void) | null = null
 let errorEventHandler: ((event: ErrorEvent) => void) | null = null
 
 const createConsoleProxy = (type: ConsoleEntry['type'], originalFn: (...args: any[]) => void) => {
@@ -52,20 +52,15 @@ export const setupConsole = () => {
 		error: console.error,
 	}
 
-	originalOnUnhandledRejection = window.onunhandledrejection
-
-	window.onunhandledrejection = event => {
+	unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
 		const error = event.reason
 		consoleBuffer.push({
 			type: 'error',
 			message: `Unhandled Promise Rejection: ${error?.stack || error?.message || error}`,
 			timestamp: new Date().toISOString(),
 		})
-
-		if (originalOnUnhandledRejection) {
-			originalOnUnhandledRejection(event)
-		}
 	}
+	window.addEventListener('unhandledrejection', unhandledRejectionHandler)
 
 	console.log = createConsoleProxy('log', originalConsole.log)
 	console.warn = createConsoleProxy('warn', originalConsole.warn)
@@ -90,9 +85,9 @@ export const cleanupConsole = () => {
 		console.error = originalConsole.error
 		originalConsole = null
 	}
-	if (originalOnUnhandledRejection) {
-		window.onunhandledrejection = originalOnUnhandledRejection
-		originalOnUnhandledRejection = null
+	if (unhandledRejectionHandler) {
+		window.removeEventListener('unhandledrejection', unhandledRejectionHandler)
+		unhandledRejectionHandler = null
 	}
 	if (errorEventHandler) {
 		window.removeEventListener('error', errorEventHandler)
