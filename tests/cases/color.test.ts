@@ -44,8 +44,13 @@ describe('getContrastColor', () => {
 		expect(getContrastColor('#CCCCCC')).toBe('#000000')
 	})
 
-	test('luminance exactly at 0.5 threshold → black text', () => {
-		// luminance >= 0.5 returns black
-		expect(getContrastColor('#BBBBBB')).toBe('#000000')
+	test('mid-gray with linearized luminance below 0.5 → white text', () => {
+		// #BBBBBB linear luminance ≈ 0.48 with gamma correction
+		expect(getContrastColor('#BBBBBB')).toBe('#FFFFFF')
+	})
+
+	test('lighter gray with linearized luminance above 0.5 → black text', () => {
+		// #BCBCBC linear luminance ≈ 0.50 with gamma correction
+		expect(getContrastColor('#BCBCBC')).toBe('#000000')
 	})
 })
