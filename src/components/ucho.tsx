@@ -1,4 +1,4 @@
-import { type Component, createEffect, createSignal, JSXElement, onCleanup, onMount } from 'solid-js'
+import { type Component, createEffect, createMemo, createSignal, JSXElement, onCleanup, onMount } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { Provider, useStore } from '~/contexts'
 import { usePageHeight } from '~/hooks/page-height-hooks'
@@ -28,25 +28,18 @@ export const Ucho: Component<FullConfig> = props => {
 }
 
 const UchoStyles: Component<{ primaryColor: string }> = props => {
-	const [dynamicStyles, setDynamicStyles] = createSignal('')
-
-	createEffect(() => {
-		const css = `
-						.ucho-root {
-							--primary-color: ${props.primaryColor};
-							--primary-text-color: ${getContrastColor(props.primaryColor)};
-						}
-					`
-		setDynamicStyles(css)
-	})
+	const dynamicStyles = createMemo(() => `
+		.ucho-root {
+			--primary-color: ${props.primaryColor};
+			--primary-text-color: ${getContrastColor(props.primaryColor)};
+		}
+	`)
 
 	return (
-		<>
-			<style>
-				{staticStyles}
-				{dynamicStyles()}
-			</style>
-		</>
+		<style>
+			{staticStyles}
+			{dynamicStyles()}
+		</style>
 	)
 }
 
