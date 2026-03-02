@@ -10,15 +10,11 @@ export const DrawingLayer: Component = () => {
 	let drawingLayerContainerRef: HTMLDivElement | undefined
 
 	onMount(() => {
-		drawingLayerContainerRef?.addEventListener('mousemove', store.drawing.methods.handleMove)
-		drawingLayerContainerRef?.addEventListener('mouseup', store.drawing.methods.handleEnd)
 		drawingLayerContainerRef?.addEventListener('touchmove', store.drawing.methods.handleMove, { passive: false })
 		drawingLayerContainerRef?.addEventListener('touchend', store.drawing.methods.handleEnd)
 	})
 
 	onCleanup(() => {
-		drawingLayerContainerRef?.removeEventListener('mousemove', store.drawing.methods.handleMove)
-		drawingLayerContainerRef?.removeEventListener('mouseup', store.drawing.methods.handleEnd)
 		drawingLayerContainerRef?.removeEventListener('touchmove', store.drawing.methods.handleMove)
 		drawingLayerContainerRef?.removeEventListener('touchend', store.drawing.methods.handleEnd)
 	})
