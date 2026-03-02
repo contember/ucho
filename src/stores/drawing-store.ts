@@ -69,6 +69,8 @@ export const createDrawingStore = (
 		cursor: computeCursor('rectangle', config.primaryColor),
 	})
 
+	const NON_PERSISTENT_KEYS: Set<keyof DrawingState> = new Set(['mousePosition', 'cursor', 'showTooltip', 'isDragging', 'dragStartPos', 'initialClickPos', 'dragOffset', 'isDrawing', 'currentPoints'])
+
 	const wrappedSetState = (newState: Partial<DrawingState>, isClearing = false) => {
 		if (newState.selectedTool || newState.selectedColor) {
 			const tool = newState.selectedTool || state.selectedTool
@@ -76,8 +78,10 @@ export const createDrawingStore = (
 			newState.cursor = computeCursor(tool, color)
 		}
 		setState(newState)
-		/* TODO: restrict changes (cursor movement, etc) from triggering onStateChange */
-		onStateChange?.(newState, isClearing)
+		const hasPersistentChange = Object.keys(newState).some(key => !NON_PERSISTENT_KEYS.has(key as keyof DrawingState))
+		if (hasPersistentChange) {
+			onStateChange?.(newState, isClearing)
+		}
 	}
 
 	const methods = {
