@@ -118,7 +118,8 @@ export const getStoredPages = () => {
 	try {
 		const allPagesData = getFromStorage<Record<string, StoredPageState>>(PAGES_KEY, {})
 		return Object.entries(allPagesData).map(([path, state]) => ({
-			path: formatPagePath(path),
+			path,
+			displayPath: formatPagePath(path),
 			state,
 		}))
 	} catch (error) {

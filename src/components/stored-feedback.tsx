@@ -85,13 +85,6 @@ export const StoredFeedback: Component = () => {
 		store.widget.setState({ pagesCount: storedPages.length })
 	}
 
-	const formatPath = (path: string) => {
-		if (path === '/') return '/'
-		const parts = path.split('/')
-		if (parts.length <= 4) return path
-		return `/${parts[1]}/.../${parts[parts.length - 1]}`
-	}
-
 	return (
 		<Show when={store.widget.state.isStoredFeedbackOpen}>
 			<div class="ucho-stored-feedback" ref={dialogRef}>
@@ -109,7 +102,7 @@ export const StoredFeedback: Component = () => {
 								<div class={`ucho-stored-feedback-item ${isCurrent() ? 'ucho-stored-feedback-item-current' : ''}`}>
 									<div class="ucho-stored-feedback-content">
 										<div class="ucho-stored-feedback-path" title={page.path}>
-											{formatPath(page.path)}
+											{page.displayPath}
 										</div>
 										<div class="ucho-stored-feedback-preview">{page.state.feedback.message}</div>
 									</div>
