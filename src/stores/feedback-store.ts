@@ -16,13 +16,8 @@ export type FeedbackStore = {
 	setState: (state: Partial<FeedbackState>, isClearing?: boolean) => void
 }
 
-export const createFeedbackStore = (
-	config: FullConfig,
-	currentPageKey: string,
-	onStateChange?: (state: Partial<FeedbackState>, isClearing?: boolean) => void,
-	customInputs?: CustomInputConfig[],
-) => {
-	const defaultCustomValues =
+export const getDefaultCustomValues = (customInputs?: CustomInputConfig[]) => {
+	return (
 		customInputs?.reduce(
 			(acc, input) => {
 				acc[input.id] = input.defaultValue ?? (input.type === 'checkbox' ? [] : '')
@@ -30,6 +25,16 @@ export const createFeedbackStore = (
 			},
 			{} as Record<string, CustomInputValue>,
 		) || {}
+	)
+}
+
+export const createFeedbackStore = (
+	config: FullConfig,
+	currentPageKey: string,
+	onStateChange?: (state: Partial<FeedbackState>, isClearing?: boolean) => void,
+	customInputs?: CustomInputConfig[],
+) => {
+	const defaultCustomValues = getDefaultCustomValues(customInputs)
 
 	const savedState = loadPageState(currentPageKey)
 	const savedCustomValues = savedState?.feedback.customInputValues || {}

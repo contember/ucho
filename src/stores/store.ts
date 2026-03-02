@@ -1,9 +1,9 @@
-import type { Config, CustomInputConfig, DrawingTool, FullConfig } from '~/types'
+import type { Config, DrawingTool, FullConfig } from '~/types'
 import { createNotificationManager } from '~/utils/notifications'
 import { createDebouncedStateSaver } from '~/utils/state-management'
 import { clearPageState, getPageKey, loadPageState } from '~/utils/storage'
 import { createDrawingStore, type DrawingStore } from './drawing-store'
-import { createFeedbackStore, type FeedbackStore } from './feedback-store'
+import { createFeedbackStore, getDefaultCustomValues, type FeedbackStore } from './feedback-store'
 import { createWidgetStore, type WidgetStore } from './widget-store'
 
 export type Store = {
@@ -15,18 +15,6 @@ export type Store = {
 		submit: Config['onSubmit']
 		handlePageChange: (newPageKey: string) => void
 	}
-}
-
-const getDefaultCustomValues = (customInputs?: CustomInputConfig[]) => {
-	return (
-		customInputs?.reduce(
-			(acc, input) => {
-				acc[input.id] = input.defaultValue ?? (input.type === 'checkbox' ? [] : '')
-				return acc
-			},
-			{} as Record<string, any>,
-		) || {}
-	)
 }
 
 export const createStore = (config: FullConfig): Store => {
