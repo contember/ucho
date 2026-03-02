@@ -2,10 +2,17 @@ import type { Point } from '~/types'
 
 export const getPointFromEvent = (e: MouseEvent | TouchEvent, { useClientCoords = false }: { useClientCoords?: boolean } = {}): Point => {
 	const isTouchEvent = typeof TouchEvent !== 'undefined' && e instanceof TouchEvent
-	const touch = isTouchEvent ? (e.touches[0] ?? e.changedTouches[0]) : null
+	const touch = isTouchEvent ? (e.touches[0] ?? e.changedTouches[0] ?? null) : null
+	if (touch) {
+		return {
+			x: useClientCoords ? touch.clientX : touch.pageX,
+			y: useClientCoords ? touch.clientY : touch.pageY,
+		}
+	}
+	const mouse = e as MouseEvent
 	return {
-		x: touch ? (useClientCoords ? touch.clientX : touch.pageX) : useClientCoords ? (e as MouseEvent).clientX : (e as MouseEvent).pageX,
-		y: touch ? (useClientCoords ? touch.clientY : touch.pageY) : useClientCoords ? (e as MouseEvent).clientY : (e as MouseEvent).pageY,
+		x: useClientCoords ? mouse.clientX : mouse.pageX,
+		y: useClientCoords ? mouse.clientY : mouse.pageY,
 	}
 }
 
