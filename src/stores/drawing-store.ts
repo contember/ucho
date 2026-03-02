@@ -110,9 +110,9 @@ export const createDrawingStore = (
 			wrappedSetState({ isDrawing: false, currentPoints: [] })
 		},
 		handleShapeClick: (shapeId: string) => {
-			// wrappedSetState({
-			// 	selectedShapeId: state.selectedShapeId === shapeId ? null : shapeId,
-			// })
+			wrappedSetState({
+				selectedShapeId: state.selectedShapeId === shapeId ? null : shapeId,
+			})
 		},
 		handleStart: (e: MouseEvent | TouchEvent) => {
 			if (e instanceof MouseEvent) {
@@ -196,6 +196,8 @@ export const createDrawingStore = (
 						wrappedSetState({ selectedShapeId: shapeId })
 					}
 				}
+				methods.setInitialClick(null)
+				return
 			}
 
 			methods.setInitialClick(null)
