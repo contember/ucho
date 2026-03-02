@@ -1,4 +1,4 @@
-import { type Component, createEffect, createSignal } from 'solid-js'
+import { type Component, createEffect, createSignal, onCleanup } from 'solid-js'
 import uchoIcon from '~/assets/ucho-icon.png'
 import { useStore } from '~/contexts'
 import { getFromStorage, setToStorage } from '~/utils'
@@ -47,6 +47,12 @@ export const LauncherButton: Component = () => {
 		}
 		if (store.widget.state.isStoredFeedbackOpen) {
 			setIsMinimized(false)
+		}
+	})
+
+	onCleanup(() => {
+		if (minimizeTimeout) {
+			window.clearTimeout(minimizeTimeout)
 		}
 	})
 
