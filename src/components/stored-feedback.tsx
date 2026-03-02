@@ -3,7 +3,7 @@ import { Button } from '~/components/button'
 import { XIcon } from '~/components/icons'
 import { ExternalLinkIcon } from '~/components/icons/external-link-icon'
 import { useStore } from '~/contexts'
-import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
+import { registerWindowEventListener } from '~/utils/listeners'
 import { clearPageState, getStoredPages } from '~/utils/storage'
 
 export const StoredFeedback: Component = () => {
@@ -47,15 +47,14 @@ export const StoredFeedback: Component = () => {
 		callback: handleUrlChange,
 	})
 
-	registerMutationObserver({
-		target: document.documentElement,
-		options: {
-			childList: true,
-			subtree: true,
-		},
-		callback: () => {
-			setCurrentPath(window.location.pathname)
-		},
+	registerWindowEventListener({
+		event: 'pushstate',
+		callback: handleUrlChange,
+	})
+
+	registerWindowEventListener({
+		event: 'replacestate',
+		callback: handleUrlChange,
 	})
 
 	registerWindowEventListener({
@@ -80,10 +79,6 @@ export const StoredFeedback: Component = () => {
 			store.methods.reset()
 		}
 		clearPageState(path)
-
-		const storedPages = getStoredPages()
-		setPages(storedPages)
-		store.widget.setState({ pagesCount: storedPages.length })
 	}
 
 	return (
