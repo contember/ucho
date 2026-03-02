@@ -6,8 +6,8 @@ const shouldIgnoreElement = (element: Element): boolean => {
 }
 
 export const captureScreenshot = async (): Promise<Screenshot | undefined> => {
+	const style = document.createElement('style')
 	try {
-		const style = document.createElement('style')
 		document.head.appendChild(style)
 		style.sheet?.insertRule('body > div:last-child img { display: inline-block; }')
 
@@ -19,11 +19,11 @@ export const captureScreenshot = async (): Promise<Screenshot | undefined> => {
 			ignoreElements: element => shouldIgnoreElement(element),
 		})
 
-		style.remove()
-
 		return canvas.toDataURL('image/png') as Screenshot
 	} catch (error) {
 		console.error('Failed to capture screenshot:', error)
 		return undefined
+	} finally {
+		style.remove()
 	}
 }
