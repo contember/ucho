@@ -170,13 +170,11 @@ export type Point = {
 	y: number
 }
 
-export type ShapeType = 'rectangle' | 'path'
-
 export type DrawingTool = 'rectangle' | 'path'
 
 export type Shape = {
 	id: string
-	type: ShapeType
+	type: DrawingTool
 	color: string
 	points: Point[]
 }
