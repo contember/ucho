@@ -69,6 +69,7 @@ export const StoredFeedback: Component = () => {
 	})
 
 	const handleNavigate = (path: string, latestQuery?: string) => {
+		if (!path.startsWith('/')) return
 		const targetUrl = latestQuery ? `${path}${latestQuery}` : path
 		window.location.href = targetUrl
 		store.widget.setState({ isStoredFeedbackOpen: false })
