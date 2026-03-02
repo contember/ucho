@@ -129,8 +129,6 @@ export const createStore = (config: FullConfig): Store => {
 			reset,
 			handlePageChange,
 			submit: async data => {
-				widget.setState({ isOpen: false })
-
 				try {
 					const response = await config.onSubmit(data)
 
@@ -139,6 +137,7 @@ export const createStore = (config: FullConfig): Store => {
 						return response
 					}
 
+					widget.setState({ isOpen: false })
 					reset()
 					notifications.show({ type: 'success', message: 'Feedback submitted' })
 					return response
