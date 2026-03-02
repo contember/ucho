@@ -15,7 +15,6 @@ export const Select: Component<SelectProps> = props => {
 	const [isOpen, setIsOpen] = createSignal(false)
 	let selectRef: HTMLDivElement | undefined
 	let triggerRef: HTMLButtonElement | undefined
-	let hiddenInputRef: HTMLInputElement | undefined
 	const selectedOption = () => props.config.options.find(opt => opt.value === (props.value === undefined ? '' : props.value))
 
 	const handleSelect = (option: SelectOption, e: MouseEvent) => {
@@ -98,7 +97,6 @@ export const Select: Component<SelectProps> = props => {
 				</Show>
 
 				<input
-					ref={hiddenInputRef}
 					type="text"
 					class="visually-hidden"
 					value={props.value === undefined ? '' : props.value}
