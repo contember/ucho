@@ -60,11 +60,7 @@ export function App() {
 		],
 	}))
 
-	useUcho({
-		...config,
-		position,
-		primaryColor: color as `#${string}`,
-	})
+	useUcho({ ...config })
 
 	return (
 		<>
