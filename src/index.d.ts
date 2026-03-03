@@ -1,5 +1,5 @@
 //@ts-nocheck
-declare module 'uchovat' {
+declare module 'ucho' {
 	export * from './types';
 	export function init(options: import('./types').Config): () => void
 }
