@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Config } from 'uchovat'
-import { init } from 'uchovat'
+import type { Config } from 'ucho-js'
+import { init } from 'ucho-js'
 
 type Position = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
 
@@ -100,7 +100,7 @@ export function App() {
 						The widget is initialized via a custom <code>useUcho</code> hook that
 						handles cleanup on unmount and reinitializes when config changes.
 					</p>
-					<Pre>{`import { init } from 'uchovat'
+					<Pre>{`import { init } from 'ucho-js'
 import { useEffect, useRef } from 'react'
 
 function useUcho(config) {
@@ -138,7 +138,7 @@ function useUcho(config) {
 			</main>
 
 			<footer style={{ textAlign: 'center', padding: '2rem', color: '#9ca3af', fontSize: '0.8rem' }}>
-				Ucho React Example &mdash; uchovat
+				Ucho React Example &mdash; ucho
 			</footer>
 		</>
 	)

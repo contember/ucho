@@ -6,7 +6,7 @@ export default defineConfig({
 	plugins: [react()],
 	resolve: {
 		alias: {
-			uchovat: resolve(__dirname, '../../dist/ucho.js'),
+			"ucho-js": resolve(__dirname, '../../dist/ucho.js'),
 		},
 	},
 })
