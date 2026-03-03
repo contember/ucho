@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/assets/ucho-icon.png" width="256" alt="Ucho">
+  <img src="https://raw.githubusercontent.com/contember/ucho/main/.github/assets/ucho-icon.png" width="256" alt="Ucho">
 </p>
 
 # Ucho
