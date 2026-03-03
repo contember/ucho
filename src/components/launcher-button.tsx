@@ -69,7 +69,7 @@ export const LauncherButton: Component = () => {
 				onPointerEnter={handleUchoLauncherButtonEnter}
 				onPointerLeave={handleUchoLauncherButtonLeave}
 				style={{
-					transform: `translateX(${isMinimized() ? '55px' : '34px'})`,
+					transform: `translateX(${isMinimized() ? '45px' : '22px'})`,
 				}}
 			>
 				<button
@@ -79,7 +79,7 @@ export const LauncherButton: Component = () => {
 					aria-label="Open feedback form"
 					aria-expanded={store.widget.state.isOpen}
 				>
-					<img src={uchoIcon} alt="" aria-hidden="true" width={72} height={72} />
+					<img src={uchoIcon} alt="ucho icon" aria-hidden="true" width={52} height={72} />
 				</button>
 				{store.widget.state.pagesCount > 0 && (
 					<button
