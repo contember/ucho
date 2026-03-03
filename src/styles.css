@@ -342,6 +342,7 @@
     position: absolute;
     top: calc(-1 * var(--spacing-xs));
     left: calc(-1 * var(--spacing-xs));
+    z-index: calc(var(--z-widget-button) + 1);
 
     background: var(--primary-color-lightest);
     color: var(--primary-color-lighter);
