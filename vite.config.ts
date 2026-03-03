@@ -11,7 +11,7 @@ export default defineConfig({
 		lib: {
 			entry: resolve(__dirname, 'src/index.tsx'),
 			formats: ['es'],
-			fileName: () => 'uchovat.js',
+			fileName: () => 'ucho.js',
 		},
 		rollupOptions: {
 			external: ['solid-js', 'html2canvas-pro'],
