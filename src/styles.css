@@ -654,6 +654,17 @@
     display: none;
 }
 
+/* Resize Handles */
+.ucho-resize-handle {
+    pointer-events: auto;
+    vector-effect: non-scaling-stroke;
+    transition: r 0.15s ease;
+}
+
+.ucho-resize-handle:hover {
+    r: 7;
+}
+
 /* Notification */
 .ucho-notification {
     position: absolute;

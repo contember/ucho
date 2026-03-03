@@ -85,6 +85,8 @@ export const createStore = (config: FullConfig): Store => {
 			},
 			drawing: {
 				isDrawing: false,
+				isResizing: false,
+				resizeAnchor: null,
 				currentPoints: [],
 				shapes: [],
 				selectedShapeId: null,

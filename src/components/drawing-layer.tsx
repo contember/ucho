@@ -1,6 +1,6 @@
-import { type Component, For, onCleanup, onMount } from 'solid-js'
+import { type Component, For, onCleanup, onMount, Show } from 'solid-js'
 import { useStore } from '~/contexts'
-import { generateCutoutPath } from '~/utils/svg'
+import { getRectFromPoints } from '~/utils/geometry'
 import { DrawingTooltip } from './drawing-tooltip'
 import { Shape } from './shape'
 import { ShapeActions } from './shape-actions'
@@ -54,24 +54,36 @@ export const DrawingLayer: Component = () => {
 					e.preventDefault() // Prevent scrolling while drawing
 					store.drawing.methods.handleMove(e)
 				}}
+				onMouseUp={store.drawing.methods.handleEnd}
 				onMouseEnter={store.drawing.methods.handleEnter}
 				onMouseLeave={store.drawing.methods.handleLeave}
 				onTouchEnd={store.drawing.methods.handleLeave}
 			>
-				{/* overlay mask */}
-				<path
+				{/* overlay mask — uses SVG mask so overlapping cutouts stay transparent */}
+				<defs>
+					<mask id="ucho-overlay-mask">
+						<rect width="100%" height="100%" fill="white" />
+						<Show when={store.drawing.state.currentPoints.length === 2}>
+							{(() => {
+								const r = getRectFromPoints(store.drawing.state.currentPoints)
+								return r ? <rect x={r.x} y={r.y} width={r.width} height={r.height} fill="black" /> : null
+							})()}
+						</Show>
+						<For each={store.drawing.state.shapes}>
+							{shape => {
+								if (shape.type !== 'rectangle') return null
+								const r = getRectFromPoints(shape.points)
+								return r ? <rect x={r.x} y={r.y} width={r.width} height={r.height} fill="black" /> : null
+							}}
+						</For>
+					</mask>
+				</defs>
+				<rect
 					class="ucho-drawing-layer-mask"
-					d={generateCutoutPath(
-						{
-							width: store.widget.state.dimensions.width,
-							height: store.widget.state.dimensions.height,
-						},
-						store.drawing.state.currentPoints,
-						store.drawing.state.shapes,
-					)}
-					fill="rgba(33, 43, 55, 1)"
-					fill-opacity="0.2"
-					fill-rule="evenodd"
+					width="100%"
+					height="100%"
+					fill="rgba(33, 43, 55, 0.2)"
+					mask="url(#ucho-overlay-mask)"
 					aria-hidden="true"
 				/>
 
@@ -84,7 +96,6 @@ export const DrawingLayer: Component = () => {
 							color={shape.color}
 							points={shape.points}
 							selectedShapeId={store.drawing.state.selectedShapeId}
-							onShapeClick={store.drawing.methods.handleShapeClick}
 						/>
 					)}
 				</For>

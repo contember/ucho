@@ -12,6 +12,8 @@ const computeCursor = (tool: DrawingTool, color: string) => {
 
 export type DrawingState = {
 	isDrawing: boolean
+	isResizing: boolean
+	resizeAnchor: Point | null
 	selectedShapeId: string | null
 	selectedTool: DrawingTool
 	selectedColor: string
@@ -40,6 +42,8 @@ export type DrawingStore = {
 		handleEnd: (e: MouseEvent | TouchEvent) => void
 		handleEnter: (e: MouseEvent | TouchEvent) => void
 		handleLeave: (e: MouseEvent | TouchEvent) => void
+		startResize: (anchor: Point) => void
+		stopResize: () => void
 		startDrag: (point: Point) => void
 		stopDrag: () => void
 		setInitialClick: (point: Point | null) => void
@@ -54,6 +58,8 @@ export const createDrawingStore = (
 ): DrawingStore => {
 	const [state, setState] = createStore<DrawingState>({
 		isDrawing: false,
+		isResizing: false,
+		resizeAnchor: null,
 		currentPoints: [],
 		selectedShapeId: null,
 		selectedTool: 'rectangle',
@@ -69,7 +75,7 @@ export const createDrawingStore = (
 		cursor: computeCursor('rectangle', config.primaryColor),
 	})
 
-	const NON_PERSISTENT_KEYS: Set<keyof DrawingState> = new Set(['mousePosition', 'cursor', 'showTooltip', 'isDragging', 'dragStartPos', 'initialClickPos', 'dragOffset', 'isDrawing', 'currentPoints'])
+	const NON_PERSISTENT_KEYS: Set<keyof DrawingState> = new Set(['mousePosition', 'cursor', 'showTooltip', 'isDragging', 'dragStartPos', 'initialClickPos', 'dragOffset', 'isDrawing', 'isResizing', 'resizeAnchor', 'currentPoints'])
 
 	const wrappedSetState = (newState: Partial<DrawingState>, isClearing = false) => {
 		if (newState.selectedTool || newState.selectedColor) {
@@ -121,25 +127,37 @@ export const createDrawingStore = (
 		handleStart: (e: MouseEvent | TouchEvent) => {
 			if (e instanceof MouseEvent) {
 				const target = e.target as HTMLElement
-				if (!target.classList.contains('ucho-drawing-layer-mask') && !target.classList.contains('ucho-shape')) {
+				if (!target.classList.contains('ucho-drawing-layer-mask') && !target.classList.contains('ucho-shape') && !target.classList.contains('ucho-resize-handle')) {
 					return
 				}
 			}
 
 			const point = getPointFromEvent(e)
 
+			// Clicked on a resize handle → start resizing
+			if (e.target instanceof SVGElement && e.target.classList.contains('ucho-resize-handle')) {
+				const anchorX = parseFloat(e.target.dataset.anchorX || '0')
+				const anchorY = parseFloat(e.target.dataset.anchorY || '0')
+				methods.startResize({ x: anchorX, y: anchorY })
+				methods.setInitialClick(point)
+				return
+			}
+
+			// Clicked on a shape → select it and prepare for potential drag
 			if (e.target instanceof SVGElement && e.target.classList.contains('ucho-shape')) {
 				const shapeId = e.target.dataset.shapeId
-				if (shapeId && state.selectedShapeId === shapeId) {
+				if (shapeId) {
 					const shape = state.shapes.find(s => s.id === shapeId)
 					if (shape) {
-						methods.startDrag(point)
-						methods.updateDragOffset(shape, point)
+						wrappedSetState({ selectedShapeId: shapeId })
+						methods.setInitialClick(point)
 						return
 					}
 				}
 			}
 
+			// Clicked on empty area → deselect and prepare for new drawing
+			wrappedSetState({ selectedShapeId: null })
 			methods.setInitialClick(point)
 		},
 		handleMove: (e: MouseEvent | TouchEvent) => {
@@ -148,6 +166,19 @@ export const createDrawingStore = (
 
 			wrappedSetState({ mousePosition: clientPoint })
 
+			// Active resize: update shape points to [anchor, currentPoint]
+			if (state.isResizing && state.selectedShapeId && state.resizeAnchor) {
+				const updatedShapes = state.shapes.map(s => {
+					if (s.id === state.selectedShapeId) {
+						return { ...s, points: [state.resizeAnchor!, point] }
+					}
+					return s
+				})
+				wrappedSetState({ shapes: updatedShapes })
+				return
+			}
+
+			// Active drag: move the selected shape
 			if (state.isDragging && state.selectedShapeId && state.dragStartPos) {
 				const shape = state.shapes.find(s => s.id === state.selectedShapeId)
 				if (shape) {
@@ -173,9 +204,20 @@ export const createDrawingStore = (
 				}
 			}
 
+			// Pending interaction: check threshold to start drag or draw
 			if (state.initialClickPos && !state.isDrawing) {
 				const distance = getDistance(state.initialClickPos, point)
 				if (distance >= MOVEMENT_THRESHOLD) {
+					// Shape is selected (clicked on a shape) → start dragging
+					if (state.selectedShapeId) {
+						const shape = state.shapes.find(s => s.id === state.selectedShapeId)
+						if (shape) {
+							methods.startDrag(state.initialClickPos)
+							methods.updateDragOffset(shape, state.initialClickPos)
+							return
+						}
+					}
+					// No shape selected → start drawing
 					methods.startDrawing(state.initialClickPos)
 				}
 				return
@@ -185,27 +227,24 @@ export const createDrawingStore = (
 				methods.updateDrawing(point)
 			}
 		},
-		handleEnd: (e: MouseEvent | TouchEvent) => {
-			if (state.isDragging) {
-				methods.stopDrag()
+		handleEnd: (_e: MouseEvent | TouchEvent) => {
+			if (state.isResizing) {
+				methods.stopResize()
+				methods.setInitialClick(null)
 				return
 			}
 
-			if (state.initialClickPos && !state.isDrawing) {
-				const point = getPointFromEvent(e)
-				const distance = getDistance(state.initialClickPos, point)
-				if (distance < MOVEMENT_THRESHOLD && e.target instanceof SVGElement && e.target.classList.contains('ucho-shape')) {
-					const shapeId = e.target.dataset.shapeId
-					if (shapeId) {
-						wrappedSetState({ selectedShapeId: shapeId })
-					}
-				}
+			if (state.isDragging) {
+				methods.stopDrag()
 				methods.setInitialClick(null)
 				return
 			}
 
 			methods.setInitialClick(null)
-			methods.finishDrawing()
+
+			if (state.isDrawing) {
+				methods.finishDrawing()
+			}
 		},
 		handleEnter: (e: MouseEvent | TouchEvent) => {
 			if (e.target === e.currentTarget && !state.hasDrawn) {
@@ -216,6 +255,18 @@ export const createDrawingStore = (
 			if (e.target === e.currentTarget) {
 				wrappedSetState({ showTooltip: false })
 			}
+		},
+		startResize: (anchor: Point) => {
+			wrappedSetState({
+				isResizing: true,
+				resizeAnchor: anchor,
+			})
+		},
+		stopResize: () => {
+			wrappedSetState({
+				isResizing: false,
+				resizeAnchor: null,
+			})
 		},
 		startDrag: (point: Point) => {
 			wrappedSetState({
