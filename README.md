@@ -21,7 +21,7 @@ A lightweight tool for capturing user feedback with screenshots, annotations, an
 ### Using as an NPM Package
 
 ```typescript
-import { init } from 'uchovat'
+import { init } from 'ucho-js'
 
 init({
   onSubmit: async (data) => {
@@ -34,7 +34,7 @@ init({
 
 ```html
 <script type="module">
-  import { init } from 'https://esm.sh/uchovat'
+  import { init } from 'https://esm.sh/ucho-js'
 
   init({
     onSubmit: async (data) => {
@@ -47,9 +47,9 @@ init({
 ### Using with React
 
 ```tsx
-import { init } from 'uchovat'
+import { init } from 'ucho-js'
 import { useEffect, useRef } from 'react'
-import type { Config } from 'uchovat'
+import type { Config } from 'ucho-js'
 
 function useUcho(config: Config) {
   const cleanupRef = useRef<(() => void) | null>(null)
