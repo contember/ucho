@@ -24,19 +24,19 @@
     --z-widget-button: 2;
     --z-feedback-form: 4;
 
-    /* Colors — palette derived from ucho ear icon (rose-pink → lavender) */
-    --primary-color: #C23AAE;
+    /* Colors — black & white */
+    --primary-color: #1a1a1a;
     --primary-text-color: #fff;
-    --error-color: #E03058;
+    --error-color: #dc2626;
     --success-color: var(--primary-color);
-    --text-dark: #1A0E1C;
-    --text-medium: #3A2042;
-    --text-light: #6B4D78;
-    --text-lighter: #9680A0;
-    --border-color: rgba(140, 60, 130, 0.22);
-    --border-color-light: rgba(140, 60, 130, 0.12);
-    --border-color-medium: rgba(140, 60, 130, 0.18);
-    --background-color: #FEFBFC;
+    --text-dark: #111111;
+    --text-medium: #333333;
+    --text-light: #666666;
+    --text-lighter: #999999;
+    --border-color: rgba(0, 0, 0, 0.15);
+    --border-color-light: rgba(0, 0, 0, 0.08);
+    --border-color-medium: rgba(0, 0, 0, 0.12);
+    --background-color: #ffffff;
 
     /* Color Mixins */
     --primary-color-lighter: color-mix(in srgb, var(--primary-color) 100%, white 40%);
@@ -44,9 +44,9 @@
     --hover-color: color-mix(in srgb, var(--primary-color) 80%, #fff);
 
     /* Shadows */
-    --shadow-color-dark: rgba(60, 30, 50, 0.45);
+    --shadow-color-dark: rgba(0, 0, 0, 0.35);
     --shadow-color-light: rgba(255, 255, 255, 0.1);
-    --shadow-color-medium: rgba(80, 40, 70, 0.12);
+    --shadow-color-medium: rgba(0, 0, 0, 0.1);
 
     /* Base Shadows */
     --shadow-sm: 0 1px 3px;
@@ -54,9 +54,9 @@
     --shadow-lg: 0 10px 20px;
 
     /* Composite Shadows */
-    --shadow-black-sm: var(--shadow-sm) rgba(60, 30, 50, 0.35);
-    --shadow-black-md: var(--shadow-md) rgba(60, 30, 50, 0.3);
-    --shadow-black-lg: var(--shadow-lg) rgba(60, 30, 50, 0.25);
+    --shadow-black-sm: var(--shadow-sm) rgba(0, 0, 0, 0.25);
+    --shadow-black-md: var(--shadow-md) rgba(0, 0, 0, 0.2);
+    --shadow-black-lg: var(--shadow-lg) rgba(0, 0, 0, 0.15);
 
     --shadow-black-lightened-sm: var(--shadow-sm) var(--shadow-color-medium);
     --shadow-black-lightened-md: var(--shadow-md) var(--shadow-color-medium);
@@ -394,13 +394,13 @@
 .ucho-feedback[data-minimized="true"] {
     transition: transform 0.4s var(--ease-default), box-shadow 0.4s var(--ease-default);
     transform: translate(calc(100% - 48px), calc(100% - 48px));
-    box-shadow: 0 8px 16px rgba(60, 30, 50, 0.15);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
 .ucho-feedback[data-minimized="true"]:hover {
     cursor: pointer;
     transform: translate(calc(100% - 48px), calc(100% - 48px)) rotate(-2deg) scale(1.1);
-    box-shadow: 0 12px 24px rgba(60, 30, 50, 0.18);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 .ucho-feedback[data-minimized="false"] {

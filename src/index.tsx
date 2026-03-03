@@ -26,7 +26,7 @@ let activeInstance: (() => void) | null = null
  *     return response; // Return response to handle success/error notifications
  *   },
  *   position: 'bottom-right',
- *   primaryColor: '#6227dc',
+ *   primaryColor: '#1a1a1a',
  *   disableMinimization: false, // Optional: disable launcher button minimization
  *   customInputs: [
  *     {
@@ -45,7 +45,7 @@ let activeInstance: (() => void) | null = null
  * @param {Config} options - Configuration options for the Ucho widget
  * @param {Function} options.onSubmit - Required callback function that handles feedback submission. Return the API Response to enable success/error notifications
  * @param {Position} [options.position='bottom-right'] - Widget position on the page
- * @param {string} [options.primaryColor='#6227dc'] - Primary color for UI elements (must be a valid hex color)
+ * @param {string} [options.primaryColor='#1a1a1a'] - Primary color for UI elements (must be a valid hex color)
  * @param {Partial<TextConfig>} [options.textConfig] - Custom text configuration for UI elements
  * @param {CustomInputConfig[]} [options.customInputs] - Configuration for custom input fields
  * @param {boolean} [options.disableMinimization=false] - Whether to disable the launcher button minimization after 4 seconds of inactivity
@@ -62,7 +62,7 @@ export function init(options: Config): () => void {
 	try {
 		validateOptions(options)
 
-		const { position = 'bottom-right', primaryColor = '#6227dc', onSubmit, textConfig = {}, customInputs = [], disableMinimization = false } = options
+		const { position = 'bottom-right', primaryColor = '#1a1a1a', onSubmit, textConfig = {}, customInputs = [], disableMinimization = false } = options
 		const mergedTextConfig = deepMerge(defaultText, textConfig)
 
 		const mountPoint = document.createElement('div')
