@@ -60,7 +60,7 @@ export function App() {
 		],
 	}))
 
-	useUcho({ ...config })
+	useUcho({ ...config, position: 'bottom-left' })
 
 	return (
 		<>

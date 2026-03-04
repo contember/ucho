@@ -62,6 +62,8 @@ export const LauncherButton: Component = () => {
 		setIsMinimized(false)
 	}
 
+	const isLeft = () => store.widget.state.position.includes('left')
+
 	return (
 		<>
 			<div
@@ -69,7 +71,7 @@ export const LauncherButton: Component = () => {
 				onPointerEnter={handleUchoLauncherButtonEnter}
 				onPointerLeave={handleUchoLauncherButtonLeave}
 				style={{
-					transform: `translateX(${isMinimized() ? '45px' : '22px'})`,
+					transform: `translateX(${isLeft() ? (isMinimized() ? '-45px' : '-22px') : (isMinimized() ? '45px' : '22px')})`,
 				}}
 			>
 				<button
@@ -79,13 +81,14 @@ export const LauncherButton: Component = () => {
 					aria-label="Open feedback form"
 					aria-expanded={store.widget.state.isOpen}
 				>
-					<img src={uchoIcon} alt="ucho icon" aria-hidden="true" width={52} height={72} />
+					<img src={uchoIcon} alt="ucho icon" aria-hidden="true" width={52} height={72} style={{ transform: isLeft() ? 'scaleX(-1)' : undefined }} />
 				</button>
 				{store.widget.state.pagesCount > 0 && (
 					<button
 						class="ucho-launcher-button-count"
 						onClick={handleCountClick}
 						aria-label={`View ${store.widget.state.pagesCount} stored feedback items`}
+						style={isLeft() ? { left: 'auto', right: 'calc(-1 * var(--spacing-xs))' } : undefined}
 					>
 						{store.widget.state.pagesCount}
 					</button>
