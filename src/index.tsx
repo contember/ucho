@@ -1,9 +1,31 @@
 import { render } from 'solid-js/web'
 import { Ucho } from './components/ucho'
 import { defaultText } from './config/default-text'
-import { type Config, type FeedbackPayload } from './types'
+import { Config } from './types'
 import { deepMerge } from './utils/common'
 import { validateOptions } from './utils/validators'
+
+export type {
+	BrowserInfo,
+	CheckboxInputConfig,
+	Config,
+	ConsoleEntry,
+	CustomInputConfig,
+	CustomInputValue,
+	FeedbackPayload,
+	LocationInfo,
+	Metadata,
+	NetworkInfo,
+	Position,
+	RadioInputConfig,
+	Screenshot,
+	SelectInputConfig,
+	SelectOption,
+	TextAreaConfig,
+	TextConfig,
+	TextInputConfig,
+	TimeInfo,
+} from './types'
 
 let activeInstance: (() => void) | null = null
 
@@ -98,5 +120,3 @@ export function init(options: Config): () => void {
 		throw error
 	}
 }
-
-export type { Config, FeedbackPayload }
