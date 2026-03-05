@@ -1,51 +1,52 @@
 {
-  "name": "ucho-js",
-  "license": "Apache-2.0",
-  "version": "0.1.5",
-  "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/contember/ucho"
-  },
-  "keywords": [
-    "feedback",
-    "solid",
-    "contember"
-  ],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/ucho.js"
-    }
-  },
-  "types": "dist/index.d.ts",
-  "workspaces": [
-    "examples/*"
-  ],
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "dev": "vite build --watch",
-    "dev:example": "concurrently \"bun run dev\" \"bun run --cwd examples/react-spa dev\"",
-    "build": "tsc && vite build && tsc --emitDeclarationOnly",
-    "ts:watch": "tsc --watch",
-    "lint": "biome lint",
-    "lint:fix": "biome lint --write .",
-    "test": "bun test"
-  },
-  "dependencies": {
-    "html2canvas-pro": "2.0.2",
-    "solid-js": "^1"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.4.4",
-    "@types/node": "^20.17.12",
-    "dprint": "^0.51.1",
-    "typescript": "^5",
-    "vite": "^7",
-    "vite-plugin-solid": "^2.10.1",
-    "concurrently": "^9",
-    "vite-tsconfig-paths": "^5.1.4"
-  }
+	"name": "ucho-js",
+	"license": "Apache-2.0",
+	"version": "0.1.5",
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/contember/ucho"
+	},
+	"keywords": [
+		"feedback",
+		"solid",
+		"contember"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/ucho.js"
+		}
+	},
+	"types": "dist/index.d.ts",
+	"workspaces": [
+		"examples/*"
+	],
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"dev": "vite build --watch",
+		"dev:example": "concurrently \"bun run dev\" \"bun run --cwd examples/react-spa dev\"",
+		"build": "tsc && vite build && tsc --emitDeclarationOnly",
+		"ts:watch": "tsc --watch",
+		"format": "dprint fmt",
+		"lint": "biome lint",
+		"lint:fix": "biome lint --write .",
+		"test": "bun test"
+	},
+	"dependencies": {
+		"html2canvas-pro": "2.0.2",
+		"solid-js": "^1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.4",
+		"@types/node": "^20.17.12",
+		"dprint": "^0.51.1",
+		"typescript": "^5",
+		"vite": "^7",
+		"vite-plugin-solid": "^2.10.1",
+		"concurrently": "^9",
+		"vite-tsconfig-paths": "^5.1.4"
+	}
 }
