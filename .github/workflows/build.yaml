@@ -11,6 +11,8 @@ jobs:
     strategy:
       matrix:
         include:
+          - job_name: format
+            run_script: bun run format:check
 
           - job_name: lint
             run_script: bun run lint
