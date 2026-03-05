@@ -21,10 +21,12 @@ Read `package.json` and note the current `version` field.
 ### 4. Generate release notes
 
 Run `git tag -l 'v*' --sort=-v:refname` to find the latest existing tag. Then:
+
 - If a previous tag exists: `git log <previous-tag>..HEAD --oneline --no-merges`
 - If no tags exist: `git log --oneline --no-merges`
 
 Group the commit messages into sections based on conventional commit prefixes:
+
 - **Features** — `feat:` or `feat(...):` commits
 - **Fixes** — `fix:` or `fix(...):` commits
 - **Other Changes** — everything else (refactor, chore, style, docs, ci, etc.)
@@ -55,6 +57,7 @@ gh release create "v<new-version>" --title "v<new-version>" --notes "<release-no
 ### 8. Summary
 
 Tell the user:
+
 - The new version number
 - Link to the GitHub release
 - That the publish workflow will run automatically to publish to npm

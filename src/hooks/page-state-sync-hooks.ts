@@ -8,7 +8,7 @@ export type PageStateSyncProps = {
 
 const patchHistoryMethod = (method: 'pushState' | 'replaceState') => {
 	const original = history[method]
-	history[method] = function (...args: Parameters<typeof original>) {
+	history[method] = function(...args: Parameters<typeof original>) {
 		const result = original.apply(this, args)
 		window.dispatchEvent(new Event(method.toLowerCase()))
 		return result

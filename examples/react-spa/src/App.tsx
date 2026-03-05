@@ -64,19 +64,23 @@ export function App() {
 
 	return (
 		<>
-			<style>{`
+			<style>
+				{`
 				*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 				body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #1a1a2e; background: #fafafa; }
-			`}</style>
+			`}
+			</style>
 
-			<header style={{
-				background: '#fff',
-				borderBottom: '1px solid #e5e7eb',
-				padding: '1rem 2rem',
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'space-between',
-			}}>
+			<header
+				style={{
+					background: '#fff',
+					borderBottom: '1px solid #e5e7eb',
+					padding: '1rem 2rem',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+				}}
+			>
 				<h1 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Acme App</h1>
 				<nav style={{ display: 'flex', gap: '1.5rem' }}>
 					{['Dashboard', 'Projects', 'Settings'].map(item => (
@@ -97,10 +101,10 @@ export function App() {
 
 				<Card title="Integration">
 					<p>
-						The widget is initialized via a custom <code>useUcho</code> hook that
-						handles cleanup on unmount and reinitializes when config changes.
+						The widget is initialized via a custom <code>useUcho</code> hook that handles cleanup on unmount and reinitializes when config changes.
 					</p>
-					<Pre>{`import { init } from 'ucho-js'
+					<Pre>
+						{`import { init } from 'ucho-js'
 import { useEffect, useRef } from 'react'
 
 function useUcho(config) {
@@ -113,7 +117,8 @@ function useUcho(config) {
       cleanupRef.current = null
     }
   }, [config])
-}`}</Pre>
+}`}
+					</Pre>
 				</Card>
 
 				<Card title="Position">
@@ -146,13 +151,15 @@ function useUcho(config) {
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
 	return (
-		<div style={{
-			background: '#fff',
-			border: '1px solid #e5e7eb',
-			borderRadius: 12,
-			padding: '2rem',
-			marginBottom: '1.5rem',
-		}}>
+		<div
+			style={{
+				background: '#fff',
+				border: '1px solid #e5e7eb',
+				borderRadius: 12,
+				padding: '2rem',
+				marginBottom: '1.5rem',
+			}}
+		>
 			<h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>{title}</h3>
 			{children}
 		</div>
@@ -189,16 +196,18 @@ function Button({ active, children, onClick, style }: {
 
 function Pre({ children }: { children: string }) {
 	return (
-		<pre style={{
-			background: '#1a1a2e',
-			color: '#e5e7eb',
-			padding: '1.25rem',
-			borderRadius: 8,
-			overflowX: 'auto',
-			fontSize: '0.85rem',
-			lineHeight: 1.7,
-			marginTop: '1rem',
-		}}>
+		<pre
+			style={{
+				background: '#1a1a2e',
+				color: '#e5e7eb',
+				padding: '1.25rem',
+				borderRadius: 8,
+				overflowX: 'auto',
+				fontSize: '0.85rem',
+				lineHeight: 1.7,
+				marginTop: '1rem',
+			}}
+		>
 			{children}
 		</pre>
 	)

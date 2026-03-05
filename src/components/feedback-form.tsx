@@ -1,7 +1,7 @@
 import { type Component, createEffect, For, Show } from 'solid-js'
 import { Button } from '~/components/button'
-import { ChevronRightIcon, XIcon } from '~/components/icons'
 import { CustomInput } from '~/components/custom-input'
+import { ChevronRightIcon, XIcon } from '~/components/icons'
 import { TextArea } from '~/components/inputs/textarea'
 import { useStore } from '~/contexts'
 import { FeedbackPayload } from '~/types'

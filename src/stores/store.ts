@@ -3,7 +3,7 @@ import { createNotificationManager } from '~/utils/notifications'
 import { createDebouncedStateSaver } from '~/utils/state-management'
 import { clearPageState, getPageKey, loadPageState } from '~/utils/storage'
 import { createDrawingStore, type DrawingStore } from './drawing-store'
-import { createFeedbackStore, getDefaultCustomValues, type FeedbackStore } from './feedback-store'
+import { createFeedbackStore, type FeedbackStore, getDefaultCustomValues } from './feedback-store'
 import { createWidgetStore, type WidgetStore } from './widget-store'
 
 export type Store = {

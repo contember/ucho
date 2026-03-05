@@ -13,8 +13,10 @@ export const getRectFromPoints = (points: Point[]) => {
 
 export const getPathFromPoints = (points: Point[]) => {
 	if (points.length < 2) return null
-	return `M ${points[0].x} ${points[0].y} ${points
-		.slice(1)
-		.map(point => `L ${point.x} ${point.y}`)
-		.join(' ')}`
+	return `M ${points[0].x} ${points[0].y} ${
+		points
+			.slice(1)
+			.map(point => `L ${point.x} ${point.y}`)
+			.join(' ')
+	}`
 }

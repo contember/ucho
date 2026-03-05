@@ -7,11 +7,11 @@ export const DrawingTooltip: Component = () => {
 
 	const showTooltip = createMemo(() => {
 		return (
-			store.drawing.state.showTooltip &&
-			store.drawing.state.mousePosition.y &&
-			store.drawing.state.mousePosition.x &&
-			store.widget.state.isOpen &&
-			!isMobileDevice()
+			store.drawing.state.showTooltip
+			&& store.drawing.state.mousePosition.y
+			&& store.drawing.state.mousePosition.x
+			&& store.widget.state.isOpen
+			&& !isMobileDevice()
 		)
 	})
 

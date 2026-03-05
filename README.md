@@ -24,9 +24,9 @@ A lightweight tool for capturing user feedback with screenshots, annotations, an
 import { init } from 'ucho-js'
 
 init({
-  onSubmit: async (data) => {
-    console.log('Feedback submitted:', data)
-  }
+	onSubmit: async (data) => {
+		console.log('Feedback submitted:', data)
+	},
 })
 ```
 
@@ -47,33 +47,33 @@ init({
 ### Using with React
 
 ```tsx
-import { init } from 'ucho-js'
 import { useEffect, useRef } from 'react'
+import { init } from 'ucho-js'
 import type { Config } from 'ucho-js'
 
 function useUcho(config: Config) {
-  const cleanupRef = useRef<(() => void) | null>(null)
+	const cleanupRef = useRef<(() => void) | null>(null)
 
-  useEffect(() => {
-    cleanupRef.current = init(config)
-    return () => {
-      cleanupRef.current?.()
-      cleanupRef.current = null
-    }
-  }, [config])
+	useEffect(() => {
+		cleanupRef.current = init(config)
+		return () => {
+			cleanupRef.current?.()
+			cleanupRef.current = null
+		}
+	}, [config])
 }
 ```
 
 ## Configuration Options
 
-| Option | Type | Required | Default | Description |
-|--------|------|----------|---------|-------------|
-| `onSubmit` | `(data: FeedbackPayload) => Promise<Response \| void>` | Yes | - | Callback function when feedback is submitted. Return a `Response` to enable success/error notifications |
-| `position` | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'` | No | `'bottom-right'` | Widget position on the page |
-| `primaryColor` | `` `#${string}` `` | No | `'#6227dc'` | Primary color for UI elements |
-| `textConfig` | `Partial<TextConfig>` | No | English defaults | Customize all text elements in the interface |
-| `customInputs` | `CustomInputConfig[]` | No | `[]` | Custom input fields added to the feedback form |
-| `disableMinimization` | `boolean` | No | `false` | Disable the launcher button minimization after inactivity |
+| Option                | Type                                                           | Required | Default          | Description                                                                                             |
+| --------------------- | -------------------------------------------------------------- | -------- | ---------------- | ------------------------------------------------------------------------------------------------------- |
+| `onSubmit`            | `(data: FeedbackPayload) => Promise<Response \| void>`         | Yes      | -                | Callback function when feedback is submitted. Return a `Response` to enable success/error notifications |
+| `position`            | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'` | No       | `'bottom-right'` | Widget position on the page                                                                             |
+| `primaryColor`        | `` `#${string}` ``                                             | No       | `'#6227dc'`      | Primary color for UI elements                                                                           |
+| `textConfig`          | `Partial<TextConfig>`                                          | No       | English defaults | Customize all text elements in the interface                                                            |
+| `customInputs`        | `CustomInputConfig[]`                                          | No       | `[]`             | Custom input fields added to the feedback form                                                          |
+| `disableMinimization` | `boolean`                                                      | No       | `false`          | Disable the launcher button minimization after inactivity                                               |
 
 ### Custom Inputs
 
@@ -81,28 +81,28 @@ You can add custom form fields to the feedback form:
 
 ```typescript
 init({
-  onSubmit: async (data) => { /* ... */ },
-  customInputs: [
-    {
-      id: 'category',
-      type: 'select',
-      label: 'Category',
-      options: [
-        { value: 'bug', label: 'Bug Report' },
-        { value: 'feature', label: 'Feature Request' },
-      ],
-    },
-    {
-      id: 'mood',
-      type: 'radio',
-      label: 'How are you feeling?',
-      options: [
-        { value: 'happy', label: 'Happy' },
-        { value: 'neutral', label: 'Neutral' },
-        { value: 'frustrated', label: 'Frustrated' },
-      ],
-    },
-  ],
+	onSubmit: async (data) => {/* ... */},
+	customInputs: [
+		{
+			id: 'category',
+			type: 'select',
+			label: 'Category',
+			options: [
+				{ value: 'bug', label: 'Bug Report' },
+				{ value: 'feature', label: 'Feature Request' },
+			],
+		},
+		{
+			id: 'mood',
+			type: 'radio',
+			label: 'How are you feeling?',
+			options: [
+				{ value: 'happy', label: 'Happy' },
+				{ value: 'neutral', label: 'Neutral' },
+				{ value: 'frustrated', label: 'Frustrated' },
+			],
+		},
+	],
 })
 ```
 
@@ -114,51 +114,51 @@ The `onSubmit` callback receives a `FeedbackPayload` object:
 
 ```typescript
 type FeedbackPayload = {
-  message: string              // User's written feedback
-  screenshot?: string          // Base64 encoded PNG screenshot
-  customInputs?: Record<string, string | string[]>
-  metadata: {
-    userAgent: string
-    browserInfo: {
-      width: number            // Viewport width
-      height: number           // Viewport height
-      screenWidth: number
-      screenHeight: number
-      language: string
-      languages: readonly string[]
-      doNotTrack: string | null
-      cookiesEnabled: boolean
-      hardwareConcurrency: number
-      deviceMemory?: number
-      maxTouchPoints: number
-      colorDepth: number
-      pixelRatio: number
-      availableWidth: number
-      availableHeight: number
-    }
-    networkInfo: {
-      effectiveType?: string
-      downlink?: number
-      rtt?: number
-      saveData?: boolean
-    }
-    locationInfo: {
-      url: string
-      origin: string
-      pathname: string
-      searchParams: Record<string, string>
-      referrer: string
-    }
-    timeInfo: {
-      timezone: string
-      localDateTime: string
-    }
-    console: Array<{
-      type: 'log' | 'warn' | 'error'
-      message: string
-      timestamp: string
-    }>
-  }
+	message: string // User's written feedback
+	screenshot?: string // Base64 encoded PNG screenshot
+	customInputs?: Record<string, string | string[]>
+	metadata: {
+		userAgent: string
+		browserInfo: {
+			width: number // Viewport width
+			height: number // Viewport height
+			screenWidth: number
+			screenHeight: number
+			language: string
+			languages: readonly string[]
+			doNotTrack: string | null
+			cookiesEnabled: boolean
+			hardwareConcurrency: number
+			deviceMemory?: number
+			maxTouchPoints: number
+			colorDepth: number
+			pixelRatio: number
+			availableWidth: number
+			availableHeight: number
+		}
+		networkInfo: {
+			effectiveType?: string
+			downlink?: number
+			rtt?: number
+			saveData?: boolean
+		}
+		locationInfo: {
+			url: string
+			origin: string
+			pathname: string
+			searchParams: Record<string, string>
+			referrer: string
+		}
+		timeInfo: {
+			timezone: string
+			localDateTime: string
+		}
+		console: Array<{
+			type: 'log' | 'warn' | 'error'
+			message: string
+			timestamp: string
+		}>
+	}
 }
 ```
 

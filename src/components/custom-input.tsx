@@ -11,8 +11,8 @@ import type {
 import { CheckboxGroup } from './inputs/checkbox-group'
 import { RadioGroup } from './inputs/radio-group'
 import { Select } from './inputs/select'
-import { TextArea } from './inputs/textarea'
 import { TextInput } from './inputs/text-input'
+import { TextArea } from './inputs/textarea'
 
 type CustomInputProps = {
 	config: CustomInputConfig

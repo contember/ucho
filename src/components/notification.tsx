@@ -38,11 +38,11 @@ export const Notification: Component = () => {
 				<XIcon size={20} />
 			</Button>
 			<div class="ucho-notification-icon">
-				{store.widget.state.notification.type === 'success' ? (
-					<CheckCircleIcon size={32} />
-				) : store.widget.state.notification.type === 'error' ? (
-					<XCircleIcon size={32} />
-				) : null}
+				{store.widget.state.notification.type === 'success'
+					? <CheckCircleIcon size={32} />
+					: store.widget.state.notification.type === 'error'
+					? <XCircleIcon size={32} />
+					: null}
 			</div>
 			<div class="ucho-notification-content">
 				<div class="ucho-notification-title">{getTitle()}</div>
