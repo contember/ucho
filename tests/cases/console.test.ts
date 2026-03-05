@@ -18,7 +18,7 @@ beforeEach(() => {
 	} as any
 	// Provide Node class so instanceof check doesn't throw
 	if (typeof globalThis.Node === 'undefined') {
-		(globalThis as any).Node = class Node {}
+		;(globalThis as any).Node = class Node {}
 	}
 })
 

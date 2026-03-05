@@ -6,10 +6,18 @@ const createMockLocalStorage = () => {
 	const store: Record<string, string> = {}
 	return {
 		getItem: (key: string) => store[key] ?? null,
-		setItem: (key: string, value: string) => { store[key] = value },
-		removeItem: (key: string) => { delete store[key] },
-		clear: () => { for (const key in store) delete store[key] },
-		get length() { return Object.keys(store).length },
+		setItem: (key: string, value: string) => {
+			store[key] = value
+		},
+		removeItem: (key: string) => {
+			delete store[key]
+		},
+		clear: () => {
+			for (const key in store) delete store[key]
+		},
+		get length() {
+			return Object.keys(store).length
+		},
 		key: (index: number) => Object.keys(store)[index] ?? null,
 	}
 }
@@ -56,7 +64,18 @@ describe('savePageState', () => {
 	test('skips save when no user interaction and no shapes', () => {
 		savePageState('/test', {
 			feedback: { message: '', isCapturing: false, isMinimized: false, customInputValues: {}, hasUserInteracted: false },
-			drawing: { shapes: [], isDrawing: false, selectedShapeId: null, selectedTool: 'rectangle', selectedColor: '#FF0000', currentPoints: [], showTooltip: false, mousePosition: { x: 0, y: 0 }, hasDrawn: false, isDragging: false },
+			drawing: {
+				shapes: [],
+				isDrawing: false,
+				selectedShapeId: null,
+				selectedTool: 'rectangle',
+				selectedColor: '#FF0000',
+				currentPoints: [],
+				showTooltip: false,
+				mousePosition: { x: 0, y: 0 },
+				hasDrawn: false,
+				isDragging: false,
+			},
 		} as any)
 		expect(localStorage.getItem('ucho_ucho-pages')).toBeNull()
 	})
@@ -64,7 +83,18 @@ describe('savePageState', () => {
 	test('saves when message has content', () => {
 		savePageState('/test', {
 			feedback: { message: 'Bug report', isCapturing: false, isMinimized: false, customInputValues: {}, hasUserInteracted: true },
-			drawing: { shapes: [], isDrawing: false, selectedShapeId: null, selectedTool: 'rectangle', selectedColor: '#FF0000', currentPoints: [], showTooltip: false, mousePosition: { x: 0, y: 0 }, hasDrawn: false, isDragging: false },
+			drawing: {
+				shapes: [],
+				isDrawing: false,
+				selectedShapeId: null,
+				selectedTool: 'rectangle',
+				selectedColor: '#FF0000',
+				currentPoints: [],
+				showTooltip: false,
+				mousePosition: { x: 0, y: 0 },
+				hasDrawn: false,
+				isDragging: false,
+			},
 		} as any)
 		const stored = JSON.parse(localStorage.getItem('ucho_ucho-pages')!)
 		expect(stored['/test'].feedback.message).toBe('Bug report')
@@ -74,12 +104,34 @@ describe('savePageState', () => {
 		// First save something
 		savePageState('/test', {
 			feedback: { message: 'Bug report', isCapturing: false, isMinimized: false, customInputValues: {}, hasUserInteracted: true },
-			drawing: { shapes: [], isDrawing: false, selectedShapeId: null, selectedTool: 'rectangle', selectedColor: '#FF0000', currentPoints: [], showTooltip: false, mousePosition: { x: 0, y: 0 }, hasDrawn: false, isDragging: false },
+			drawing: {
+				shapes: [],
+				isDrawing: false,
+				selectedShapeId: null,
+				selectedTool: 'rectangle',
+				selectedColor: '#FF0000',
+				currentPoints: [],
+				showTooltip: false,
+				mousePosition: { x: 0, y: 0 },
+				hasDrawn: false,
+				isDragging: false,
+			},
 		} as any)
 		// Then clear it
 		savePageState('/test', {
 			feedback: { message: '', isCapturing: false, isMinimized: false, customInputValues: {}, hasUserInteracted: true },
-			drawing: { shapes: [], isDrawing: false, selectedShapeId: null, selectedTool: 'rectangle', selectedColor: '#FF0000', currentPoints: [], showTooltip: false, mousePosition: { x: 0, y: 0 }, hasDrawn: false, isDragging: false },
+			drawing: {
+				shapes: [],
+				isDrawing: false,
+				selectedShapeId: null,
+				selectedTool: 'rectangle',
+				selectedColor: '#FF0000',
+				currentPoints: [],
+				showTooltip: false,
+				mousePosition: { x: 0, y: 0 },
+				hasDrawn: false,
+				isDragging: false,
+			},
 		} as any)
 		const stored = JSON.parse(localStorage.getItem('ucho_ucho-pages')!)
 		expect(stored['/test']).toBeUndefined()
@@ -90,7 +142,18 @@ describe('loadPageState / clearPageState round-trip', () => {
 	test('loads previously saved state', () => {
 		savePageState('/page', {
 			feedback: { message: 'Hello', isCapturing: false, isMinimized: false, customInputValues: {}, hasUserInteracted: true },
-			drawing: { shapes: [], isDrawing: false, selectedShapeId: null, selectedTool: 'rectangle', selectedColor: '#FF0000', currentPoints: [], showTooltip: false, mousePosition: { x: 0, y: 0 }, hasDrawn: false, isDragging: false },
+			drawing: {
+				shapes: [],
+				isDrawing: false,
+				selectedShapeId: null,
+				selectedTool: 'rectangle',
+				selectedColor: '#FF0000',
+				currentPoints: [],
+				showTooltip: false,
+				mousePosition: { x: 0, y: 0 },
+				hasDrawn: false,
+				isDragging: false,
+			},
 		} as any)
 		const loaded = loadPageState('/page')
 		expect(loaded?.feedback.message).toBe('Hello')
@@ -103,7 +166,18 @@ describe('loadPageState / clearPageState round-trip', () => {
 	test('clearPageState removes saved state', () => {
 		savePageState('/page', {
 			feedback: { message: 'Hello', isCapturing: false, isMinimized: false, customInputValues: {}, hasUserInteracted: true },
-			drawing: { shapes: [], isDrawing: false, selectedShapeId: null, selectedTool: 'rectangle', selectedColor: '#FF0000', currentPoints: [], showTooltip: false, mousePosition: { x: 0, y: 0 }, hasDrawn: false, isDragging: false },
+			drawing: {
+				shapes: [],
+				isDrawing: false,
+				selectedShapeId: null,
+				selectedTool: 'rectangle',
+				selectedColor: '#FF0000',
+				currentPoints: [],
+				showTooltip: false,
+				mousePosition: { x: 0, y: 0 },
+				hasDrawn: false,
+				isDragging: false,
+			},
 		} as any)
 		clearPageState('/page')
 		expect(loadPageState('/page')).toBeUndefined()
