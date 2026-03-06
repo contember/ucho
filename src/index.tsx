@@ -84,7 +84,15 @@ export function init(options: Config): () => void {
 	try {
 		validateOptions(options)
 
-		const { position = 'bottom-right', primaryColor = '#1a1a1a', onSubmit, textConfig = {}, customInputs = [], disableMinimization = false, fancyIcon = false } = options
+		const {
+			position = 'bottom-right',
+			primaryColor = '#1a1a1a',
+			onSubmit,
+			textConfig = {},
+			customInputs = [],
+			disableMinimization = false,
+			fancyIcon = false,
+		} = options
 		const mergedTextConfig = deepMerge(defaultText, textConfig)
 
 		const mountPoint = document.createElement('div')
