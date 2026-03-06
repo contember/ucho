@@ -16,15 +16,17 @@ export const Provider: Component<ProviderProps> = props => {
 		position: props.position,
 		customInputs: props.customInputs,
 		disableMinimization: props.disableMinimization,
+		fancyIcon: props.fancyIcon,
 	})
 
 	createEffect(on(
-		() => [props.primaryColor, props.position, props.disableMinimization, props.textConfig, props.customInputs],
+		() => [props.primaryColor, props.position, props.disableMinimization, props.fancyIcon, props.textConfig, props.customInputs],
 		() => {
 			store.widget.setState({
 				primaryColor: props.primaryColor,
 				position: props.position,
 				disableMinimization: props.disableMinimization,
+				fancyIcon: props.fancyIcon,
 				text: props.textConfig,
 				customInputs: props.customInputs,
 			})

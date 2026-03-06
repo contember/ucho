@@ -1,5 +1,6 @@
-import { type Component, createEffect, createSignal, onCleanup } from 'solid-js'
-import uchoIcon from '~/assets/ucho-icon.png'
+import { type Component, createEffect, createSignal, onCleanup, Show } from 'solid-js'
+import uchoIconPng from '~/assets/ucho-icon.png'
+import { UchoIcon } from '~/components/icons'
 import { useStore } from '~/contexts'
 import { getFromStorage, setToStorage } from '~/utils'
 import { StoredFeedback } from './stored-feedback'
@@ -81,7 +82,9 @@ export const LauncherButton: Component = () => {
 					aria-label="Open feedback form"
 					aria-expanded={store.widget.state.isOpen}
 				>
-					<img src={uchoIcon} alt="ucho icon" aria-hidden="true" width={52} height={72} style={{ transform: isLeft() ? 'scaleX(-1)' : undefined }} />
+					<Show when={store.widget.state.fancyIcon} fallback={<UchoIcon size={52} style={{ transform: isLeft() ? 'scaleX(-1)' : undefined }} />}>
+						<img src={uchoIconPng} alt="ucho icon" aria-hidden="true" width={52} height={72} style={{ transform: isLeft() ? 'scaleX(-1)' : undefined }} />
+					</Show>
 				</button>
 				{store.widget.state.pagesCount > 0 && (
 					<button

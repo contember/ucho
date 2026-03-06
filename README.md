@@ -74,6 +74,7 @@ function useUcho(config: Config) {
 | `textConfig`          | `Partial<TextConfig>`                                          | No       | English defaults | Customize all text elements in the interface                                                            |
 | `customInputs`        | `CustomInputConfig[]`                                          | No       | `[]`             | Custom input fields added to the feedback form                                                          |
 | `disableMinimization` | `boolean`                                                      | No       | `false`          | Disable the launcher button minimization after inactivity                                               |
+| `fancyIcon`           | `boolean`                                                      | No       | `false`          | Use the fancy PNG icon instead of the default SVG icon                                                  |
 
 ### Custom Inputs
 

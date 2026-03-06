@@ -139,11 +139,13 @@ export type Config = {
 	textConfig?: Partial<TextConfig>
 	customInputs?: CustomInputConfig[]
 	disableMinimization?: boolean
+	fancyIcon?: boolean
 }
 
 export type FullConfig = Required<Config> & {
 	textConfig: TextConfig
 	disableMinimization: boolean
+	fancyIcon: boolean
 }
 
 export const POSITIONS: Record<Position, { [key: string]: string }> = {

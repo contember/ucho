@@ -17,6 +17,7 @@ export type WidgetState = {
 	position: Position
 	customInputs?: CustomInputConfig[]
 	disableMinimization: boolean
+	fancyIcon: boolean
 }
 
 export type WidgetStore = {
@@ -44,6 +45,7 @@ export const createWidgetStore = (config: FullConfig, currentPageKey: string): W
 		position: config.position,
 		customInputs: config.customInputs,
 		disableMinimization: config.disableMinimization,
+		fancyIcon: config.fancyIcon,
 	})
 
 	return {
