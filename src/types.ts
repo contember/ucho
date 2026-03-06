@@ -1,4 +1,4 @@
-export type Screenshot = `data:image/png;base64,${string}`
+export type Screenshot = `data:image/jpeg;base64,${string}`
 
 export type BrowserInfo = {
 	width: number

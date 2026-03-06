@@ -1,5 +1,5 @@
 import { onCleanup, onMount } from 'solid-js'
-import { registerMutationObserver, registerWindowEventListener } from '~/utils/listeners'
+import { registerWindowEventListener } from '~/utils/listeners'
 import { getPageKey } from '~/utils/storage'
 
 export type PageStateSyncProps = {
@@ -46,12 +46,6 @@ export const usePageStateSync = ({ onUrlChange }: PageStateSyncProps) => {
 	registerWindowEventListener({ event: 'pushstate', callback: handleUrlChange })
 	registerWindowEventListener({ event: 'replacestate', callback: handleUrlChange })
 
-	registerMutationObserver({
-		target: document.documentElement,
-		options: {
-			childList: true,
-			subtree: true,
-		},
-		callback: handleUrlChange,
-	})
+	// URL changes are already detected via pushstate/replacestate/popstate events.
+	// No MutationObserver needed here.
 }

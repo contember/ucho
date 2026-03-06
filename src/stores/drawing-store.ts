@@ -51,11 +51,16 @@ export type DrawingStore = {
 	}
 }
 
+const PATH_POINT_MIN_DISTANCE = 3 // minimum pixels between path points
+
 export const createDrawingStore = (
 	config: FullConfig,
 	currentPageKey: string,
 	onStateChange?: (state: Partial<DrawingState>, isClearing?: boolean) => void,
 ): DrawingStore => {
+	let drawingRafId: number | undefined
+	let pendingDrawPoint: Point | undefined
+
 	const [state, setState] = createStore<DrawingState>({
 		isDrawing: false,
 		isResizing: false,
@@ -114,6 +119,8 @@ export const createDrawingStore = (
 			if (state.selectedTool === 'rectangle') {
 				wrappedSetState({ currentPoints: [state.currentPoints[0], point] })
 			} else if (state.selectedTool === 'path') {
+				const lastPoint = state.currentPoints[state.currentPoints.length - 1]
+				if (lastPoint && getDistance(lastPoint, point) < PATH_POINT_MIN_DISTANCE) return
 				wrappedSetState({
 					currentPoints: [...state.currentPoints, point],
 				})
@@ -176,54 +183,20 @@ export const createDrawingStore = (
 			methods.setInitialClick(point)
 		},
 		handleMove: (e: MouseEvent | TouchEvent) => {
-			const clientPoint = getPointFromEvent(e, { useClientCoords: true })
 			const point = getPointFromEvent(e)
 
-			wrappedSetState({ mousePosition: clientPoint })
-
-			// Active resize: update shape points to [anchor, currentPoint]
-			if (state.isResizing && state.selectedShapeId && state.resizeAnchor) {
-				const updatedShapes = state.shapes.map(s => {
-					if (s.id === state.selectedShapeId) {
-						return { ...s, points: [state.resizeAnchor!, point] }
-					}
-					return s
-				})
-				wrappedSetState({ shapes: updatedShapes })
+			if (!state.isDrawing && !state.isResizing && !state.isDragging && !state.initialClickPos) {
+				if (state.showTooltip) {
+					const clientPoint = getPointFromEvent(e, { useClientCoords: true })
+					wrappedSetState({ mousePosition: clientPoint })
+				}
 				return
 			}
 
-			// Active drag: move the selected shape
-			if (state.isDragging && state.selectedShapeId && state.dragStartPos) {
-				const shape = state.shapes.find(s => s.id === state.selectedShapeId)
-				if (shape) {
-					const dx = point.x - state.dragStartPos.x
-					const dy = point.y - state.dragStartPos.y
-
-					const updatedShapes = state.shapes.map(s => {
-						if (s.id === state.selectedShapeId) {
-							return {
-								...s,
-								points: s.points.map(p => ({
-									x: p.x + dx,
-									y: p.y + dy,
-								})),
-							}
-						}
-						return s
-					})
-
-					wrappedSetState({ shapes: updatedShapes })
-					methods.startDrag(point)
-					return
-				}
-			}
-
-			// Pending interaction: check threshold to start drag or draw
-			if (state.initialClickPos && !state.isDrawing) {
+			// Threshold check runs immediately (no RAF) so drawing starts responsively
+			if (state.initialClickPos && !state.isDrawing && !state.isResizing && !state.isDragging) {
 				const distance = getDistance(state.initialClickPos, point)
 				if (distance >= MOVEMENT_THRESHOLD) {
-					// Shape is selected (clicked on a shape) → start dragging
 					if (state.selectedShapeId) {
 						const shape = state.shapes.find(s => s.id === state.selectedShapeId)
 						if (shape) {
@@ -232,15 +205,57 @@ export const createDrawingStore = (
 							return
 						}
 					}
-					// No shape selected → start drawing
 					methods.startDrawing(state.initialClickPos)
 				}
 				return
 			}
 
-			if (state.isDrawing) {
-				methods.updateDrawing(point)
-			}
+			// Batch actual drawing/resize/drag updates with RAF
+			pendingDrawPoint = point
+			if (drawingRafId !== undefined) return
+			drawingRafId = requestAnimationFrame(() => {
+				drawingRafId = undefined
+				const p = pendingDrawPoint!
+				pendingDrawPoint = undefined
+
+				if (state.isResizing && state.selectedShapeId && state.resizeAnchor) {
+					const updatedShapes = state.shapes.map(s => {
+						if (s.id === state.selectedShapeId) {
+							return { ...s, points: [state.resizeAnchor!, p] }
+						}
+						return s
+					})
+					wrappedSetState({ shapes: updatedShapes })
+					return
+				}
+
+				if (state.isDragging && state.selectedShapeId && state.dragStartPos) {
+					const shape = state.shapes.find(s => s.id === state.selectedShapeId)
+					if (shape) {
+						const dx = p.x - state.dragStartPos.x
+						const dy = p.y - state.dragStartPos.y
+						const updatedShapes = state.shapes.map(s => {
+							if (s.id === state.selectedShapeId) {
+								return {
+									...s,
+									points: s.points.map(pt => ({
+										x: pt.x + dx,
+										y: pt.y + dy,
+									})),
+								}
+							}
+							return s
+						})
+						wrappedSetState({ shapes: updatedShapes })
+						methods.startDrag(p)
+						return
+					}
+				}
+
+				if (state.isDrawing) {
+					methods.updateDrawing(p)
+				}
+			})
 		},
 		handleEnd: (_e: MouseEvent | TouchEvent) => {
 			if (state.isResizing) {

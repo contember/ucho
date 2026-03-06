@@ -14,12 +14,12 @@ export const captureScreenshot = async (): Promise<Screenshot | undefined> => {
 		const canvas = await html2canvas(document.body, {
 			logging: false,
 			useCORS: true,
-			scale: window.devicePixelRatio,
+			scale: 1,
 			allowTaint: true,
 			ignoreElements: element => shouldIgnoreElement(element),
 		})
 
-		return canvas.toDataURL('image/png') as Screenshot
+		return canvas.toDataURL('image/jpeg', 0.7) as Screenshot
 	} catch (error) {
 		console.error('Failed to capture screenshot:', error)
 		return undefined

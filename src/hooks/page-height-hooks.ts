@@ -7,19 +7,34 @@ export const usePageHeight = (element: () => HTMLElement | undefined) => {
 		height: document.documentElement.scrollHeight,
 	})
 
+	let rafId: number | undefined
+	let debounceTimer: ReturnType<typeof setTimeout> | undefined
+
 	const updateDimensions = () => {
-		requestAnimationFrame(() => {
+		if (rafId !== undefined) return
+		rafId = requestAnimationFrame(() => {
+			rafId = undefined
 			const el = element()
 			if (!el) return
 
-			el.style.height = '0px'
-			el.style.height = `${document.documentElement.scrollHeight}px`
+			const newHeight = document.documentElement.scrollHeight
+			const newWidth = document.documentElement.clientWidth
+			const current = dimensions()
+
+			if (current.width === newWidth && current.height === newHeight) return
+
+			el.style.height = `${newHeight}px`
 
 			setDimensions({
-				width: document.documentElement.clientWidth,
-				height: document.documentElement.scrollHeight,
+				width: newWidth,
+				height: newHeight,
 			})
 		})
+	}
+
+	const debouncedUpdateDimensions = () => {
+		if (debounceTimer !== undefined) clearTimeout(debounceTimer)
+		debounceTimer = setTimeout(updateDimensions, 100)
 	}
 
 	registerWindowEventListener({
@@ -33,9 +48,9 @@ export const usePageHeight = (element: () => HTMLElement | undefined) => {
 		options: {
 			childList: true,
 			subtree: true,
-			attributes: true,
+			attributes: false,
 		},
-		callback: updateDimensions,
+		callback: debouncedUpdateDimensions,
 	})
 
 	return dimensions
