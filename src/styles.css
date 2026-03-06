@@ -121,16 +121,37 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-    bottom: calc(100% + var(--spacing-lg));
-    right: 0;
     width: 320px;
     background: var(--background-color);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-black-lightened-lg);
     animation: slideUpFade var(--duration-base) var(--ease-smooth);
     z-index: calc(var(--z-widget-button) + 1);
+    transition: transform var(--duration-base) var(--ease-smooth), opacity var(--duration-base) var(--ease-smooth);
+}
+
+.ucho-root[data-position="bottom-right"] .ucho-stored-feedback {
+    bottom: calc(100% + var(--spacing-lg));
+    right: 0;
     transform-origin: bottom right;
-    transition: all var(--duration-base) var(--ease-smooth);
+}
+
+.ucho-root[data-position="bottom-left"] .ucho-stored-feedback {
+    bottom: calc(100% + var(--spacing-lg));
+    left: 0;
+    transform-origin: bottom left;
+}
+
+.ucho-root[data-position="top-right"] .ucho-stored-feedback {
+    top: calc(100% + var(--spacing-lg));
+    right: 0;
+    transform-origin: top right;
+}
+
+.ucho-root[data-position="top-left"] .ucho-stored-feedback {
+    top: calc(100% + var(--spacing-lg));
+    left: 0;
+    transform-origin: top left;
 }
 
 .ucho-stored-feedback-header {
@@ -159,7 +180,7 @@
     justify-content: space-between;
     padding: var(--spacing-md) var(--spacing-lg);
     border-bottom: 1px solid var(--border-color-light);
-    transition: all var(--duration-base) var(--ease-smooth);
+    transition: background var(--duration-base) var(--ease-smooth);
     background: var(--background-color);
     position: relative;
 }
@@ -284,6 +305,12 @@
     transition: opacity var(--duration-slow) var(--ease-in-out), visibility var(--duration-slow) var(--ease-in-out);
 }
 
+/* Dialog uses showModal/close — skip opacity transition to avoid full-page compositing */
+.ucho-overlay[data-hidden="true"],
+.ucho-overlay[data-hidden="false"] {
+    transition: none;
+}
+
 [data-hidden="true"] {
     opacity: 0;
     visibility: hidden;
@@ -306,8 +333,14 @@
     will-change: transform;
 }
 
-.ucho-launcher-button-wrapper:hover {
+.ucho-root[data-position="bottom-right"] .ucho-launcher-button-wrapper:hover,
+.ucho-root[data-position="top-right"] .ucho-launcher-button-wrapper:hover {
     transform: translateX(8px) !important;
+}
+
+.ucho-root[data-position="bottom-left"] .ucho-launcher-button-wrapper:hover,
+.ucho-root[data-position="top-left"] .ucho-launcher-button-wrapper:hover {
+    transform: translateX(-8px) !important;
 }
 
 .ucho-launcher-button {
@@ -374,8 +407,6 @@
 /* Feedback Form */
 .ucho-feedback {
     position: fixed;
-    bottom: var(--spacing-xl);
-    right: var(--spacing-xl);
     width: min(calc(100vw - var(--spacing-xl) * 2), 24rem);
     max-height: calc(100vh - var(--spacing-xl) * 2);
     z-index: var(--z-feedback-form);
@@ -392,15 +423,76 @@
     padding: 0 var(--spacing-lg);
 }
 
-.ucho-feedback[data-minimized="true"] {
+/* Feedback form position variants */
+.ucho-root[data-position="bottom-right"] .ucho-feedback {
+    bottom: var(--spacing-xl);
+    right: var(--spacing-xl);
+}
+
+.ucho-root[data-position="bottom-left"] .ucho-feedback {
+    bottom: var(--spacing-xl);
+    left: var(--spacing-xl);
+}
+
+.ucho-root[data-position="top-right"] .ucho-feedback {
+    top: var(--spacing-xl);
+    right: var(--spacing-xl);
+}
+
+.ucho-root[data-position="top-left"] .ucho-feedback {
+    top: var(--spacing-xl);
+    left: var(--spacing-xl);
+}
+
+/* Minimize: bottom-right (default) */
+.ucho-root[data-position="bottom-right"] .ucho-feedback[data-minimized="true"] {
     transition: transform 0.4s var(--ease-default), box-shadow 0.4s var(--ease-default);
     transform: translate(calc(100% - 48px), calc(100% - 48px));
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
-.ucho-feedback[data-minimized="true"]:hover {
+.ucho-root[data-position="bottom-right"] .ucho-feedback[data-minimized="true"]:hover {
     cursor: pointer;
     transform: translate(calc(100% - 48px), calc(100% - 48px)) rotate(-2deg) scale(1.1);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Minimize: bottom-left */
+.ucho-root[data-position="bottom-left"] .ucho-feedback[data-minimized="true"] {
+    transition: transform 0.4s var(--ease-default), box-shadow 0.4s var(--ease-default);
+    transform: translate(calc(-100% + 48px), calc(100% - 48px));
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.ucho-root[data-position="bottom-left"] .ucho-feedback[data-minimized="true"]:hover {
+    cursor: pointer;
+    transform: translate(calc(-100% + 48px), calc(100% - 48px)) rotate(2deg) scale(1.1);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Minimize: top-right */
+.ucho-root[data-position="top-right"] .ucho-feedback[data-minimized="true"] {
+    transition: transform 0.4s var(--ease-default), box-shadow 0.4s var(--ease-default);
+    transform: translate(calc(100% - 48px), calc(-100% + 48px));
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.ucho-root[data-position="top-right"] .ucho-feedback[data-minimized="true"]:hover {
+    cursor: pointer;
+    transform: translate(calc(100% - 48px), calc(-100% + 48px)) rotate(2deg) scale(1.1);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Minimize: top-left */
+.ucho-root[data-position="top-left"] .ucho-feedback[data-minimized="true"] {
+    transition: transform 0.4s var(--ease-default), box-shadow 0.4s var(--ease-default);
+    transform: translate(calc(-100% + 48px), calc(-100% + 48px));
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.ucho-root[data-position="top-left"] .ucho-feedback[data-minimized="true"]:hover {
+    cursor: pointer;
+    transform: translate(calc(-100% + 48px), calc(-100% + 48px)) rotate(-2deg) scale(1.1);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
@@ -470,6 +562,16 @@
     -webkit-user-select: none;
 }
 
+/* Drawing Overlay Canvas (replaces SVG mask for performance) */
+.ucho-drawing-overlay-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
 /* Drawing Layer */
 .ucho-drawing-layer {
     position: absolute;
@@ -491,6 +593,7 @@
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none;
+    contain: layout style;
 }
 
 .ucho-drawing-layer-container svg {
@@ -501,13 +604,22 @@
 .ucho-drawing-toolbar {
     position: fixed;
     top: var(--spacing-xl);
-    left: var(--spacing-xl);
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
     z-index: var(--z-drawing-toolbar);
     opacity: 1;
     transition: opacity var(--duration-base) var(--ease-default);
+}
+
+.ucho-root[data-position="bottom-left"] .ucho-drawing-toolbar,
+.ucho-root[data-position="top-left"] .ucho-drawing-toolbar {
+    left: var(--spacing-xl);
+}
+
+.ucho-root[data-position="bottom-right"] .ucho-drawing-toolbar,
+.ucho-root[data-position="top-right"] .ucho-drawing-toolbar {
+    right: var(--spacing-xl);
 }
 
 .ucho-drawing-toolbar-button {
@@ -521,7 +633,7 @@
     justify-content: center;
     cursor: pointer;
     padding: 0;
-    transition: all var(--duration-base) var(--ease-default);
+    transition: transform var(--duration-base) var(--ease-default), border-color var(--duration-base) var(--ease-default), box-shadow var(--duration-base) var(--ease-default);
     box-shadow: var(--shadow-black-sm);
     position: relative;
 }
@@ -548,23 +660,42 @@
     position: relative;
 }
 
-.ucho-color-selector:hover .ucho-drawing-toolbar-button {
+.ucho-root[data-position="bottom-left"] .ucho-color-selector:hover .ucho-drawing-toolbar-button,
+.ucho-root[data-position="top-left"] .ucho-color-selector:hover .ucho-drawing-toolbar-button {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     transform: scale(1.05);
     border-right-color: transparent;
-    background: rgba(var(--primary-color), 0.9);
+    border-color: var(--hover-color);
+}
+
+.ucho-root[data-position="bottom-right"] .ucho-color-selector:hover .ucho-drawing-toolbar-button,
+.ucho-root[data-position="top-right"] .ucho-color-selector:hover .ucho-drawing-toolbar-button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    transform: scale(1.05);
+    border-left-color: transparent;
     border-color: var(--hover-color);
 }
 
 .ucho-color-swatch-wrapper {
     position: absolute;
-    left: calc(100% - 2px);
     top: 50%;
     transform: translateY(-50%);
     height: calc(50px * 1.05);
-    padding-right: var(--spacing-sm);
     display: none;
+}
+
+.ucho-root[data-position="bottom-left"] .ucho-color-swatch-wrapper,
+.ucho-root[data-position="top-left"] .ucho-color-swatch-wrapper {
+    left: calc(100% - 2px);
+    padding-right: var(--spacing-sm);
+}
+
+.ucho-root[data-position="bottom-right"] .ucho-color-swatch-wrapper,
+.ucho-root[data-position="top-right"] .ucho-color-swatch-wrapper {
+    right: calc(100% - 2px);
+    padding-left: var(--spacing-sm);
 }
 
 .ucho-color-selector:hover .ucho-color-swatch-wrapper {
@@ -575,20 +706,42 @@
     height: 100%;
     background: var(--background-color);
     border-radius: var(--radius-md);
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
     padding: var(--spacing-sm);
-    padding-left: var(--spacing-md);
     box-shadow: var(--shadow-black-sm);
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
     border: 2px solid #DDD5DA;
+}
+
+.ucho-root[data-position="bottom-left"] .ucho-color-swatch,
+.ucho-root[data-position="top-left"] .ucho-color-swatch {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-left: var(--spacing-md);
     border-left: none;
+}
+
+.ucho-root[data-position="bottom-right"] .ucho-color-swatch,
+.ucho-root[data-position="top-right"] .ucho-color-swatch {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-right: var(--spacing-md);
+    border-right: none;
 }
 
 .ucho-color-selector:hover .ucho-color-swatch {
     border-color: var(--hover-color);
+}
+
+.ucho-root[data-position="bottom-left"] .ucho-color-selector:hover .ucho-color-swatch,
+.ucho-root[data-position="top-left"] .ucho-color-selector:hover .ucho-color-swatch {
+    border-left: none;
+}
+
+.ucho-root[data-position="bottom-right"] .ucho-color-selector:hover .ucho-color-swatch,
+.ucho-root[data-position="top-right"] .ucho-color-selector:hover .ucho-color-swatch {
+    border-right: none;
 }
 
 .ucho-color-swatch-button {
@@ -670,8 +823,6 @@
 .ucho-notification {
     position: absolute;
     z-index: var(--z-notification);
-    bottom: 70px;
-    right: 0;
     width: 300px;
     padding: var(--spacing-2xl);
     border-radius: var(--radius-lg);
@@ -680,14 +831,37 @@
     box-shadow: var(--shadow-combined-md);
     background: var(--background-color);
     border: 1px solid var(--primary-color);
-    transform-origin: bottom right;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--spacing-xl);
     opacity: 1;
     pointer-events: auto;
-    transition: all var(--duration-base) var(--ease-smooth);
+    transition: opacity var(--duration-base) var(--ease-smooth), transform var(--duration-base) var(--ease-smooth);
+}
+
+.ucho-root[data-position="bottom-right"] .ucho-notification {
+    bottom: 70px;
+    right: 0;
+    transform-origin: bottom right;
+}
+
+.ucho-root[data-position="bottom-left"] .ucho-notification {
+    bottom: 70px;
+    left: 0;
+    transform-origin: bottom left;
+}
+
+.ucho-root[data-position="top-right"] .ucho-notification {
+    top: 70px;
+    right: 0;
+    transform-origin: top right;
+}
+
+.ucho-root[data-position="top-left"] .ucho-notification {
+    top: 70px;
+    left: 0;
+    transform-origin: top left;
 }
 
 .ucho-notification:not([data-empty="true"]) {
@@ -717,7 +891,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all var(--duration-base) var(--ease-bounce);
+    transition: opacity var(--duration-base) var(--ease-bounce), background var(--duration-base) var(--ease-bounce), transform var(--duration-base) var(--ease-bounce), color var(--duration-base) var(--ease-bounce);
     flex-shrink: 0;
 }
 
@@ -738,7 +912,7 @@
     padding: var(--spacing-md);
     border-radius: var(--radius-full);
     margin-top: var(--spacing-md);
-    transition: all var(--duration-base) var(--ease-bounce);
+    transition: color var(--duration-base) var(--ease-bounce), background var(--duration-base) var(--ease-bounce);
 }
 
 .ucho-notification[data-type="success"] {
@@ -783,7 +957,6 @@
 
 @media (max-width: 768px) {
     .ucho-notification {
-        right: 0;
         width: calc(100vw - 40px);
         height: auto;
         min-height: 180px;
@@ -791,7 +964,26 @@
         font-size: 0.9375rem;
         padding: 20px;
         gap: 16px;
+    }
+
+    .ucho-root[data-position="bottom-right"] .ucho-notification,
+    .ucho-root[data-position="bottom-left"] .ucho-notification {
         bottom: calc(100% + 20px);
+    }
+
+    .ucho-root[data-position="top-right"] .ucho-notification,
+    .ucho-root[data-position="top-left"] .ucho-notification {
+        top: calc(100% + 20px);
+    }
+
+    .ucho-root[data-position="bottom-right"] .ucho-notification,
+    .ucho-root[data-position="top-right"] .ucho-notification {
+        right: 0;
+    }
+
+    .ucho-root[data-position="bottom-left"] .ucho-notification,
+    .ucho-root[data-position="top-left"] .ucho-notification {
+        left: 0;
     }
 
     .ucho-notification-icon {
@@ -826,7 +1018,7 @@
     box-shadow: var(--shadow-primary-md), var(--shadow-black-lightened-md);
     opacity: 1;
     transform: translateY(0) scale(1);
-    transition: all var(--duration-slow) var(--ease-smooth);
+    transition: transform var(--duration-slow) var(--ease-smooth), opacity var(--duration-slow) var(--ease-smooth);
     animation: bounceIn var(--duration-slowest) var(--ease-bounce);
     user-select: none;
     -webkit-user-select: none;
@@ -854,7 +1046,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all var(--duration-base) var(--ease-default);
+    transition: opacity var(--duration-base) var(--ease-default), background var(--duration-base) var(--ease-default), transform var(--duration-base) var(--ease-default);
 }
 
 .ucho-welcome-message-close:hover {
@@ -892,7 +1084,7 @@
     border-radius: var(--radius-md);
     font-weight: 500;
     cursor: pointer;
-    transition: all var(--duration-base) var(--ease-default);
+    transition: background var(--duration-base) var(--ease-default), opacity var(--duration-base) var(--ease-default), transform var(--duration-base) var(--ease-default);
     line-height: 1;
 }
 
@@ -1061,7 +1253,7 @@
 	background-color: var(--background-color);
 	color: var(--text-medium);
 	font-size: var(--font-sm);
-	transition: all var(--duration-base) var(--ease-default);
+	transition: border-color var(--duration-base) var(--ease-default), box-shadow var(--duration-base) var(--ease-default);
 }
 
 .ucho-input-field:focus {
@@ -1121,7 +1313,7 @@ select.ucho-input-field {
 	cursor: pointer;
 	padding: var(--spacing-xs);
 	border-radius: var(--radius-sm);
-	transition: all var(--duration-base) var(--ease-default);
+	transition: background var(--duration-base) var(--ease-default);
 }
 
 .ucho-input-option:hover {
@@ -1141,7 +1333,7 @@ select.ucho-input-field {
 	display: grid;
 	place-content: center;
 	cursor: pointer;
-	transition: all var(--duration-base) var(--ease-default);
+	transition: border-color var(--duration-base) var(--ease-default), background-color var(--duration-base) var(--ease-default), box-shadow var(--duration-base) var(--ease-default);
 }
 
 /* Radio specific styles */
@@ -1173,7 +1365,7 @@ select.ucho-input-field {
 	width: 12px;
 	height: 12px;
 	transform: scale(0);
-	transition: all var(--duration-base) var(--ease-default);
+	transition: transform var(--duration-base) var(--ease-default);
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -1227,7 +1419,7 @@ select.ucho-input-field {
 	background-color: var(--background-color);
 	color: var(--text-medium);
 	font-size: var(--font-sm);
-	transition: all var(--duration-base) var(--ease-default);
+	transition: border-color var(--duration-base) var(--ease-default), box-shadow var(--duration-base) var(--ease-default);
 	cursor: pointer;
 	text-align: left;
 	display: flex;
@@ -1285,7 +1477,7 @@ select.ucho-input-field {
 	color: var(--text-medium);
 	font-size: var(--font-sm);
 	cursor: pointer;
-	transition: all var(--duration-base) var(--ease-default);
+	transition: background var(--duration-base) var(--ease-default);
 	outline: none;
 	border-radius: var(--radius-sm);
 }

@@ -124,7 +124,7 @@ const Root: Component<{
 	})
 
 	return (
-		<div class="ucho-root" data-drawing={store.drawing.state.isDrawing}>
+		<div class="ucho-root" data-drawing={store.drawing.state.isDrawing} data-position={store.widget.state.position}>
 			{props.children}
 		</div>
 	)
