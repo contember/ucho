@@ -140,7 +140,7 @@ export const createDrawingStore = (
 			if (e instanceof MouseEvent) {
 				const target = e.target as HTMLElement
 				if (
-					!target.classList.contains('ucho-drawing-layer-mask') && !target.classList.contains('ucho-shape')
+					!target.classList.contains('ucho-drawing-layer') && !target.classList.contains('ucho-shape')
 					&& !target.classList.contains('ucho-resize-handle')
 				) {
 					return

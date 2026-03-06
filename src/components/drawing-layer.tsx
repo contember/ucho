@@ -1,4 +1,4 @@
-import { type Component, For, onCleanup, onMount, Show } from 'solid-js'
+import { type Component, createEffect, For, on, onCleanup, onMount } from 'solid-js'
 import { useStore } from '~/contexts'
 import { getRectFromPoints } from '~/utils/geometry'
 import { DrawingTooltip } from './drawing-tooltip'
@@ -8,10 +8,73 @@ import { ShapeActions } from './shape-actions'
 export const DrawingLayer: Component = () => {
 	const store = useStore()
 	let drawingLayerContainerRef: HTMLDivElement | undefined
+	let canvasRef: HTMLCanvasElement | undefined
+
+	const drawOverlay = () => {
+		const canvas = canvasRef
+		if (!canvas) return
+
+		const parent = canvas.parentElement
+		if (!parent) return
+
+		const width = parent.clientWidth
+		const height = parent.clientHeight
+
+		if (canvas.width !== width || canvas.height !== height) {
+			canvas.width = width
+			canvas.height = height
+		}
+
+		const ctx = canvas.getContext('2d')
+		if (!ctx) return
+
+		ctx.clearRect(0, 0, width, height)
+
+		// Draw semi-transparent overlay
+		ctx.fillStyle = 'rgba(33, 43, 55, 0.2)'
+		ctx.fillRect(0, 0, width, height)
+
+		// Cut out rectangle shapes
+		ctx.globalCompositeOperation = 'destination-out'
+
+		// Cut out existing rectangle shapes
+		for (const shape of store.drawing.state.shapes) {
+			if (shape.type !== 'rectangle') continue
+			const r = getRectFromPoints(shape.points)
+			if (r) {
+				ctx.fillStyle = 'rgba(0, 0, 0, 1)'
+				ctx.fillRect(r.x, r.y, r.width, r.height)
+			}
+		}
+
+		// Cut out current drawing (if rectangle with 2 points)
+		if (store.drawing.state.currentPoints.length === 2 && store.drawing.state.selectedTool === 'rectangle') {
+			const r = getRectFromPoints(store.drawing.state.currentPoints)
+			if (r) {
+				ctx.fillStyle = 'rgba(0, 0, 0, 1)'
+				ctx.fillRect(r.x, r.y, r.width, r.height)
+			}
+		}
+
+		ctx.globalCompositeOperation = 'source-over'
+	}
+
+	createEffect(on(
+		() => [
+			store.drawing.state.shapes,
+			store.drawing.state.currentPoints,
+			store.drawing.state.selectedTool,
+			store.widget.state.dimensions,
+		],
+		() => {
+			drawOverlay()
+		},
+	))
 
 	onMount(() => {
 		drawingLayerContainerRef?.addEventListener('touchmove', store.drawing.methods.handleMove, { passive: false })
 		drawingLayerContainerRef?.addEventListener('touchend', store.drawing.methods.handleEnd)
+		drawOverlay()
 	})
 
 	onCleanup(() => {
@@ -31,6 +94,12 @@ export const DrawingLayer: Component = () => {
 		>
 			<DrawingTooltip />
 			<ShapeActions />
+
+			<canvas
+				ref={canvasRef}
+				class="ucho-drawing-overlay-canvas"
+				aria-hidden="true"
+			/>
 
 			<svg
 				width="100%"
@@ -59,34 +128,6 @@ export const DrawingLayer: Component = () => {
 				onMouseLeave={store.drawing.methods.handleLeave}
 				onTouchEnd={store.drawing.methods.handleLeave}
 			>
-				{/* overlay mask — uses SVG mask so overlapping cutouts stay transparent */}
-				<defs>
-					<mask id="ucho-overlay-mask">
-						<rect width="100%" height="100%" fill="white" />
-						<Show when={store.drawing.state.currentPoints.length === 2}>
-							{(() => {
-								const r = getRectFromPoints(store.drawing.state.currentPoints)
-								return r ? <rect x={r.x} y={r.y} width={r.width} height={r.height} fill="black" /> : null
-							})()}
-						</Show>
-						<For each={store.drawing.state.shapes}>
-							{shape => {
-								if (shape.type !== 'rectangle') return null
-								const r = getRectFromPoints(shape.points)
-								return r ? <rect x={r.x} y={r.y} width={r.width} height={r.height} fill="black" /> : null
-							}}
-						</For>
-					</mask>
-				</defs>
-				<rect
-					class="ucho-drawing-layer-mask"
-					width="100%"
-					height="100%"
-					fill="rgba(33, 43, 55, 0.2)"
-					mask="url(#ucho-overlay-mask)"
-					aria-hidden="true"
-				/>
-
 				{/* already drawn shapes */}
 				<For each={store.drawing.state.shapes}>
 					{shape => (
