@@ -33,8 +33,7 @@ export function App() {
 	const [config] = useState<Pick<Config, 'onSubmit' | 'customInputs'>>(() => ({
 		onSubmit: async (data) => {
 			console.log('Feedback submitted:', data)
-			// In a real app, send to your backend:
-			// return fetch('/api/feedback', { method: 'POST', body: JSON.stringify(data) })
+			return fetch('/api/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
 		},
 		customInputs: [
 			{
