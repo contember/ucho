@@ -18,7 +18,9 @@ export function feedbackSaver({ outputDir, endpoint = '/api/feedback' }: Feedbac
 					return
 				}
 				let body = ''
-				req.on('data', (chunk: Buffer) => { body += chunk.toString() })
+				req.on('data', (chunk: Buffer) => {
+					body += chunk.toString()
+				})
 				req.on('end', () => {
 					try {
 						const data = JSON.parse(body)
