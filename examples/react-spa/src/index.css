@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+@import 'tailwindcss';
+
+@layer base {
+	:root {
+		--radius: 0.65rem;
+		--background: hsl(225 25% 6%);
+		--foreground: hsl(40 20% 92%);
+		--card: hsl(225 20% 10%);
+		--card-foreground: hsl(40 20% 92%);
+		--popover: hsl(225 22% 12%);
+		--popover-foreground: hsl(40 20% 92%);
+		--primary: hsl(38 92% 60%);
+		--primary-foreground: hsl(225 25% 6%);
+		--secondary: hsl(225 15% 16%);
+		--secondary-foreground: hsl(40 10% 75%);
+		--muted: hsl(225 15% 16%);
+		--muted-foreground: hsl(225 10% 50%);
+		--accent: hsl(38 92% 60%);
+		--accent-foreground: hsl(225 25% 6%);
+		--destructive: hsl(0 72% 51%);
+		--destructive-foreground: hsl(0 0% 98%);
+		--border: hsl(225 15% 18%);
+		--input: hsl(225 15% 18%);
+		--ring: hsl(38 92% 60%);
+	}
+}
+
+@theme {
+	--font-display: 'Instrument Serif', Georgia, serif;
+	--font-body: 'DM Sans', system-ui, sans-serif;
+
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+
+	--border-radius-xl: calc(var(--radius) + 4px);
+	--border-radius-lg: var(--radius);
+	--border-radius-md: calc(var(--radius) - 2px);
+	--border-radius-sm: calc(var(--radius) - 4px);
+}
+
+@utility container {
+	margin-inline: auto;
+	padding-inline: 2rem;
+
+	@media screen and (min-width: 1400px) {
+		max-width: 1400px;
+	}
+}
+
+@layer base {
+	body {
+		font-family: var(--font-body);
+		background: var(--background);
+		color: var(--foreground);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+}
+
+@keyframes fade-up {
+	from { opacity: 0; transform: translateY(16px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes grain-drift {
+	0%, 100% { transform: translate(0, 0); }
+	10% { transform: translate(-2%, -3%); }
+	30% { transform: translate(3%, 2%); }
+	50% { transform: translate(-1%, 4%); }
+	70% { transform: translate(2%, -2%); }
+	90% { transform: translate(-3%, 1%); }
+}
+
+@keyframes shimmer {
+	0% { background-position: -200% 0; }
+	100% { background-position: 200% 0; }
+}
+
+@keyframes glow-pulse {
+	0%, 100% { opacity: 0.4; }
+	50% { opacity: 0.8; }
+}
