@@ -38,11 +38,8 @@ const stripLayersPlugin: SnapdomPlugin = {
 		const original = ctx.svgString
 		ctx.svgString = ctx.svgString.replace(
 			/<style([^>]*)>([\s\S]*?)<\/style>/g,
-			(fullMatch, attrs, cssContent) => {
+			(_fullMatch, attrs, cssContent) => {
 				const processed = stripCSSLayers(cssContent)
-				if (processed.length !== cssContent.length) {
-					console.log(`  [ucho] Stripped @layer from <style> (${cssContent.length} → ${processed.length} chars)`)
-				}
 				return `<style${attrs}>${processed}</style>`
 			},
 		)
@@ -50,15 +47,12 @@ const stripLayersPlugin: SnapdomPlugin = {
 		// Also update the data URL so toCanvas() uses the processed version
 		if (ctx.dataURL && ctx.svgString !== original) {
 			ctx.dataURL = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(ctx.svgString)}`
-			console.log(`  [ucho] Updated SVG dataURL (${ctx.dataURL.length} chars)`)
 		}
 	},
 }
 
 export const captureScreenshot = async (): Promise<Screenshot | undefined> => {
 	try {
-		console.group('[ucho] captureScreenshot (snapdom)')
-
 		const result = await snapdom(document.body, {
 			scale: 1,
 			dpr: 1,
@@ -68,14 +62,8 @@ export const captureScreenshot = async (): Promise<Screenshot | undefined> => {
 		})
 
 		const canvas = await result.toCanvas()
-		const dataUrl = canvas.toDataURL('image/jpeg', 0.7) as Screenshot
-
-		console.log(`Screenshot: ${dataUrl.length} chars, ${canvas.width}x${canvas.height}`)
-		console.groupEnd()
-		return dataUrl
-	} catch (error) {
-		console.error('[ucho] Failed to capture screenshot:', error)
-		console.groupEnd()
+		return canvas.toDataURL('image/jpeg', 0.7) as Screenshot
+	} catch {
 		return undefined
 	}
 }
