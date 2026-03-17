@@ -152,3 +152,6 @@ $RECYCLE.BIN/
 
 # Docker Compose override file
 /docker-compose.override.yaml
+
+# Example feedback output
+examples/*/feedback-output/
