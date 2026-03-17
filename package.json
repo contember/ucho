@@ -41,13 +41,13 @@
 		"solid-js": "^1"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.4",
-		"@types/node": "^20.17.12",
-		"dprint": "^0.51.1",
+		"@biomejs/biome": "^2.4.7",
+		"@types/node": "^25.5.0",
+		"dprint": "^0.53.0",
 		"typescript": "^5",
-		"vite": "^7",
-		"vite-plugin-solid": "^2.10.1",
+		"vite": "^8.0.0",
+		"vite-plugin-solid": "^2.11.11",
 		"concurrently": "^9",
-		"vite-tsconfig-paths": "^5.1.4"
+		"vite-tsconfig-paths": "^6.1.1"
 	}
 }
