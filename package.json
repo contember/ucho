@@ -37,7 +37,7 @@
 		"test": "bun test"
 	},
 	"dependencies": {
-		"html2canvas-pro": "2.0.2",
+		"@zumer/snapdom": "^2.5.0",
 		"solid-js": "^1"
 	},
 	"devDependencies": {

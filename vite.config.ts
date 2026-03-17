@@ -14,7 +14,7 @@ export default defineConfig({
 			fileName: () => 'ucho.js',
 		},
 		rollupOptions: {
-			external: ['solid-js', 'html2canvas-pro'],
+			external: ['solid-js', '@zumer/snapdom'],
 		},
 	},
 })
