@@ -1,6 +1,6 @@
 import { type Component, createContext, createEffect, JSXElement, on, useContext } from 'solid-js'
-import { createStore, type Store } from '~/stores'
-import type { FullConfig } from '~/types'
+import { createStore, getDefaultCustomValues, type Store } from '~/stores'
+import type { CustomInputValue, FullConfig } from '~/types'
 
 type ProviderProps = FullConfig & {
 	children: JSXElement
@@ -30,6 +30,32 @@ export const Provider: Component<ProviderProps> = props => {
 				text: props.textConfig,
 				customInputs: props.customInputs,
 			})
+
+			// Custom input values are seeded once when the store is built, so inputs
+			// added by a later `update()` would render with no value at all. Reseed
+			// against the new config: keep what the user already typed, default what
+			// is new, and drop what no longer exists.
+			const defaults = getDefaultCustomValues(props.customInputs)
+			const current = store.feedback.state.customInputValues
+			const reseeded: Record<string, CustomInputValue> = {}
+			for (const id of Object.keys(defaults)) {
+				reseeded[id] = id in current ? current[id] : defaults[id]
+			}
+			// `update()` may be called on every render of a host framework, so only
+			// write when the value set actually changed.
+			const currentIds = Object.keys(current)
+			const isUnchanged = currentIds.length === Object.keys(reseeded).length
+				&& currentIds.every(id => {
+					const before = current[id]
+					const after = reseeded[id]
+					return Array.isArray(before) && Array.isArray(after)
+						? before.length === after.length && before.every((value, index) => value === after[index])
+						: before === after
+				})
+
+			if (!isUnchanged) {
+				store.feedback.setState({ customInputValues: reseeded })
+			}
 		},
 		{ defer: true },
 	))

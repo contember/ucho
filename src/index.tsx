@@ -1,7 +1,8 @@
+import { createSignal } from 'solid-js'
 import { render } from 'solid-js/web'
 import { Ucho } from './components/ucho'
 import { defaultText } from './config/default-text'
-import { Config } from './types'
+import { Config, FullConfig } from './types'
 import { deepMerge } from './utils/common'
 import { validateOptions } from './utils/validators'
 
@@ -27,7 +28,26 @@ export type {
 	TimeInfo,
 } from './types'
 
-let activeInstance: (() => void) | null = null
+/**
+ * The cleanup function returned by {@link init}, with a `update` method for
+ * changing configuration without tearing the widget down.
+ */
+export type UchoInstance = (() => void) & {
+	/** Merge new options into the running widget. */
+	update: (options: Partial<Config>) => void
+}
+
+const normalizeConfig = (options: Config): FullConfig => ({
+	position: options.position ?? 'bottom-right',
+	primaryColor: options.primaryColor ?? '#1a1a1a',
+	onSubmit: options.onSubmit,
+	textConfig: deepMerge(defaultText, options.textConfig ?? {}),
+	customInputs: options.customInputs ?? [],
+	disableMinimization: options.disableMinimization ?? false,
+	fancyIcon: options.fancyIcon ?? false,
+})
+
+let activeInstance: UchoInstance | null = null
 
 /**
  * Initialize the Echo feedback widget with the provided configuration.
@@ -73,9 +93,10 @@ let activeInstance: (() => void) | null = null
  * @param {boolean} [options.disableMinimization=false] - Whether to disable the launcher button minimization after 4 seconds of inactivity
  *
  * @throws {Error} If initialization fails or invalid options are provided
- * @returns {() => void} Cleanup function that removes the widget when called
+ * @returns {UchoInstance} Cleanup function that removes the widget when called,
+ *   carrying an `update(options)` method that changes configuration in place
  */
-export function init(options: Config): () => void {
+export function init(options: Config): UchoInstance {
 	if (activeInstance) {
 		console.warn('Ucho widget is already initialized. Cleaning up previous instance...')
 		activeInstance()
@@ -84,16 +105,11 @@ export function init(options: Config): () => void {
 	try {
 		validateOptions(options)
 
-		const {
-			position = 'bottom-right',
-			primaryColor = '#1a1a1a',
-			onSubmit,
-			textConfig = {},
-			customInputs = [],
-			disableMinimization = false,
-			fancyIcon = false,
-		} = options
-		const mergedTextConfig = deepMerge(defaultText, textConfig)
+		// Options live in a signal so they can be swapped without a remount: every
+		// prop below is read through `config()`, which makes it reactive, and the
+		// Provider already watches those props and pushes them into the store.
+		let rawOptions = options
+		const [config, setConfig] = createSignal<FullConfig>(normalizeConfig(options))
 
 		const mountPoint = document.createElement('div')
 		document.body.appendChild(mountPoint)
@@ -101,13 +117,13 @@ export function init(options: Config): () => void {
 		const dispose = render(
 			() => (
 				<Ucho
-					position={position}
-					primaryColor={primaryColor}
-					textConfig={mergedTextConfig}
-					onSubmit={onSubmit}
-					customInputs={customInputs}
-					disableMinimization={disableMinimization}
-					fancyIcon={fancyIcon}
+					position={config().position}
+					primaryColor={config().primaryColor}
+					textConfig={config().textConfig}
+					onSubmit={data => config().onSubmit(data)}
+					customInputs={config().customInputs}
+					disableMinimization={config().disableMinimization}
+					fancyIcon={config().fancyIcon}
 				/>
 			),
 			mountPoint,
@@ -115,15 +131,27 @@ export function init(options: Config): () => void {
 
 		mountPoint.remove()
 
+		let disposed = false
+
 		const cleanup = () => {
+			if (disposed) return
+			disposed = true
 			dispose()
 			activeInstance = null
 		}
 
+		const update = (next: Partial<Config>) => {
+			if (disposed) return
+			rawOptions = { ...rawOptions, ...next }
+			validateOptions(rawOptions)
+			setConfig(normalizeConfig(rawOptions))
+		}
+
 		window.addEventListener('pagehide', cleanup, { once: true })
 
-		activeInstance = cleanup
-		return cleanup
+		const instance: UchoInstance = Object.assign(cleanup, { update })
+		activeInstance = instance
+		return instance
 	} catch (error) {
 		console.error('Ucho initialization failed:', error)
 		throw error
