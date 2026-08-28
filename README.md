@@ -80,7 +80,7 @@ function useUcho(config: Config) {
 | --------------------- | -------------------------------------------------------------- | -------- | ---------------- | ------------------------------------------------------------------------------------------------------- |
 | `onSubmit`            | `(data: FeedbackPayload) => Promise<Response \| void>`         | Yes      | -                | Callback function when feedback is submitted. Return a `Response` to enable success/error notifications |
 | `position`            | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'` | No       | `'bottom-right'` | Widget position on the page                                                                             |
-| `primaryColor`        | `` `#${string}` ``                                             | No       | `'#6227dc'`      | Primary color for UI elements                                                                           |
+| `primaryColor`        | `` `#${string}` ``                                             | No       | `'#1a1a1a'`      | Primary color for UI elements                                                                           |
 | `textConfig`          | `Partial<TextConfig>`                                          | No       | English defaults | Customize all text elements in the interface                                                            |
 | `customInputs`        | `CustomInputConfig[]`                                          | No       | `[]`             | Custom input fields added to the feedback form                                                          |
 | `disableMinimization` | `boolean`                                                      | No       | `false`          | Disable the launcher button minimization after inactivity                                               |
@@ -126,7 +126,7 @@ The `onSubmit` callback receives a `FeedbackPayload` object:
 ```typescript
 type FeedbackPayload = {
 	message: string // User's written feedback
-	screenshot?: string // Base64 encoded PNG screenshot
+	screenshot?: Screenshot // `data:image/jpeg;base64,…` data URL, not bare base64
 	customInputs?: Record<string, string | string[]>
 	metadata: {
 		userAgent: string
