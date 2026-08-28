@@ -52,14 +52,24 @@ import { init } from 'ucho-js'
 import type { Config } from 'ucho-js'
 
 function useUcho(config: Config) {
-	const cleanupRef = useRef<(() => void) | null>(null)
+	const instance = useRef<UchoInstance | null>(null)
+	const initial = useRef(config)
 
+	// Mount once. `init()` tears the widget down and rebuilds it, so keying this
+	// on `config` would restart it whenever the caller passes a fresh object
+	// literal — which is the normal way to call the hook.
 	useEffect(() => {
-		cleanupRef.current = init(config)
+		instance.current = init(initial.current)
 		return () => {
-			cleanupRef.current?.()
-			cleanupRef.current = null
+			instance.current?.()
+			instance.current = null
 		}
+	}, [])
+
+	// Later changes are pushed into the running widget instead of remounting it,
+	// so every option stays live — not just `onSubmit`.
+	useEffect(() => {
+		instance.current?.update(config)
 	}, [config])
 }
 ```

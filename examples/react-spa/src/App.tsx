@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Select from '@radix-ui/react-select'
 import { useEffect, useRef, useState } from 'react'
-import type { Config } from 'ucho-js'
+import type { Config, UchoInstance } from 'ucho-js'
 import { init } from 'ucho-js'
 
 type Position = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
@@ -16,14 +16,24 @@ const colors = [
 ] as const
 
 function useUcho(config: Config) {
-	const cleanupRef = useRef<(() => void) | null>(null)
+	const instance = useRef<UchoInstance | null>(null)
+	const initial = useRef(config)
 
+	// Mount once. `init()` tears the widget down and rebuilds it, so keying this
+	// on `config` would restart it whenever the caller passes a fresh object
+	// literal — which is the normal way to call the hook.
 	useEffect(() => {
-		cleanupRef.current = init(config)
+		instance.current = init(initial.current)
 		return () => {
-			cleanupRef.current?.()
-			cleanupRef.current = null
+			instance.current?.()
+			instance.current = null
 		}
+	}, [])
+
+	// Later changes are pushed into the running widget instead of remounting it,
+	// so every option stays live — not just `onSubmit`.
+	useEffect(() => {
+		instance.current?.update(config)
 	}, [config])
 }
 
@@ -211,10 +221,18 @@ export function App() {
 import { useEffect, useRef } from 'react'
 
 function useUcho(config) {
-  const cleanupRef = useRef(null)
+  const instance = useRef(null)
+  const initial = useRef(config)
+
+  // Mount once...
   useEffect(() => {
-    cleanupRef.current = init(config)
-    return () => cleanupRef.current?.()
+    instance.current = init(initial.current)
+    return () => instance.current?.()
+  }, [])
+
+  // ...then push changes in, no remount.
+  useEffect(() => {
+    instance.current?.update(config)
   }, [config])
 }`}
 						</Pre>
