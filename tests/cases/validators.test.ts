@@ -16,8 +16,17 @@ describe('validateOptions', () => {
 		expect(() => validateOptions('string' as any)).toThrow('options must be an object')
 	})
 
-	test('throws when onSubmit is missing', () => {
-		expect(() => validateOptions({} as any)).toThrow('onSubmit must be a function')
+	test('throws when neither onSubmit nor chat is given', () => {
+		expect(() => validateOptions({} as any)).toThrow('at least one of onSubmit and chat is required')
+	})
+
+	test('accepts chat without onSubmit — a chat-only widget', () => {
+		const chat = { history: () => {}, send: () => {}, subscribe: () => {} }
+		expect(() => validateOptions({ chat } as any)).not.toThrow()
+	})
+
+	test('accepts onSubmit without chat — the original shape', () => {
+		expect(() => validateOptions({ onSubmit: () => {} } as any)).not.toThrow()
 	})
 
 	test('throws when onSubmit is not a function', () => {

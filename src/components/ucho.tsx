@@ -71,7 +71,10 @@ const UchoInterface: Component = () => {
 			</div>
 
 			<UchoOverlay>
-				<Show when={store.widget.state.captureMode === 'chat'} fallback={<FeedbackForm />}>
+				<Show
+					when={store.widget.state.captureMode === 'chat'}
+					fallback={<Show when={store.methods.hasFeedback()}>{<FeedbackForm />}</Show>}
+				>
 					<ChatAttachBar />
 				</Show>
 				<DrawingToolbar />

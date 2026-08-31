@@ -91,7 +91,7 @@ let activeInstance: UchoInstance | null = null
  * ```
  *
  * @param {Config} options - Configuration options for the Ucho widget
- * @param {Function} options.onSubmit - Required callback function that handles feedback submission. Return the API Response to enable success/error notifications
+ * @param {Function} [options.onSubmit] - Handles feedback submission; omit it for a chat-only widget. Return the API Response to enable success/error notifications
  * @param {Position} [options.position='bottom-right'] - Widget position on the page
  * @param {string} [options.primaryColor='#1a1a1a'] - Primary color for UI elements (must be a valid hex color)
  * @param {Partial<TextConfig>} [options.textConfig] - Custom text configuration for UI elements
@@ -127,7 +127,7 @@ export function init(options: Config): UchoInstance {
 					position={config().position}
 					primaryColor={config().primaryColor}
 					textConfig={config().textConfig}
-					onSubmit={data => config().onSubmit(data)}
+					onSubmit={config().onSubmit}
 					customInputs={config().customInputs}
 					disableMinimization={config().disableMinimization}
 					fancyIcon={config().fancyIcon}

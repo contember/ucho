@@ -15,7 +15,11 @@ export const Provider: Component<ProviderProps> = props => {
 			return props.chat
 		},
 		primaryColor: props.primaryColor,
-		onSubmit: data => props.onSubmit(data),
+		// Read through like `chat`: the store has to see feedback being withdrawn, not just
+		// a wrapper that is always a function.
+		get onSubmit() {
+			return props.onSubmit
+		},
 		textConfig: props.textConfig,
 		position: props.position,
 		customInputs: props.customInputs,

@@ -5,8 +5,12 @@ export const validateOptions = (options: Config): void => {
 		throw new Error('Ucho initialization failed: options must be an object')
 	}
 
-	if (typeof options.onSubmit !== 'function') {
+	if (options.onSubmit !== undefined && typeof options.onSubmit !== 'function') {
 		throw new Error('Ucho initialization failed: onSubmit must be a function')
+	}
+
+	if (!options.onSubmit && !options.chat) {
+		throw new Error('Ucho initialization failed: at least one of onSubmit and chat is required')
 	}
 
 	if (options.primaryColor && !/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(options.primaryColor)) {

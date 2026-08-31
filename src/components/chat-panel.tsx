@@ -93,15 +93,17 @@ export const ChatPanel: Component = () => {
 							</p>
 						</Show>
 					</div>
-					<Button
-						variant="secondary"
-						size="sm"
-						title={store.widget.state.text.chat.feedbackLink}
-						aria-label={store.widget.state.text.chat.feedbackLink}
-						onClick={openFeedback}
-					>
-						<PenIcon size={18} />
-					</Button>
+					<Show when={store.methods.hasFeedback()}>
+						<Button
+							variant="secondary"
+							size="sm"
+							title={store.widget.state.text.chat.feedbackLink}
+							aria-label={store.widget.state.text.chat.feedbackLink}
+							onClick={openFeedback}
+						>
+							<PenIcon size={18} />
+						</Button>
+					</Show>
 					<Button
 						variant="secondary"
 						size="sm"
@@ -120,14 +122,16 @@ export const ChatPanel: Component = () => {
 							fallback={
 								<div class="ucho-chat-empty">
 									<p>{store.widget.state.text.chat.emptyState}</p>
-									<Button
-										class="ucho-chat-empty-action"
-										variant="secondary"
-										size="sm"
-										onClick={openFeedback}
-									>
-										{store.widget.state.text.chat.feedbackLink}
-									</Button>
+									<Show when={store.methods.hasFeedback()}>
+										<Button
+											class="ucho-chat-empty-action"
+											variant="secondary"
+											size="sm"
+											onClick={openFeedback}
+										>
+											{store.widget.state.text.chat.feedbackLink}
+										</Button>
+									</Show>
 								</div>
 							}
 						>

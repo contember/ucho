@@ -1,4 +1,4 @@
-import type { Config, DrawingTool, FullConfig } from '~/types'
+import type { DrawingTool, FeedbackPayload, FullConfig } from '~/types'
 import { createNotificationManager } from '~/utils/notifications'
 import { createDebouncedStateSaver } from '~/utils/state-management'
 import { clearPageState, getPageKey, loadPageState } from '~/utils/storage'
@@ -15,7 +15,9 @@ export type Store = {
 	chat?: ChatStore
 	methods: {
 		reset: () => void
-		submit: Config['onSubmit']
+		/** Whether the host configured feedback. Read live, so `update()` can withdraw it. */
+		hasFeedback: () => boolean
+		submit: (data: FeedbackPayload) => Promise<Response | void>
 		handlePageChange: (newPageKey: string) => void
 	}
 }
@@ -124,8 +126,13 @@ export const createStore = (config: FullConfig): Store => {
 		chat,
 		methods: {
 			reset,
+			hasFeedback: () => !!config.onSubmit,
 			handlePageChange,
 			submit: async data => {
+				// Nothing to submit to. The form is not rendered in that case, so this only
+				// guards against feedback being withdrawn while the overlay is open.
+				if (!config.onSubmit) return
+
 				try {
 					const response = await config.onSubmit(data)
 

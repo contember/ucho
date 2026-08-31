@@ -120,7 +120,7 @@ export const LauncherButton: Component = () => {
 						{store.chat?.state.unreadCount}
 					</span>
 				</Show>
-				{store.widget.state.pagesCount > 0 && (
+				{store.methods.hasFeedback() && store.widget.state.pagesCount > 0 && (
 					<button
 						class="ucho-launcher-button-count"
 						onClick={handleCountClick}

@@ -253,8 +253,16 @@ export type CheckboxInputConfig = CustomInputBase & {
 
 export type CustomInputConfig = TextInputConfig | TextAreaConfig | SelectInputConfig | RadioInputConfig | CheckboxInputConfig
 
+/**
+ * At least one of `onSubmit` and `chat` must be supplied — a widget that can neither
+ * take feedback nor hold a conversation has nothing to offer.
+ */
 export type Config = {
-	onSubmit: (data: FeedbackPayload) => Promise<Response | void>
+	/**
+	 * Enables the feedback form. Omit it for a chat-only widget: the form, its launcher
+	 * route and the unsubmitted-drafts list all disappear with it.
+	 */
+	onSubmit?: (data: FeedbackPayload) => Promise<Response | void>
 	/** Enables the support chat panel. Omit it and the widget behaves exactly as before. */
 	chat?: ChatConfig
 	position?: Position
@@ -265,7 +273,9 @@ export type Config = {
 	fancyIcon?: boolean
 }
 
-export type FullConfig = Omit<Required<Config>, 'chat'> & {
+export type FullConfig = Omit<Required<Config>, 'chat' | 'onSubmit'> & {
+	/** Absent when the host did not configure feedback; the form is then never rendered. */
+	onSubmit?: Config['onSubmit']
 	textConfig: TextConfig
 	disableMinimization: boolean
 	fancyIcon: boolean
