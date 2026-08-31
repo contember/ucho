@@ -24,4 +24,22 @@ export const defaultText: TextConfig = {
 	drawingTooltip: {
 		text: 'Click & drag to draw',
 	},
+	chat: {
+		title: 'Support',
+		placeholder: 'Write a message…',
+		sendButton: 'Send',
+		openTitle: 'Open support chat',
+		closeTitle: 'Close chat',
+		emptyState: 'No messages yet. Ask us anything.',
+		loading: 'Loading conversation…',
+		errorMessage: 'Message could not be sent.',
+		feedbackLink: 'Send feedback instead',
+		unreadLabel: 'unread messages',
+		attachTitle: 'Attach a screenshot',
+		attachBarText: 'Draw on the page to point something out, then attach it.',
+		attachConfirm: 'Attach',
+		attachCancel: 'Cancel',
+		attachmentLabel: 'Screenshot attached',
+		removeAttachment: 'Remove screenshot',
+	},
 }

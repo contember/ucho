@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Select from '@radix-ui/react-select'
-import { useEffect, useRef, useState } from 'react'
-import type { Config } from 'ucho-js'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import type { ChatConfig, ChatMessage, Config, UchoInstance } from 'ucho-js'
 import { init } from 'ucho-js'
 
 type Position = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
@@ -15,15 +15,127 @@ const colors = [
 	{ value: '#5cbf8a', label: 'Jade' },
 ] as const
 
-function useUcho(config: Config) {
-	const cleanupRef = useRef<(() => void) | null>(null)
+const now = () => new Date().toISOString()
+const id = () => Math.random().toString(36).slice(2)
 
+/**
+ * Demo-only transport. A real integration points these at a backend — ucho itself
+ * never fetches anything, which is why the adapter lives out here in the host app.
+ */
+function createDemoChat(): ChatConfig {
+	let messages: ChatMessage[] = []
+	let listener: ((transcript: { messages: ChatMessage[]; removed?: string[] }) => void) | null = null
+
+	return {
+		history: async () => ({ messages }),
+		send: async ({ text, screenshot, page }) => {
+			const sent: ChatMessage = {
+				id: id(),
+				createdAt: now(),
+				text,
+				attachments: screenshot ? [{ url: screenshot, fileName: 'screenshot.jpg', fileType: 'image/jpeg' }] : undefined,
+				author: { name: 'You', isCustomer: true },
+			}
+			messages = [...messages, sent]
+
+			// Stand in for someone answering from Slack a moment later.
+			window.setTimeout(() => {
+				const reply: ChatMessage = {
+					id: id(),
+					createdAt: now(),
+					text: screenshot
+						? `Got the screenshot from ${page.pathname} — we can see exactly what you marked.`
+						: `Thanks — we can see you are on ${page.pathname}. Taking a look now.`,
+					author: { name: 'Jana from support', isCustomer: false },
+				}
+				messages = [...messages, reply]
+				listener?.({ messages: [reply] })
+			}, 1400)
+
+			return { messages: [sent] }
+		},
+		availability: async () => ({
+			state: 'online',
+			message: 'Usually replies within an hour',
+		}),
+		subscribe: (onTranscript) => {
+			listener = onTranscript
+			return () => {
+				listener = null
+			}
+		},
+	}
+}
+
+/**
+ * Talks to a real backend when `.env.local` supplies one, so the example can be pointed
+ * at a live service instead of the in-memory demo. The token is minted server-side and
+ * handed to the page; a browser never mints its own.
+ */
+function createRemoteChat(base: string, token: string): ChatConfig {
+	const url = (path: string) => `${base}/${path}`
+	const auth = { Authorization: `Bearer ${token}` }
+	let cursor: string | null = null
+
+	const readTranscript = async (response: Response) => {
+		if (!response.ok) throw new Error(`chat backend responded ${response.status}`)
+		const body = await response.json()
+		// The cursor is the host's business — ucho's ChatTranscript does not carry it.
+		cursor = body.cursor ?? cursor
+		return { messages: body.messages ?? [], removed: body.removed ?? [] }
+	}
+
+	return {
+		history: async () => readTranscript(await fetch(url('history'), { headers: auth })),
+		send: async ({ text, screenshot, page, metadata }) =>
+			readTranscript(
+				await fetch(url('message'), {
+					method: 'POST',
+					headers: { ...auth, 'Content-Type': 'application/json' },
+					body: JSON.stringify({ text, screenshot, page, metadata }),
+				}),
+			),
+		subscribe: (onTranscript) => {
+			// Deliberately naive for a demo: a real integration backs off when the tab is
+			// hidden and when the conversation goes quiet.
+			const timer = window.setInterval(async () => {
+				try {
+					const query = cursor ? `history?since=${encodeURIComponent(cursor)}` : 'history'
+					onTranscript(await readTranscript(await fetch(url(query), { headers: auth })))
+				} catch {
+					// A failed poll is not worth surfacing; the next one may succeed.
+				}
+			}, 4000)
+			return () => window.clearInterval(timer)
+		},
+		availability: async () => {
+			const response = await fetch(url('session'), { headers: auth })
+			if (!response.ok) return { state: 'offline', message: 'Support chat is unavailable' }
+			const body = await response.json()
+			return { state: 'online', message: body.project?.name ? `Connected to ${body.project.name}` : 'Connected' }
+		},
+	}
+}
+
+function useUcho(config: Config) {
+	const instance = useRef<UchoInstance | null>(null)
+	const initial = useRef(config)
+
+	// Mount once. `init()` tears the widget down and rebuilds it, so keying this
+	// on `config` would restart it whenever the caller passes a fresh object
+	// literal — which is the normal way to call the hook.
 	useEffect(() => {
-		cleanupRef.current = init(config)
+		instance.current = init(initial.current)
 		return () => {
-			cleanupRef.current?.()
-			cleanupRef.current = null
+			instance.current?.()
+			instance.current = null
 		}
+	}, [])
+
+	// Later changes are pushed into the running widget instead of remounting it,
+	// so every option stays live — not just `onSubmit`.
+	useEffect(() => {
+		instance.current?.update(config)
 	}, [config])
 }
 
@@ -32,7 +144,10 @@ export function App() {
 	const [color, setColor] = useState('#e8a849')
 	const [dialogOpen, setDialogOpen] = useState(false)
 
-	const [config] = useState<Pick<Config, 'onSubmit' | 'customInputs'>>(() => ({
+	const [config] = useState<Pick<Config, 'onSubmit' | 'customInputs' | 'chat'>>(() => ({
+		chat: import.meta.env.VITE_CHAT_BASE && import.meta.env.VITE_CHAT_TOKEN
+			? createRemoteChat(import.meta.env.VITE_CHAT_BASE, import.meta.env.VITE_CHAT_TOKEN)
+			: createDemoChat(),
 		onSubmit: async (data) => {
 			console.log('Feedback submitted:', data)
 			return fetch('/api/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
@@ -61,7 +176,13 @@ export function App() {
 		],
 	}))
 
-	useUcho({ ...config, position: 'bottom-left' })
+	// Position and colour are driven by the controls below, which is what actually
+	// exercises `update()`. Memoised so unrelated re-renders do not push a new config.
+	const uchoConfig = useMemo(
+		() => ({ ...config, position, primaryColor: color as `#${string}` }),
+		[config, position, color],
+	)
+	useUcho(uchoConfig)
 
 	return (
 		<div className="min-h-screen relative overflow-hidden">
@@ -211,10 +332,18 @@ export function App() {
 import { useEffect, useRef } from 'react'
 
 function useUcho(config) {
-  const cleanupRef = useRef(null)
+  const instance = useRef(null)
+  const initial = useRef(config)
+
+  // Mount once...
   useEffect(() => {
-    cleanupRef.current = init(config)
-    return () => cleanupRef.current?.()
+    instance.current = init(initial.current)
+    return () => instance.current?.()
+  }, [])
+
+  // ...then push changes in, no remount.
+  useEffect(() => {
+    instance.current?.update(config)
   }, [config])
 }`}
 						</Pre>

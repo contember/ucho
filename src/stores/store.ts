@@ -1,7 +1,8 @@
-import type { Config, DrawingTool, FullConfig } from '~/types'
+import type { DrawingTool, FeedbackPayload, FullConfig } from '~/types'
 import { createNotificationManager } from '~/utils/notifications'
 import { createDebouncedStateSaver } from '~/utils/state-management'
 import { clearPageState, getPageKey, loadPageState } from '~/utils/storage'
+import { type ChatStore, createChatStore } from './chat-store'
 import { createDrawingStore, type DrawingStore } from './drawing-store'
 import { createFeedbackStore, type FeedbackStore, getDefaultCustomValues } from './feedback-store'
 import { createWidgetStore, type WidgetStore } from './widget-store'
@@ -10,9 +11,13 @@ export type Store = {
 	feedback: FeedbackStore
 	drawing: DrawingStore
 	widget: WidgetStore
+	/** Only present when the host configured `chat`. */
+	chat?: ChatStore
 	methods: {
 		reset: () => void
-		submit: Config['onSubmit']
+		/** Whether the host configured feedback. Read live, so `update()` can withdraw it. */
+		hasFeedback: () => boolean
+		submit: (data: FeedbackPayload) => Promise<Response | void>
 		handlePageChange: (newPageKey: string) => void
 	}
 }
@@ -21,6 +26,9 @@ export const createStore = (config: FullConfig): Store => {
 	let currentPageKey = getPageKey()
 
 	const widget = createWidgetStore(config, currentPageKey)
+	// Deliberately outside the per-page save/reset path below: a conversation belongs
+	// to a person and has to survive both navigation and a feedback submit.
+	const chat = config.chat ? createChatStore(config) : undefined
 	const debouncedSave = createDebouncedStateSaver(widget)
 	const notifications = createNotificationManager(widget)
 
@@ -115,10 +123,16 @@ export const createStore = (config: FullConfig): Store => {
 		feedback,
 		drawing,
 		widget,
+		chat,
 		methods: {
 			reset,
+			hasFeedback: () => !!config.onSubmit,
 			handlePageChange,
 			submit: async data => {
+				// Nothing to submit to. The form is not rendered in that case, so this only
+				// guards against feedback being withdrawn while the overlay is open.
+				if (!config.onSubmit) return
+
 				try {
 					const response = await config.onSubmit(data)
 

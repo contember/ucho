@@ -5,11 +5,25 @@ export const validateOptions = (options: Config): void => {
 		throw new Error('Ucho initialization failed: options must be an object')
 	}
 
-	if (typeof options.onSubmit !== 'function') {
+	if (options.onSubmit !== undefined && typeof options.onSubmit !== 'function') {
 		throw new Error('Ucho initialization failed: onSubmit must be a function')
+	}
+
+	if (!options.onSubmit && !options.chat) {
+		throw new Error('Ucho initialization failed: at least one of onSubmit and chat is required')
 	}
 
 	if (options.primaryColor && !/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(options.primaryColor)) {
 		throw new Error('Ucho initialization failed: primaryColor must be a valid hex color')
+	}
+
+	if (options.chat !== undefined && options.chat !== null) {
+		// Fail here rather than when the panel first opens: a half-supplied adapter
+		// otherwise looks fine until someone tries to send, which is far too late.
+		for (const method of ['history', 'send', 'subscribe'] as const) {
+			if (typeof options.chat[method] !== 'function') {
+				throw new Error(`Ucho initialization failed: chat.${method} must be a function`)
+			}
+		}
 	}
 }

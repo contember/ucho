@@ -24,7 +24,10 @@ export const WelcomeMessage: Component = () => {
 	}
 
 	const openWidget = () => {
-		store.widget.setState({ isOpen: true })
+		// Same destination as the launcher two centimetres away — chat when it is
+		// configured, the feedback form otherwise.
+		if (store.chat?.isAvailable()) store.chat.methods.open()
+		else store.widget.setState({ isOpen: true })
 		store.widget.setState({ welcomeMessageIsClosing: true })
 		setToStorage('welcome_message_shown', true)
 	}

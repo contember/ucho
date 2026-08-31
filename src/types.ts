@@ -60,6 +60,109 @@ export type FeedbackPayload = {
 	customInputs?: Record<string, CustomInputValue>
 }
 
+/**
+ * A file that belongs to a message. `url` is whatever the host can serve — a hosted
+ * asset from its own storage, or a `data:` URL for an adapter that echoes locally.
+ */
+export type ChatAttachment = {
+	url: string
+	fileName?: string
+	/** Media type. Anything that is not an image renders as a link rather than inline. */
+	fileType?: string
+}
+
+export type ChatMessage = {
+	id: string
+	/** ISO 8601. Used for ordering; the widget never parses it for display beyond time-of-day. */
+	createdAt: string
+	text: string
+	/**
+	 * Files on this message — in practice the annotated screenshot. Incoming attachments
+	 * carry a URL rather than the `data:` URL that was uploaded, so a transcript does not
+	 * re-send megabytes on every poll.
+	 */
+	attachments?: ChatAttachment[]
+	author: {
+		name: string
+		/** True for the person using the widget, false for whoever is answering. */
+		isCustomer: boolean
+	}
+}
+
+/**
+ * What the widget sends. A screenshot is attached by the user through the drawing
+ * overlay, exactly as in the feedback flow.
+ */
+export type ChatOutgoingMessage = {
+	text: string
+	screenshot?: Screenshot
+	/**
+	 * Where the user was when they wrote this. Always sent — knowing the page is
+	 * most of the value of asking inside the app, and it costs nothing.
+	 *
+	 * Note that `searchParams` is included verbatim; if the host puts tokens or
+	 * personal data in query strings, strip them here before forwarding.
+	 */
+	page: LocationInfo
+	/**
+	 * Everything else — device, network, and the captured console buffer. Included
+	 * **only** when a screenshot is attached, because that is the deliberate "I am
+	 * reporting a problem" act and `metadata.console` can hold whatever the host
+	 * application logged. Its `locationInfo` repeats `page`.
+	 */
+	metadata?: Metadata
+}
+
+/**
+ * Whether anyone is going to answer, and when. Presence is deliberately not a
+ * boolean the widget guesses at: the host answers it, because only the host knows
+ * its own business hours and response times.
+ */
+export type ChatAvailability = {
+	state: 'online' | 'offline'
+	/** Shown verbatim, e.g. "Usually replies within an hour" or "Back tomorrow at 9:00". */
+	message?: string
+}
+
+/**
+ * What an adapter reports: messages to insert or replace, and ids that no longer
+ * exist. Removals have to be named explicitly — a message simply missing from a
+ * payload is indistinguishable from a delta that does not mention it.
+ */
+export type ChatTranscript = {
+	/** Inserted, or replaced when the id is already known. Editing a message is an upsert. */
+	messages: ChatMessage[]
+	/** Dropped from the transcript. Unknown ids are ignored. */
+	removed?: string[]
+}
+
+/**
+ * Chat transport, supplied by the host application. Ucho never talks to a server
+ * itself — exactly as with `onSubmit` — so the host decides what backs the
+ * conversation and how often it polls.
+ *
+ * All three may report the whole transcript or only what changed; the widget
+ * upserts by `id`, so either works — but a deletion must be named in `removed`,
+ * because omitting a message never means "delete it".
+ */
+export type ChatConfig = {
+	/** Loaded when the widget starts, to establish what the user has already seen. */
+	history: () => Promise<ChatTranscript>
+	/**
+	 * Send one message. Must resolve with at least the message that was just sent —
+	 * the widget has nothing to display otherwise and treats an empty resolve as a
+	 * failure. Reject to surface an error and keep the composer's text.
+	 */
+	send: (message: ChatOutgoingMessage) => Promise<ChatTranscript>
+	/**
+	 * Optional. Asked when the panel opens. Sending is never blocked by the answer —
+	 * an offline chat still accepts messages, it just says when they will be read.
+	 */
+	availability?: () => Promise<ChatAvailability | undefined>
+	/** Push changes in as they arrive. Returns its own teardown. */
+	subscribe: (onTranscript: (transcript: ChatTranscript) => void) => () => void
+}
+
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
 export type TextConfig = {
@@ -85,6 +188,24 @@ export type TextConfig = {
 	}
 	drawingTooltip: {
 		text: string
+	}
+	chat: {
+		title: string
+		placeholder: string
+		sendButton: string
+		openTitle: string
+		closeTitle: string
+		emptyState: string
+		loading: string
+		errorMessage: string
+		feedbackLink: string
+		unreadLabel: string
+		attachTitle: string
+		attachBarText: string
+		attachConfirm: string
+		attachCancel: string
+		attachmentLabel: string
+		removeAttachment: string
 	}
 }
 
@@ -132,8 +253,18 @@ export type CheckboxInputConfig = CustomInputBase & {
 
 export type CustomInputConfig = TextInputConfig | TextAreaConfig | SelectInputConfig | RadioInputConfig | CheckboxInputConfig
 
+/**
+ * At least one of `onSubmit` and `chat` must be supplied — a widget that can neither
+ * take feedback nor hold a conversation has nothing to offer.
+ */
 export type Config = {
-	onSubmit: (data: FeedbackPayload) => Promise<Response | void>
+	/**
+	 * Enables the feedback form. Omit it for a chat-only widget: the form, its launcher
+	 * route and the unsubmitted-drafts list all disappear with it.
+	 */
+	onSubmit?: (data: FeedbackPayload) => Promise<Response | void>
+	/** Enables the support chat panel. Omit it and the widget behaves exactly as before. */
+	chat?: ChatConfig
 	position?: Position
 	primaryColor?: `#${string}`
 	textConfig?: Partial<TextConfig>
@@ -142,10 +273,14 @@ export type Config = {
 	fancyIcon?: boolean
 }
 
-export type FullConfig = Required<Config> & {
+export type FullConfig = Omit<Required<Config>, 'chat' | 'onSubmit'> & {
+	/** Absent when the host did not configure feedback; the form is then never rendered. */
+	onSubmit?: Config['onSubmit']
 	textConfig: TextConfig
 	disableMinimization: boolean
 	fancyIcon: boolean
+	/** Absent when the host did not configure chat; the panel is then never rendered. */
+	chat?: ChatConfig
 }
 
 export const POSITIONS: Record<Position, { [key: string]: string }> = {

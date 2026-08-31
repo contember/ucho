@@ -83,7 +83,7 @@ export const StoredFeedback: Component = () => {
 
 	return (
 		<Show when={store.widget.state.isStoredFeedbackOpen}>
-			<div class="ucho-stored-feedback" ref={dialogRef}>
+			<div class="ucho-popover ucho-stored-feedback" ref={dialogRef}>
 				<div class="ucho-stored-feedback-header">
 					<h3>Unsubmitted Feedback</h3>
 					<Button variant="secondary" size="sm" onClick={() => store.widget.setState({ isStoredFeedbackOpen: false })}>

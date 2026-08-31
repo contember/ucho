@@ -1,4 +1,4 @@
-import { type Component, createEffect, createMemo, createSignal, JSXElement, onCleanup, onMount } from 'solid-js'
+import { type Component, createEffect, createMemo, createSignal, JSXElement, onCleanup, onMount, Show } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { Provider, useStore } from '~/contexts'
 import { usePageHeight } from '~/hooks/page-height-hooks'
@@ -7,6 +7,7 @@ import type { FullConfig } from '~/types'
 import { getContrastColor } from '~/utils'
 import { cleanupConsole, setupConsole } from '~/utils/console'
 import staticStyles from './../styles.css?inline'
+import { ChatAttachBar } from './chat-attach-bar'
 import { DrawingLayer } from './drawing-layer'
 import { DrawingToolbar } from './drawing-toolbar'
 import { FeedbackForm } from './feedback-form'
@@ -51,8 +52,16 @@ const UchoInterface: Component = () => {
 			<div
 				class="ucho-launcher"
 				style={{
-					...(store.widget.state.position.includes('top') ? { top: 'var(--spacing-xl)' } : { bottom: 'var(--spacing-xl)' }),
-					...(store.widget.state.position.includes('left') ? { left: 'var(--spacing-xl)' } : { right: 'var(--spacing-xl)' }),
+					// Both sides of each axis are set: the stylesheet pins `bottom` and `right`,
+					// so setting only the opposite one leaves this fixed element
+					// over-constrained and stretched to the full viewport — which puts
+					// anything anchored to it (the chat panel, stored feedback) off-screen.
+					...(store.widget.state.position.includes('top')
+						? { top: 'var(--spacing-xl)', bottom: 'auto' }
+						: { bottom: 'var(--spacing-xl)', top: 'auto' }),
+					...(store.widget.state.position.includes('left')
+						? { left: 'var(--spacing-xl)', right: 'auto' }
+						: { right: 'var(--spacing-xl)', left: 'auto' }),
 				}}
 				data-hidden={store.widget.state.isOpen}
 			>
@@ -62,7 +71,12 @@ const UchoInterface: Component = () => {
 			</div>
 
 			<UchoOverlay>
-				<FeedbackForm />
+				<Show
+					when={store.widget.state.captureMode === 'chat'}
+					fallback={<Show when={store.methods.hasFeedback()}>{<FeedbackForm />}</Show>}
+				>
+					<ChatAttachBar />
+				</Show>
 				<DrawingToolbar />
 				<DrawingLayer />
 			</UchoOverlay>
@@ -99,7 +113,12 @@ const UchoOverlay: Component<{ children: JSXElement }> = props => {
 				width: `${dimensions().width}px`,
 			}}
 			data-hidden={!store.widget.state.isOpen}
-			onClose={() => store.widget.setState({ isOpen: false })}
+			onClose={() => {
+				// Escape and the backdrop both land here, and they are the only other ways
+				// out of attach mode — without this the overlay keeps showing the attach bar
+				// instead of the feedback form for the rest of the session.
+				store.widget.setState({ isOpen: false, captureMode: 'feedback' })
+			}}
 		>
 			{props.children}
 		</dialog>

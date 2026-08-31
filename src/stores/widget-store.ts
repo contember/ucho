@@ -12,6 +12,8 @@ export type WidgetState = {
 		height: number
 	}
 	isStoredFeedbackOpen: boolean
+	/** The drawing overlay is shared: it either submits feedback or hands a screenshot to chat. */
+	captureMode: 'feedback' | 'chat'
 	pagesCount: number
 	welcomeMessageIsClosing: boolean
 	position: Position
@@ -40,6 +42,7 @@ export const createWidgetStore = (config: FullConfig, currentPageKey: string): W
 			height: document.documentElement.scrollHeight,
 		},
 		isStoredFeedbackOpen: false,
+		captureMode: 'feedback',
 		pagesCount: getStoredPagesCount(),
 		welcomeMessageIsClosing: false,
 		position: config.position,
