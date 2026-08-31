@@ -1729,6 +1729,14 @@ select.ucho-input-field {
     border: 1px solid var(--border-color-light);
 }
 
+.ucho-chat-file {
+    display: inline-block;
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-xs);
+    color: var(--text-medium);
+    text-decoration: underline;
+}
+
 .ucho-chat-pending {
     display: flex;
     align-items: center;

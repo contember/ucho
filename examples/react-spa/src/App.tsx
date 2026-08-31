@@ -29,7 +29,13 @@ function createDemoChat(): ChatConfig {
 	return {
 		history: async () => ({ messages }),
 		send: async ({ text, screenshot, page }) => {
-			const sent: ChatMessage = { id: id(), createdAt: now(), text, screenshot, author: { name: 'You', isCustomer: true } }
+			const sent: ChatMessage = {
+				id: id(),
+				createdAt: now(),
+				text,
+				attachments: screenshot ? [{ url: screenshot, fileName: 'screenshot.jpg', fileType: 'image/jpeg' }] : undefined,
+				author: { name: 'You', isCustomer: true },
+			}
 			messages = [...messages, sent]
 
 			// Stand in for someone answering from Slack a moment later.

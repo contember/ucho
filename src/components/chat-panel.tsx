@@ -2,8 +2,14 @@ import { type Component, createEffect, createSignal, For, onCleanup, onMount, Sh
 import { Button } from '~/components/button'
 import { ImageIcon, PenIcon, SendIcon, XIcon } from '~/components/icons'
 import { useStore } from '~/contexts'
-import type { ChatMessage } from '~/types'
+import type { ChatAttachment, ChatMessage } from '~/types'
 import { registerWindowEventListener } from '~/utils/listeners'
+import { safeMediaUrl } from '~/utils/url'
+
+/** Only images are worth showing inline; anything else is offered as a link. */
+const isImage = (attachment: ChatAttachment): boolean => (
+	attachment.fileType ? attachment.fileType.startsWith('image/') : /\.(png|jpe?g|webp|gif|avif)$/i.test(attachment.url)
+)
 
 const formatTime = (createdAt: string): string => {
 	const date = new Date(createdAt)
@@ -135,9 +141,30 @@ export const ChatPanel: Component = () => {
 											<Show when={message.text}>
 												<p class="ucho-chat-text">{message.text}</p>
 											</Show>
-											<Show when={message.screenshot}>
-												<img class="ucho-chat-shot" src={message.screenshot} alt={store.widget.state.text.chat.attachmentLabel} />
-											</Show>
+											<For each={message.attachments}>
+												{(attachment: ChatAttachment) => {
+													// The adapter is host-supplied and its URLs come from a backend, so
+													// they are input. An unsafe one renders as a plain filename rather
+													// than a link nobody should click.
+													const href = safeMediaUrl(attachment.url)
+													const label = () => attachment.fileName ?? store.widget.state.text.chat.attachmentLabel
+
+													return (
+														<Show when={href} fallback={<span class="ucho-chat-file">{label()}</span>}>
+															<Show
+																when={isImage(attachment)}
+																fallback={
+																	<a class="ucho-chat-file" href={href!} target="_blank" rel="noreferrer noopener">
+																		{label()}
+																	</a>
+																}
+															>
+																<img class="ucho-chat-shot" src={href!} alt={label()} />
+															</Show>
+														</Show>
+													)
+												}}
+											</For>
 										</div>
 										<time class="ucho-chat-time" dateTime={message.createdAt}>{formatTime(message.createdAt)}</time>
 									</div>

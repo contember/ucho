@@ -8,6 +8,7 @@ import { validateOptions } from './utils/validators'
 
 export type {
 	BrowserInfo,
+	ChatAttachment,
 	ChatAvailability,
 	ChatConfig,
 	ChatMessage,

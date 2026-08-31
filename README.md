@@ -157,6 +157,12 @@ init({
 changed. Messages are upserted by `id`, so re-sending one replaces it — that is how an
 edit arrives.
 
+A message's files arrive as `attachments` — `{ url, fileName?, fileType? }` — where the
+URL is served by the host rather than being the `data:` URL that was uploaded, so a
+transcript does not re-send megabytes on every poll. Images render inline; anything else
+is offered as a link. The outgoing `screenshot` is still a `data:` URL, because that is
+what the widget captures.
+
 Deletions must be named in `removed`. A message simply missing from a payload is never
 treated as deleted, because that is indistinguishable from a delta that does not mention
 it. Retracting an unread answer also takes it back off the unread badge.
@@ -165,6 +171,63 @@ Every outgoing message carries `page` (the current URL and path). The fuller `me
 — device, network and the captured console buffer — is included **only** when the user
 attached a screenshot, since that is the deliberate act of reporting a problem. Strip
 anything sensitive in your own handler before forwarding it.
+
+### Connecting it to a backend
+
+The adapter is where ucho ends and your service begins. A polling integration usually
+looks like this — note that the cursor is yours to keep: `ChatTranscript` deliberately
+does not carry one, because paging is the transport's concern.
+
+```typescript
+function createChat(baseUrl: string, token: string): ChatConfig {
+	const auth = { Authorization: `Bearer ${token}` }
+	let cursor: string | null = null
+
+	const read = async (response: Response) => {
+		if (!response.ok) throw new Error(`chat backend responded ${response.status}`)
+		const body = await response.json()
+		cursor = body.cursor ?? cursor
+		return { messages: body.messages ?? [], removed: body.removed ?? [] }
+	}
+
+	return {
+		history: async () =>
+			read(await fetch(`${baseUrl}/history`, { headers: auth })),
+		send: async (message) =>
+			read(
+				await fetch(`${baseUrl}/message`, {
+					method: 'POST',
+					headers: { ...auth, 'Content-Type': 'application/json' },
+					body: JSON.stringify(message),
+				}),
+			),
+		subscribe: (onTranscript) => {
+			const timer = setInterval(async () => {
+				const query = cursor
+					? `history?since=${encodeURIComponent(cursor)}`
+					: 'history'
+				try {
+					onTranscript(
+						await read(await fetch(`${baseUrl}/${query}`, { headers: auth })),
+					)
+				} catch {
+					// A failed poll is not worth surfacing; the next one may succeed.
+				}
+			}, 5000)
+			return () => clearInterval(timer)
+		},
+	}
+}
+```
+
+A working version of this is in `examples/react-spa`, which runs against the in-memory
+demo adapter by default and against a real service when `.env.local` provides
+`VITE_CHAT_BASE` and `VITE_CHAT_TOKEN`.
+
+**Mint the token on your server, not in the page.** The browser holds a short-lived
+credential it was handed; if the page could mint its own, the identity it carries would
+be worth nothing. Keep the polling interval honest too — back off while the tab is
+hidden and while the conversation is quiet, because this runs on every open tab.
 
 Chat cannot be added by a later `update()`: it has to be present at `init()`. Setting
 `chat` to `undefined` afterwards does hide the panel.

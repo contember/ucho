@@ -60,13 +60,28 @@ export type FeedbackPayload = {
 	customInputs?: Record<string, CustomInputValue>
 }
 
+/**
+ * A file that belongs to a message. `url` is whatever the host can serve — a hosted
+ * asset from its own storage, or a `data:` URL for an adapter that echoes locally.
+ */
+export type ChatAttachment = {
+	url: string
+	fileName?: string
+	/** Media type. Anything that is not an image renders as a link rather than inline. */
+	fileType?: string
+}
+
 export type ChatMessage = {
 	id: string
 	/** ISO 8601. Used for ordering; the widget never parses it for display beyond time-of-day. */
 	createdAt: string
 	text: string
-	/** An annotated screenshot attached to this message, if there was one. */
-	screenshot?: Screenshot
+	/**
+	 * Files on this message — in practice the annotated screenshot. Incoming attachments
+	 * carry a URL rather than the `data:` URL that was uploaded, so a transcript does not
+	 * re-send megabytes on every poll.
+	 */
+	attachments?: ChatAttachment[]
 	author: {
 		name: string
 		/** True for the person using the widget, false for whoever is answering. */
