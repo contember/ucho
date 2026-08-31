@@ -78,14 +78,19 @@ function useUcho(config: Config) {
 
 | Option                | Type                                                           | Required | Default          | Description                                                                                             |
 | --------------------- | -------------------------------------------------------------- | -------- | ---------------- | ------------------------------------------------------------------------------------------------------- |
-| `onSubmit`            | `(data: FeedbackPayload) => Promise<Response \| void>`         | Yes      | -                | Callback function when feedback is submitted. Return a `Response` to enable success/error notifications |
+| `onSubmit`            | `(data: FeedbackPayload) => Promise<Response \| void>`         | No\*     | -                | Callback function when feedback is submitted. Return a `Response` to enable success/error notifications |
 | `position`            | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'` | No       | `'bottom-right'` | Widget position on the page                                                                             |
 | `primaryColor`        | `` `#${string}` ``                                             | No       | `'#1a1a1a'`      | Primary color for UI elements                                                                           |
 | `textConfig`          | `Partial<TextConfig>`                                          | No       | English defaults | Customize all text elements in the interface                                                            |
 | `customInputs`        | `CustomInputConfig[]`                                          | No       | `[]`             | Custom input fields added to the feedback form                                                          |
 | `disableMinimization` | `boolean`                                                      | No       | `false`          | Disable the launcher button minimization after inactivity                                               |
 | `fancyIcon`           | `boolean`                                                      | No       | `false`          | Use the fancy PNG icon instead of the default SVG icon                                                  |
-| `chat`                | `ChatConfig`                                                   | No       | -                | Enables the support chat panel. Omit it and the widget behaves exactly as before                        |
+| `chat`                | `ChatConfig`                                                   | No\*     | -                | Enables the support chat panel. Omit it and the widget behaves exactly as before                        |
+
+\* At least one of `onSubmit` and `chat` is required — a widget that can neither take
+feedback nor hold a conversation has nothing to offer. Supply only `chat` for a chat-only
+widget: the feedback form, its route from the launcher, and the unsubmitted-drafts list
+all disappear with `onSubmit`.
 
 ### Custom Inputs
 
