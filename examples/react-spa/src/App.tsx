@@ -67,6 +67,56 @@ function createDemoChat(): ChatConfig {
 	}
 }
 
+/**
+ * Talks to a real backend when `.env.local` supplies one, so the example can be pointed
+ * at a live service instead of the in-memory demo. The token is minted server-side and
+ * handed to the page; a browser never mints its own.
+ */
+function createRemoteChat(base: string, token: string): ChatConfig {
+	const url = (path: string) => `${base}/${path}`
+	const auth = { Authorization: `Bearer ${token}` }
+	let cursor: string | null = null
+
+	const readTranscript = async (response: Response) => {
+		if (!response.ok) throw new Error(`chat backend responded ${response.status}`)
+		const body = await response.json()
+		// The cursor is the host's business — ucho's ChatTranscript does not carry it.
+		cursor = body.cursor ?? cursor
+		return { messages: body.messages ?? [], removed: body.removed ?? [] }
+	}
+
+	return {
+		history: async () => readTranscript(await fetch(url('history'), { headers: auth })),
+		send: async ({ text, screenshot, page, metadata }) =>
+			readTranscript(
+				await fetch(url('message'), {
+					method: 'POST',
+					headers: { ...auth, 'Content-Type': 'application/json' },
+					body: JSON.stringify({ text, screenshot, page, metadata }),
+				}),
+			),
+		subscribe: (onTranscript) => {
+			// Deliberately naive for a demo: a real integration backs off when the tab is
+			// hidden and when the conversation goes quiet.
+			const timer = window.setInterval(async () => {
+				try {
+					const query = cursor ? `history?since=${encodeURIComponent(cursor)}` : 'history'
+					onTranscript(await readTranscript(await fetch(url(query), { headers: auth })))
+				} catch {
+					// A failed poll is not worth surfacing; the next one may succeed.
+				}
+			}, 4000)
+			return () => window.clearInterval(timer)
+		},
+		availability: async () => {
+			const response = await fetch(url('session'), { headers: auth })
+			if (!response.ok) return { state: 'offline', message: 'Support chat is unavailable' }
+			const body = await response.json()
+			return { state: 'online', message: body.project?.name ? `Connected to ${body.project.name}` : 'Connected' }
+		},
+	}
+}
+
 function useUcho(config: Config) {
 	const instance = useRef<UchoInstance | null>(null)
 	const initial = useRef(config)
@@ -95,7 +145,9 @@ export function App() {
 	const [dialogOpen, setDialogOpen] = useState(false)
 
 	const [config] = useState<Pick<Config, 'onSubmit' | 'customInputs' | 'chat'>>(() => ({
-		chat: createDemoChat(),
+		chat: import.meta.env.VITE_CHAT_BASE && import.meta.env.VITE_CHAT_TOKEN
+			? createRemoteChat(import.meta.env.VITE_CHAT_BASE, import.meta.env.VITE_CHAT_TOKEN)
+			: createDemoChat(),
 		onSubmit: async (data) => {
 			console.log('Feedback submitted:', data)
 			return fetch('/api/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
