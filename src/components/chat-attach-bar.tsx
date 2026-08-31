@@ -12,8 +12,14 @@ export const ChatAttachBar: Component = () => {
 	const store = useStore()
 	const [isCapturing, setIsCapturing] = createSignal(false)
 
+	// The drawing store is shared with the feedback flow and its shapes are persisted
+	// per page. Anything drawn for an attachment is ours to clean up, but whatever was
+	// already there belongs to an unsubmitted feedback draft and has to come back —
+	// including when the user cancels.
+	const shapesBeforeAttach = store.drawing.state.shapes
+
 	const leaveAttachMode = () => {
-		store.drawing.setState({ shapes: [], hasDrawn: false }, true)
+		store.drawing.setState({ shapes: shapesBeforeAttach, hasDrawn: shapesBeforeAttach.length > 0 }, true)
 		store.widget.setState({ isOpen: false, captureMode: 'feedback' })
 		store.chat?.methods.open()
 	}
