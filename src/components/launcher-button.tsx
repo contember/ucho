@@ -46,7 +46,7 @@ export const LauncherButton: Component = () => {
 		// With chat configured the launcher is the way into the conversation; the
 		// feedback overlay is then reached from inside the panel. Without it, nothing
 		// about this button changes.
-		if (store.chat) {
+		if (store.chat?.isAvailable()) {
 			// The two popovers share the same slot and stacking level, so one must give way.
 			store.widget.setState({ isStoredFeedbackOpen: false })
 			store.chat.methods.toggle()

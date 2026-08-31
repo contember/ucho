@@ -76,7 +76,7 @@ export const ChatPanel: Component = () => {
 	}
 
 	return (
-		<Show when={chat.state.isOpen}>
+		<Show when={chat.isAvailable() && chat.state.isOpen}>
 			<div class="ucho-popover ucho-chat" role="dialog" aria-label={store.widget.state.text.chat.title}>
 				<div class="ucho-chat-header">
 					<div class="ucho-chat-heading">

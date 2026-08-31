@@ -20,6 +20,12 @@ export type ChatState = {
 
 export type ChatStore = {
 	state: ChatState
+	/**
+	 * Whether the host currently supplies an adapter. Read live, so `update({ chat: undefined })`
+	 * takes the panel out of the way. Note the reverse is not supported: chat that was absent
+	 * at `init()` cannot be added later, because the store is only built when it is present.
+	 */
+	isAvailable: () => boolean
 	setState: (state: Partial<ChatState>) => void
 	methods: {
 		open: () => void
@@ -128,7 +134,12 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 
 	const send = async (text: string) => {
 		const trimmed = text.trim()
-		if (!config.chat || state.isSending) return
+		if (state.isSending) return
+		if (!config.chat) {
+			// Resolving here would let the panel clear the composer over a message that
+			// was never sent anywhere.
+			throw new Error('Chat is not configured')
+		}
 		// A screenshot on its own is a complete message; text alone is too.
 		if (!trimmed && !state.pendingScreenshot) return
 
@@ -163,6 +174,7 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 
 	return {
 		state,
+		isAvailable: () => !!config.chat,
 		setState,
 		methods: {
 			open,
