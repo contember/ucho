@@ -27,9 +27,21 @@ export const Provider: Component<ProviderProps> = props => {
 				position: props.position,
 				disableMinimization: props.disableMinimization,
 				fancyIcon: props.fancyIcon,
-				text: props.textConfig,
-				customInputs: props.customInputs,
 			})
+
+			// `text` and `customInputs` are written only when their identity actually
+			// changed: replacing the store node rebuilds every custom input, which steals
+			// focus from whoever is typing in one.
+			if (store.widget.state.text !== props.textConfig) {
+				store.widget.setState({ text: props.textConfig })
+			}
+			if (store.widget.state.customInputs !== props.customInputs) {
+				store.widget.setState({ customInputs: props.customInputs })
+			}
+
+			// The pen and the draw cursor were seeded from the init-time primary colour and
+			// have no other update path, so they would keep drawing in the old brand colour.
+			store.drawing.setState({ selectedColor: props.primaryColor })
 
 			// Custom input values are seeded once when the store is built, so inputs
 			// added by a later `update()` would render with no value at all. Reseed
@@ -54,7 +66,7 @@ export const Provider: Component<ProviderProps> = props => {
 				})
 
 			if (!isUnchanged) {
-				store.feedback.setState({ customInputValues: reseeded })
+				store.feedback.resyncCustomValues(reseeded)
 			}
 		},
 		{ defer: true },

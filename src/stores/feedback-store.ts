@@ -14,6 +14,12 @@ export type FeedbackState = {
 export type FeedbackStore = {
 	state: FeedbackState
 	setState: (state: Partial<FeedbackState>, isClearing?: boolean) => void
+	/**
+	 * Re-seed values after the host changed `customInputs`. Deliberately bypasses
+	 * `setState`: that would mark the draft as user-touched and persist an empty
+	 * page entry for someone who has typed nothing.
+	 */
+	resyncCustomValues: (values: Record<string, CustomInputValue>) => void
 }
 
 export const getDefaultCustomValues = (customInputs?: CustomInputConfig[]) => {
@@ -68,5 +74,6 @@ export const createFeedbackStore = (
 	return {
 		state,
 		setState: wrappedSetState,
+		resyncCustomValues: (values: Record<string, CustomInputValue>) => setState({ customInputValues: values }),
 	}
 }

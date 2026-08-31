@@ -142,9 +142,22 @@ export function init(options: Config): UchoInstance {
 
 		const update = (next: Partial<Config>) => {
 			if (disposed) return
-			rawOptions = { ...rawOptions, ...next }
-			validateOptions(rawOptions)
-			setConfig(normalizeConfig(rawOptions))
+
+			// Validate a candidate rather than the accumulator: adopting first would leave
+			// `rawOptions` poisoned by a rejected value, so every later update would
+			// re-validate the bad field and throw again for the life of the page.
+			const candidate = { ...rawOptions, ...next }
+			validateOptions(candidate)
+
+			const normalized = normalizeConfig(candidate)
+			// Reuse the previous objects when the caller passed the same input. Both are
+			// freshly allocated by `normalizeConfig`, and a new identity makes Solid replace
+			// the store node — which rebuilds every custom input and steals focus mid-typing.
+			if (candidate.textConfig === rawOptions.textConfig) normalized.textConfig = config().textConfig
+			if (candidate.customInputs === rawOptions.customInputs) normalized.customInputs = config().customInputs
+
+			rawOptions = candidate
+			setConfig(normalized)
 		}
 
 		window.addEventListener('pagehide', cleanup, { once: true })
