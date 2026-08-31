@@ -116,42 +116,49 @@
     --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Saved Pages Dropdown */
-.ucho-stored-feedback {
+/* Popovers anchored to the launcher — the stored-feedback list and the chat panel.
+   Both hang off `.ucho-launcher`, so the anchoring is shared and lives here once. */
+.ucho-popover {
     position: absolute;
     display: flex;
     flex-direction: column;
-    width: 320px;
     background: var(--background-color);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-black-lightened-lg);
     animation: slideUpFade var(--duration-base) var(--ease-smooth);
     z-index: calc(var(--z-widget-button) + 1);
+    /* The launcher is click-through so the host page keeps working around the widget. */
+    pointer-events: auto;
     transition: transform var(--duration-base) var(--ease-smooth), opacity var(--duration-base) var(--ease-smooth);
 }
 
-.ucho-root[data-position="bottom-right"] .ucho-stored-feedback {
+.ucho-root[data-position="bottom-right"] .ucho-popover {
     bottom: calc(100% + var(--spacing-lg));
     right: 0;
     transform-origin: bottom right;
 }
 
-.ucho-root[data-position="bottom-left"] .ucho-stored-feedback {
+.ucho-root[data-position="bottom-left"] .ucho-popover {
     bottom: calc(100% + var(--spacing-lg));
     left: 0;
     transform-origin: bottom left;
 }
 
-.ucho-root[data-position="top-right"] .ucho-stored-feedback {
+.ucho-root[data-position="top-right"] .ucho-popover {
     top: calc(100% + var(--spacing-lg));
     right: 0;
     transform-origin: top right;
 }
 
-.ucho-root[data-position="top-left"] .ucho-stored-feedback {
+.ucho-root[data-position="top-left"] .ucho-popover {
     top: calc(100% + var(--spacing-lg));
     left: 0;
     transform-origin: top left;
+}
+
+/* Saved Pages Dropdown */
+.ucho-stored-feedback {
+    width: 320px;
 }
 
 .ucho-stored-feedback-header {
