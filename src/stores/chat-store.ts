@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store'
-import type { ChatAvailability, ChatMessage, FullConfig, Screenshot } from '~/types'
+import type { ChatAvailability, ChatMessage, ChatTranscript, FullConfig, Screenshot } from '~/types'
 import { collectLocationInfo, collectMetadata } from '~/utils/metadata'
 
 export type ChatState = {
@@ -41,16 +41,20 @@ export type ChatStore = {
 }
 
 /**
- * Adapters may return the whole transcript or only what is new, so messages are
- * merged by id rather than appended. Sorting by `createdAt` keeps a late-arriving
- * message in its right place; the id is a tiebreak so the order is stable.
+ * Adapters may report the whole transcript or only what changed, so messages are
+ * upserted by id rather than appended — which is also how an edit arrives. Removals
+ * are applied from `removed`, never inferred from a message being absent. Sorting by
+ * `createdAt` keeps a late arrival in its right place; the id is a stable tiebreak.
  */
-export const mergeMessages = (existing: ChatMessage[], incoming: ChatMessage[]): ChatMessage[] => {
-	if (incoming.length === 0) return existing
+export const mergeMessages = (existing: ChatMessage[], incoming: ChatMessage[], removed?: string[]): ChatMessage[] => {
+	if (incoming.length === 0 && !removed?.length) return existing
 
 	const byId = new Map(existing.map(message => [message.id, message]))
 	for (const message of incoming) {
 		byId.set(message.id, message)
+	}
+	for (const id of removed ?? []) {
+		byId.delete(id)
 	}
 
 	// Compared as instants, not as strings: adapters differ in fractional precision and
@@ -80,14 +84,21 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 
 	const setState = (next: Partial<ChatState>) => setStoreState(next)
 
-	const receive = (incoming: ChatMessage[]) => {
+	const receive = (transcript: ChatTranscript) => {
+		const incoming = transcript.messages
 		const known = new Set(state.messages.map(message => message.id))
-		const merged = mergeMessages(state.messages, incoming)
+		const merged = mergeMessages(state.messages, incoming, transcript.removed)
 
 		// An adapter is allowed to push the whole transcript, and the first batch arrives
 		// before any history load — counting it would greet a returning user with every
 		// answer they have ever read. The first batch only establishes the baseline.
 		const isBaseline = !state.hasBaseline
+
+		// A retracted answer stops being unread: leaving it counted would leave a badge
+		// pointing at a message the user can never open.
+		const byId = new Map(state.messages.map(message => [message.id, message]))
+		const retractedUnread = (transcript.removed ?? [])
+			.filter(id => byId.get(id)?.author.isCustomer === false).length
 
 		// Only answers count as unread, and only while the panel is shut — a message
 		// the user just sent themselves is not news to them.
@@ -95,7 +106,7 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 			? state.isOpen ? 0 : state.unreadCount
 			: state.unreadCount + incoming.filter(message => !known.has(message.id) && !message.author.isCustomer).length
 
-		setState({ messages: merged, unreadCount: unread, hasBaseline: true })
+		setState({ messages: merged, unreadCount: Math.max(0, unread - retractedUnread), hasBaseline: true })
 	}
 
 	const loadHistory = async () => {
@@ -103,11 +114,15 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 
 		setState({ isLoading: true, error: null })
 		try {
-			const messages = await config.chat.history()
+			const transcript = await config.chat.history()
 			// Establishing the baseline here — rather than from the first `subscribe` batch —
 			// keeps a delta-only adapter's first reply countable while still not greeting a
 			// returning user with every answer they have already read.
-			setState({ messages: mergeMessages(state.messages, messages), hasLoaded: true, hasBaseline: true })
+			setState({
+				messages: mergeMessages(state.messages, transcript.messages, transcript.removed),
+				hasLoaded: true,
+				hasBaseline: true,
+			})
 		} catch {
 			// Left unset on purpose: a failed history load is not a failed send, and the
 			// panel says so with its empty state rather than a scary error.
@@ -149,7 +164,7 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 		const screenshot = state.pendingScreenshot
 		setState({ isSending: true, error: null })
 		try {
-			const messages = await config.chat.send({
+			const transcript = await config.chat.send({
 				text: trimmed,
 				screenshot,
 				// Collected per message, not per conversation: in an SPA the user can move
@@ -159,12 +174,15 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 				// Only with a screenshot: see the note on `ChatOutgoingMessage.metadata`.
 				metadata: screenshot ? collectMetadata() : undefined,
 			})
-			if (messages.length === 0) {
+			if (transcript.messages.length === 0) {
 				// Nothing came back, so nothing can be shown. Failing loudly beats clearing
 				// the composer over an empty transcript and leaving the user to guess.
 				throw new Error('chat.send resolved without any messages')
 			}
-			setState({ messages: mergeMessages(state.messages, messages), pendingScreenshot: undefined })
+			setState({
+				messages: mergeMessages(state.messages, transcript.messages, transcript.removed),
+				pendingScreenshot: undefined,
+			})
 		} catch (error) {
 			setState({ error: error instanceof Error ? error.message : 'send-failed' })
 			throw error

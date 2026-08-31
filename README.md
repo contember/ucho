@@ -130,17 +130,18 @@ the host supplies the transport, exactly as it does for `onSubmit`.
 init({
 	onSubmit: async (data) => {/* ... */},
 	chat: {
-		// Loaded once when the widget starts.
-		history: async () => fetchMessages(),
+		// Loaded when the widget starts.
+		history: async () => ({ messages: await fetchMessages() }),
 		// Must resolve with at least the message just sent.
-		send: async ({ text, screenshot, page, metadata }) =>
-			postMessage({ text, screenshot, page, metadata }),
-		// Push new messages in; return the teardown.
-		subscribe: (onMessages) => {
-			const timer = setInterval(
-				async () => onMessages(await fetchSince(cursor)),
-				5000,
-			)
+		send: async ({ text, screenshot, page, metadata }) => ({
+			messages: [await postMessage({ text, screenshot, page, metadata })],
+		}),
+		// Push changes in; return the teardown.
+		subscribe: (onTranscript) => {
+			const timer = setInterval(async () => {
+				const { messages, removed } = await fetchSince(cursor)
+				onTranscript({ messages, removed })
+			}, 5000)
 			return () => clearInterval(timer)
 		},
 		// Optional. Shown under the title; never blocks sending.
@@ -152,8 +153,13 @@ init({
 })
 ```
 
-`history`, `send` and `subscribe` may each return the whole transcript or only what is
-new — messages are merged by `id`.
+`history`, `send` and `subscribe` may each report the whole transcript or only what
+changed. Messages are upserted by `id`, so re-sending one replaces it — that is how an
+edit arrives.
+
+Deletions must be named in `removed`. A message simply missing from a payload is never
+treated as deleted, because that is indistinguishable from a delta that does not mention
+it. Retracting an unread answer also takes it back off the unread badge.
 
 Every outgoing message carries `page` (the current URL and path). The fuller `metadata`
 — device, network and the captured console buffer — is included **only** when the user

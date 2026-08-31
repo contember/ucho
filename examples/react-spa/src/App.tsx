@@ -24,10 +24,10 @@ const id = () => Math.random().toString(36).slice(2)
  */
 function createDemoChat(): ChatConfig {
 	let messages: ChatMessage[] = []
-	let listener: ((messages: ChatMessage[]) => void) | null = null
+	let listener: ((transcript: { messages: ChatMessage[]; removed?: string[] }) => void) | null = null
 
 	return {
-		history: async () => messages,
+		history: async () => ({ messages }),
 		send: async ({ text, screenshot, page }) => {
 			const sent: ChatMessage = { id: id(), createdAt: now(), text, screenshot, author: { name: 'You', isCustomer: true } }
 			messages = [...messages, sent]
@@ -43,17 +43,17 @@ function createDemoChat(): ChatConfig {
 					author: { name: 'Jana from support', isCustomer: false },
 				}
 				messages = [...messages, reply]
-				listener?.([reply])
+				listener?.({ messages: [reply] })
 			}, 1400)
 
-			return [sent]
+			return { messages: [sent] }
 		},
 		availability: async () => ({
 			state: 'online',
 			message: 'Usually replies within an hour',
 		}),
-		subscribe: (onMessages) => {
-			listener = onMessages
+		subscribe: (onTranscript) => {
+			listener = onTranscript
 			return () => {
 				listener = null
 			}

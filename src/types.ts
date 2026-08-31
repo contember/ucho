@@ -110,29 +110,42 @@ export type ChatAvailability = {
 }
 
 /**
+ * What an adapter reports: messages to insert or replace, and ids that no longer
+ * exist. Removals have to be named explicitly — a message simply missing from a
+ * payload is indistinguishable from a delta that does not mention it.
+ */
+export type ChatTranscript = {
+	/** Inserted, or replaced when the id is already known. Editing a message is an upsert. */
+	messages: ChatMessage[]
+	/** Dropped from the transcript. Unknown ids are ignored. */
+	removed?: string[]
+}
+
+/**
  * Chat transport, supplied by the host application. Ucho never talks to a server
  * itself — exactly as with `onSubmit` — so the host decides what backs the
  * conversation and how often it polls.
  *
- * All three may return the whole transcript or only what is new; the widget
- * merges by `id`, so either works.
+ * All three may report the whole transcript or only what changed; the widget
+ * upserts by `id`, so either works — but a deletion must be named in `removed`,
+ * because omitting a message never means "delete it".
  */
 export type ChatConfig = {
-	/** Loaded once, the first time the panel is opened. */
-	history: () => Promise<ChatMessage[]>
+	/** Loaded when the widget starts, to establish what the user has already seen. */
+	history: () => Promise<ChatTranscript>
 	/**
 	 * Send one message. Must resolve with at least the message that was just sent —
 	 * the widget has nothing to display otherwise and treats an empty resolve as a
 	 * failure. Reject to surface an error and keep the composer's text.
 	 */
-	send: (message: ChatOutgoingMessage) => Promise<ChatMessage[]>
+	send: (message: ChatOutgoingMessage) => Promise<ChatTranscript>
 	/**
 	 * Optional. Asked when the panel opens. Sending is never blocked by the answer —
 	 * an offline chat still accepts messages, it just says when they will be read.
 	 */
 	availability?: () => Promise<ChatAvailability | undefined>
-	/** Push incoming messages in. Returns its own teardown. */
-	subscribe: (onMessages: (messages: ChatMessage[]) => void) => () => void
+	/** Push changes in as they arrive. Returns its own teardown. */
+	subscribe: (onTranscript: (transcript: ChatTranscript) => void) => () => void
 }
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'

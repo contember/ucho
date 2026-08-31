@@ -72,6 +72,39 @@ describe('mergeMessages', () => {
 		expect(merged.map(m => m.id)).toEqual(['a', 'b'])
 	})
 
+	test('removes ids named in `removed`', () => {
+		const merged = mergeMessages(
+			[message('a', '2026-01-01T10:00:00Z'), message('b', '2026-01-01T10:05:00Z')],
+			[],
+			['a'],
+		)
+		expect(merged.map(m => m.id)).toEqual(['b'])
+	})
+
+	test('applies upserts and removals in the same batch', () => {
+		const merged = mergeMessages(
+			[message('a', '2026-01-01T10:00:00Z'), message('b', '2026-01-01T10:05:00Z')],
+			[message('c', '2026-01-01T10:10:00Z')],
+			['b'],
+		)
+		expect(merged.map(m => m.id)).toEqual(['a', 'c'])
+	})
+
+	test('ignores removals for ids it never had', () => {
+		const existing = [message('a', '2026-01-01T10:00:00Z')]
+		const merged = mergeMessages(existing, [], ['nope'])
+		expect(merged.map(m => m.id)).toEqual(['a'])
+	})
+
+	test('a message absent from a payload is kept — only `removed` deletes', () => {
+		// A delta that does not mention `a` must not be read as "delete a".
+		const merged = mergeMessages(
+			[message('a', '2026-01-01T10:00:00Z')],
+			[message('b', '2026-01-01T10:05:00Z')],
+		)
+		expect(merged.map(m => m.id)).toEqual(['a', 'b'])
+	})
+
 	test('breaks ties on id so the order is stable across polls', () => {
 		const sameInstant = '2026-01-01T10:00:00Z'
 		const merged = mergeMessages([], [message('b', sameInstant), message('a', sameInstant)])
