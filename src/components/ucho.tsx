@@ -51,8 +51,16 @@ const UchoInterface: Component = () => {
 			<div
 				class="ucho-launcher"
 				style={{
-					...(store.widget.state.position.includes('top') ? { top: 'var(--spacing-xl)' } : { bottom: 'var(--spacing-xl)' }),
-					...(store.widget.state.position.includes('left') ? { left: 'var(--spacing-xl)' } : { right: 'var(--spacing-xl)' }),
+					// Both sides of each axis are set: the stylesheet pins `bottom` and `right`,
+					// so setting only the opposite one leaves this fixed element
+					// over-constrained and stretched to the full viewport — which puts
+					// anything anchored to it (the chat panel, stored feedback) off-screen.
+					...(store.widget.state.position.includes('top')
+						? { top: 'var(--spacing-xl)', bottom: 'auto' }
+						: { bottom: 'var(--spacing-xl)', top: 'auto' }),
+					...(store.widget.state.position.includes('left')
+						? { left: 'var(--spacing-xl)', right: 'auto' }
+						: { right: 'var(--spacing-xl)', left: 'auto' }),
 				}}
 				data-hidden={store.widget.state.isOpen}
 			>
