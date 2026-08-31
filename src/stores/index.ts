@@ -1,3 +1,4 @@
+export * from './chat-store'
 export * from './drawing-store'
 export * from './feedback-store'
 export * from './store'

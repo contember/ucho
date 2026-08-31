@@ -2,6 +2,7 @@ import type { Config, DrawingTool, FullConfig } from '~/types'
 import { createNotificationManager } from '~/utils/notifications'
 import { createDebouncedStateSaver } from '~/utils/state-management'
 import { clearPageState, getPageKey, loadPageState } from '~/utils/storage'
+import { type ChatStore, createChatStore } from './chat-store'
 import { createDrawingStore, type DrawingStore } from './drawing-store'
 import { createFeedbackStore, type FeedbackStore, getDefaultCustomValues } from './feedback-store'
 import { createWidgetStore, type WidgetStore } from './widget-store'
@@ -10,6 +11,8 @@ export type Store = {
 	feedback: FeedbackStore
 	drawing: DrawingStore
 	widget: WidgetStore
+	/** Only present when the host configured `chat`. */
+	chat?: ChatStore
 	methods: {
 		reset: () => void
 		submit: Config['onSubmit']
@@ -21,6 +24,9 @@ export const createStore = (config: FullConfig): Store => {
 	let currentPageKey = getPageKey()
 
 	const widget = createWidgetStore(config, currentPageKey)
+	// Deliberately outside the per-page save/reset path below: a conversation belongs
+	// to a person and has to survive both navigation and a feedback submit.
+	const chat = config.chat ? createChatStore(config) : undefined
 	const debouncedSave = createDebouncedStateSaver(widget)
 	const notifications = createNotificationManager(widget)
 
@@ -115,6 +121,7 @@ export const createStore = (config: FullConfig): Store => {
 		feedback,
 		drawing,
 		widget,
+		chat,
 		methods: {
 			reset,
 			handlePageChange,

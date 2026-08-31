@@ -1,4 +1,4 @@
-import { type Component, createEffect, createMemo, createSignal, JSXElement, onCleanup, onMount } from 'solid-js'
+import { type Component, createEffect, createMemo, createSignal, JSXElement, onCleanup, onMount, Show } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { Provider, useStore } from '~/contexts'
 import { usePageHeight } from '~/hooks/page-height-hooks'
@@ -7,6 +7,7 @@ import type { FullConfig } from '~/types'
 import { getContrastColor } from '~/utils'
 import { cleanupConsole, setupConsole } from '~/utils/console'
 import staticStyles from './../styles.css?inline'
+import { ChatAttachBar } from './chat-attach-bar'
 import { DrawingLayer } from './drawing-layer'
 import { DrawingToolbar } from './drawing-toolbar'
 import { FeedbackForm } from './feedback-form'
@@ -70,7 +71,9 @@ const UchoInterface: Component = () => {
 			</div>
 
 			<UchoOverlay>
-				<FeedbackForm />
+				<Show when={store.widget.state.captureMode === 'chat'} fallback={<FeedbackForm />}>
+					<ChatAttachBar />
+				</Show>
 				<DrawingToolbar />
 				<DrawingLayer />
 			</UchoOverlay>

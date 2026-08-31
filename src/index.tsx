@@ -8,6 +8,8 @@ import { validateOptions } from './utils/validators'
 
 export type {
 	BrowserInfo,
+	ChatConfig,
+	ChatMessage,
 	CheckboxInputConfig,
 	Config,
 	ConsoleEntry,
@@ -45,6 +47,7 @@ const normalizeConfig = (options: Config): FullConfig => ({
 	customInputs: options.customInputs ?? [],
 	disableMinimization: options.disableMinimization ?? false,
 	fancyIcon: options.fancyIcon ?? false,
+	chat: options.chat,
 })
 
 let activeInstance: UchoInstance | null = null
@@ -117,6 +120,7 @@ export function init(options: Config): UchoInstance {
 		const dispose = render(
 			() => (
 				<Ucho
+					chat={config().chat}
 					position={config().position}
 					primaryColor={config().primaryColor}
 					textConfig={config().textConfig}

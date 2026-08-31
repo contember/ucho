@@ -30,7 +30,7 @@ const collectBrowserInfo = (): BrowserInfo => {
 	}
 }
 
-const collectLocationInfo = (): LocationInfo => {
+export const collectLocationInfo = (): LocationInfo => {
 	const url = new URL(window.location.href)
 	const searchParams: Record<string, string> = {}
 	url.searchParams.forEach((value, key) => {

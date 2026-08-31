@@ -12,4 +12,14 @@ export const validateOptions = (options: Config): void => {
 	if (options.primaryColor && !/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(options.primaryColor)) {
 		throw new Error('Ucho initialization failed: primaryColor must be a valid hex color')
 	}
+
+	if (options.chat !== undefined) {
+		// Fail here rather than when the panel first opens: a half-supplied adapter
+		// otherwise looks fine until someone tries to send, which is far too late.
+		for (const method of ['history', 'send', 'subscribe'] as const) {
+			if (typeof options.chat[method] !== 'function') {
+				throw new Error(`Ucho initialization failed: chat.${method} must be a function`)
+			}
+		}
+	}
 }

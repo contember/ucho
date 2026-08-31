@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Select from '@radix-ui/react-select'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { Config, UchoInstance } from 'ucho-js'
+import type { ChatConfig, ChatMessage, Config, UchoInstance } from 'ucho-js'
 import { init } from 'ucho-js'
 
 type Position = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
@@ -14,6 +14,52 @@ const colors = [
 	{ value: '#4a9eed', label: 'Cerulean' },
 	{ value: '#5cbf8a', label: 'Jade' },
 ] as const
+
+const now = () => new Date().toISOString()
+const id = () => Math.random().toString(36).slice(2)
+
+/**
+ * Demo-only transport. A real integration points these at a backend — ucho itself
+ * never fetches anything, which is why the adapter lives out here in the host app.
+ */
+function createDemoChat(): ChatConfig {
+	let messages: ChatMessage[] = []
+	let listener: ((messages: ChatMessage[]) => void) | null = null
+
+	return {
+		history: async () => messages,
+		send: async ({ text, screenshot, page }) => {
+			const sent: ChatMessage = { id: id(), createdAt: now(), text, screenshot, author: { name: 'You', isCustomer: true } }
+			messages = [...messages, sent]
+
+			// Stand in for someone answering from Slack a moment later.
+			window.setTimeout(() => {
+				const reply: ChatMessage = {
+					id: id(),
+					createdAt: now(),
+					text: screenshot
+						? `Got the screenshot from ${page.pathname} — we can see exactly what you marked.`
+						: `Thanks — we can see you are on ${page.pathname}. Taking a look now.`,
+					author: { name: 'Jana from support', isCustomer: false },
+				}
+				messages = [...messages, reply]
+				listener?.([reply])
+			}, 1400)
+
+			return [sent]
+		},
+		availability: async () => ({
+			state: 'online',
+			message: 'Usually replies within an hour',
+		}),
+		subscribe: (onMessages) => {
+			listener = onMessages
+			return () => {
+				listener = null
+			}
+		},
+	}
+}
 
 function useUcho(config: Config) {
 	const instance = useRef<UchoInstance | null>(null)
@@ -42,7 +88,8 @@ export function App() {
 	const [color, setColor] = useState('#e8a849')
 	const [dialogOpen, setDialogOpen] = useState(false)
 
-	const [config] = useState<Pick<Config, 'onSubmit' | 'customInputs'>>(() => ({
+	const [config] = useState<Pick<Config, 'onSubmit' | 'customInputs' | 'chat'>>(() => ({
+		chat: createDemoChat(),
 		onSubmit: async (data) => {
 			console.log('Feedback submitted:', data)
 			return fetch('/api/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })

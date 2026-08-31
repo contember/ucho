@@ -10,6 +10,10 @@ const Context = createContext<Store>()
 
 export const Provider: Component<ProviderProps> = props => {
 	const store = createStore({
+		// Read through, so a host swapping the adapter (a refreshed token) takes effect.
+		get chat() {
+			return props.chat
+		},
 		primaryColor: props.primaryColor,
 		onSubmit: data => props.onSubmit(data),
 		textConfig: props.textConfig,
