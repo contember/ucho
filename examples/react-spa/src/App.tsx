@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Select from '@radix-ui/react-select'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Config, UchoInstance } from 'ucho-js'
 import { init } from 'ucho-js'
 
@@ -71,7 +71,13 @@ export function App() {
 		],
 	}))
 
-	useUcho({ ...config, position: 'bottom-left' })
+	// Position and colour are driven by the controls below, which is what actually
+	// exercises `update()`. Memoised so unrelated re-renders do not push a new config.
+	const uchoConfig = useMemo(
+		() => ({ ...config, position, primaryColor: color as `#${string}` }),
+		[config, position, color],
+	)
+	useUcho(uchoConfig)
 
 	return (
 		<div className="min-h-screen relative overflow-hidden">
