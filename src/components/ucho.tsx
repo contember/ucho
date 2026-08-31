@@ -110,7 +110,12 @@ const UchoOverlay: Component<{ children: JSXElement }> = props => {
 				width: `${dimensions().width}px`,
 			}}
 			data-hidden={!store.widget.state.isOpen}
-			onClose={() => store.widget.setState({ isOpen: false })}
+			onClose={() => {
+				// Escape and the backdrop both land here, and they are the only other ways
+				// out of attach mode — without this the overlay keeps showing the attach bar
+				// instead of the feedback form for the rest of the session.
+				store.widget.setState({ isOpen: false, captureMode: 'feedback' })
+			}}
 		>
 			{props.children}
 		</dialog>
