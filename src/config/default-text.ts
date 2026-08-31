@@ -33,7 +33,6 @@ export const defaultText: TextConfig = {
 		emptyState: 'No messages yet. Ask us anything.',
 		loading: 'Loading conversation…',
 		errorMessage: 'Message could not be sent.',
-		retryButton: 'Try again',
 		feedbackLink: 'Send feedback instead',
 		unreadLabel: 'unread messages',
 		attachTitle: 'Attach a screenshot',

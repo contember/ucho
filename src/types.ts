@@ -170,7 +170,6 @@ export type TextConfig = {
 		emptyState: string
 		loading: string
 		errorMessage: string
-		retryButton: string
 		feedbackLink: string
 		unreadLabel: string
 		attachTitle: string
