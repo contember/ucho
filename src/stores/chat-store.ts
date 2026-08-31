@@ -47,9 +47,15 @@ export const mergeMessages = (existing: ChatMessage[], incoming: ChatMessage[]):
 		byId.set(message.id, message)
 	}
 
-	return [...byId.values()].sort((a, b) => (
-		a.createdAt === b.createdAt ? a.id.localeCompare(b.id) : a.createdAt.localeCompare(b.createdAt)
-	))
+	// Compared as instants, not as strings: adapters differ in fractional precision and
+	// timezone offset, and `'…00.250Z'` sorts before `'…00Z'` lexically while `-05:00`
+	// offsets sort as if they were UTC. Ties fall back to the id so polls are stable.
+	return [...byId.values()].sort((a, b) => {
+		const at = Date.parse(a.createdAt)
+		const bt = Date.parse(b.createdAt)
+		if (at === bt || Number.isNaN(at) || Number.isNaN(bt)) return a.id < b.id ? -1 : a.id > b.id ? 1 : 0
+		return at - bt
+	})
 }
 
 export const createChatStore = (config: FullConfig): ChatStore => {

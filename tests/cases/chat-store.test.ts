@@ -46,6 +46,32 @@ describe('mergeMessages', () => {
 		expect(merged.map(m => m.id)).toEqual(['a', 'b', 'c'])
 	})
 
+	test('orders by instant, not by string — fractional precision must not reverse it', () => {
+		const merged = mergeMessages(
+			[message('older', '2026-01-01T10:00:00Z')],
+			[message('newer', '2026-01-01T10:00:00.250Z')],
+		)
+		expect(merged.map(m => m.id)).toEqual(['older', 'newer'])
+	})
+
+	test('orders by instant across timezone offsets', () => {
+		// 23:00-05:00 is 04:00Z the next day, i.e. after 00:00Z — the shape a timestamptz
+		// column produces.
+		const merged = mergeMessages(
+			[message('utc', '2026-01-02T00:00:00Z')],
+			[message('offset', '2026-01-01T23:00:00-05:00')],
+		)
+		expect(merged.map(m => m.id)).toEqual(['utc', 'offset'])
+	})
+
+	test('treats the same instant spelled two ways as a tie', () => {
+		const merged = mergeMessages(
+			[message('b', '2026-01-01T10:00:00.000Z')],
+			[message('a', '2026-01-01T10:00:00Z')],
+		)
+		expect(merged.map(m => m.id)).toEqual(['a', 'b'])
+	})
+
 	test('breaks ties on id so the order is stable across polls', () => {
 		const sameInstant = '2026-01-01T10:00:00Z'
 		const merged = mergeMessages([], [message('b', sameInstant), message('a', sameInstant)])
