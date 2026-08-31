@@ -104,7 +104,10 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 		setState({ isLoading: true, error: null })
 		try {
 			const messages = await config.chat.history()
-			setState({ messages: mergeMessages(state.messages, messages), hasLoaded: true })
+			// Establishing the baseline here — rather than from the first `subscribe` batch —
+			// keeps a delta-only adapter's first reply countable while still not greeting a
+			// returning user with every answer they have already read.
+			setState({ messages: mergeMessages(state.messages, messages), hasLoaded: true, hasBaseline: true })
 		} catch {
 			// Left unset on purpose: a failed history load is not a failed send, and the
 			// panel says so with its empty state rather than a scary error.
@@ -130,7 +133,7 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 		void loadAvailability()
 	}
 
-	const close = () => setState({ isOpen: false })
+	const close = () => setState({ isOpen: false, error: null })
 
 	const send = async (text: string) => {
 		const trimmed = text.trim()
@@ -170,7 +173,12 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 		}
 	}
 
-	const start = () => config.chat?.subscribe(receive)
+	const start = () => {
+		// Loaded up front, not on first open: the unread badge is only meaningful once we
+		// know what was already there.
+		void loadHistory()
+		return config.chat?.subscribe(receive)
+	}
 
 	return {
 		state,
