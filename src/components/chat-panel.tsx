@@ -1,6 +1,6 @@
 import { type Component, createEffect, createSignal, For, onCleanup, onMount, Show } from 'solid-js'
 import { Button } from '~/components/button'
-import { ImageIcon, SendIcon, XIcon } from '~/components/icons'
+import { ImageIcon, PenIcon, SendIcon, XIcon } from '~/components/icons'
 import { useStore } from '~/contexts'
 import type { ChatMessage } from '~/types'
 import { registerWindowEventListener } from '~/utils/listeners'
@@ -48,9 +48,17 @@ export const ChatPanel: Component = () => {
 		},
 	})
 
+	// The launcher routes exclusively into chat once it is configured, so this is the
+	// only remaining way into the feedback form. It has to stay reachable from a full
+	// conversation, not just from the empty state.
+	const openFeedback = () => {
+		chat.methods.close()
+		store.widget.setState({ isOpen: true })
+	}
+
 	const submit = async () => {
 		const text = draft().trim()
-		if (!text) return
+		if (!text && !chat.state.pendingScreenshot) return
 
 		try {
 			// Cleared only once the send is confirmed: clearing up front loses the text
@@ -82,6 +90,15 @@ export const ChatPanel: Component = () => {
 					<Button
 						variant="secondary"
 						size="sm"
+						title={store.widget.state.text.chat.feedbackLink}
+						aria-label={store.widget.state.text.chat.feedbackLink}
+						onClick={openFeedback}
+					>
+						<PenIcon size={18} />
+					</Button>
+					<Button
+						variant="secondary"
+						size="sm"
 						title={store.widget.state.text.chat.closeTitle}
 						aria-label={store.widget.state.text.chat.closeTitle}
 						onClick={() => chat.methods.close()}
@@ -101,10 +118,7 @@ export const ChatPanel: Component = () => {
 										class="ucho-chat-empty-action"
 										variant="secondary"
 										size="sm"
-										onClick={() => {
-											chat.methods.close()
-											store.widget.setState({ isOpen: true })
-										}}
+										onClick={openFeedback}
 									>
 										{store.widget.state.text.chat.feedbackLink}
 									</Button>
