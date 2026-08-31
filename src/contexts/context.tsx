@@ -26,6 +26,8 @@ export const Provider: Component<ProviderProps> = props => {
 	createEffect(on(
 		() => [props.primaryColor, props.position, props.disableMinimization, props.fancyIcon, props.textConfig, props.customInputs],
 		() => {
+			const previousColor = store.widget.state.primaryColor
+
 			store.widget.setState({
 				primaryColor: props.primaryColor,
 				position: props.position,
@@ -44,8 +46,12 @@ export const Provider: Component<ProviderProps> = props => {
 			}
 
 			// The pen and the draw cursor were seeded from the init-time primary colour and
-			// have no other update path, so they would keep drawing in the old brand colour.
-			store.drawing.setState({ selectedColor: props.primaryColor })
+			// have no other update path. Only on an actual change, though: this effect re-runs
+			// on every `update()`, and `selectedColor` is also user-settable from the colour
+			// picker — resetting it unconditionally snaps the pen back mid-annotation.
+			if (previousColor !== props.primaryColor) {
+				store.drawing.setState({ selectedColor: props.primaryColor })
+			}
 
 			// Custom input values are seeded once when the store is built, so inputs
 			// added by a later `update()` would render with no value at all. Reseed
