@@ -35,6 +35,8 @@ export type ChatStore = {
 		clearAttachment: () => void
 		send: (text: string) => Promise<void>
 		loadHistory: () => Promise<void>
+		/** Asked separately by the menu, which advertises response times without opening the panel. */
+		loadAvailability: () => Promise<void>
 		/** Starts the host's subscription; returns its teardown. */
 		start: () => (() => void) | undefined
 	}
@@ -210,6 +212,7 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 			clearAttachment: () => setState({ pendingScreenshot: undefined }),
 			send,
 			loadHistory,
+			loadAvailability,
 			start,
 		},
 	}

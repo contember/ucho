@@ -4,6 +4,7 @@ import { UchoIcon } from '~/components/icons'
 import { useStore } from '~/contexts'
 import { getFromStorage, setToStorage } from '~/utils'
 import { ChatPanel } from './chat-panel'
+import { MenuPanel } from './menu-panel'
 import { StoredFeedback } from './stored-feedback'
 
 export const LauncherButton: Component = () => {
@@ -24,7 +25,8 @@ export const LauncherButton: Component = () => {
 			// the badge would be invisible exactly when it matters.
 			const hasUnread = (store.chat?.state.unreadCount ?? 0) > 0
 			if (
-				!store.widget.state.isOpen && !store.widget.state.isStoredFeedbackOpen && !store.chat?.state.isOpen && !hasUnread && hasSeenMessage
+				!store.widget.state.isOpen && !store.widget.state.isStoredFeedbackOpen && !store.widget.state.isMenuOpen && !store.chat?.state.isOpen
+				&& !hasUnread && hasSeenMessage
 			) {
 				setIsMinimized(true)
 			}
@@ -39,15 +41,29 @@ export const LauncherButton: Component = () => {
 		resetHideTimeout()
 	}
 
+	// Everything the launcher can put on screen. The popovers share one slot and one
+	// stacking level, so at most one of them is ever up.
+	const isAnythingOpen = () => store.widget.state.isMenuOpen || store.widget.state.isStoredFeedbackOpen || !!store.chat?.state.isOpen
+
 	const handleClick = (e: MouseEvent) => {
 		store.widget.setState({ welcomeMessageIsClosing: true })
 		setToStorage('welcome_message_shown', true)
 
-		// With chat configured the launcher is the way into the conversation; the
-		// feedback overlay is then reached from inside the panel. Without it, nothing
-		// about this button changes.
+		// Chat and feedback are worth the same; picking one for the user would bury the
+		// other. So with both configured the launcher opens the signpost instead, and
+		// doubles as the way back out of whatever it opened.
+		if (store.methods.hasMenu()) {
+			if (isAnythingOpen()) {
+				store.chat?.methods.close()
+				store.widget.setState({ isStoredFeedbackOpen: false, isMenuOpen: false })
+				return
+			}
+			store.widget.setState({ isMenuOpen: true })
+			return
+		}
+
+		// A single route needs no choosing: go straight there.
 		if (store.chat?.isAvailable()) {
-			// The two popovers share the same slot and stacking level, so one must give way.
 			store.widget.setState({ isStoredFeedbackOpen: false })
 			store.chat.methods.toggle()
 			return
@@ -70,7 +86,7 @@ export const LauncherButton: Component = () => {
 				resetHideTimeout()
 			}
 		}
-		if (store.widget.state.isStoredFeedbackOpen || store.chat?.state.isOpen) {
+		if (store.widget.state.isStoredFeedbackOpen || store.widget.state.isMenuOpen || store.chat?.state.isOpen) {
 			setIsMinimized(false)
 		}
 	})
@@ -81,10 +97,16 @@ export const LauncherButton: Component = () => {
 		}
 	})
 
+	const launcherLabel = () => {
+		if (store.methods.hasMenu()) return store.widget.state.text.menu.openTitle
+		if (store.chat) return store.widget.state.text.chat.openTitle
+		return 'Open feedback form'
+	}
+
 	const handleCountClick = (e: MouseEvent) => {
 		e.stopPropagation()
 		store.chat?.methods.close()
-		store.widget.setState({ isStoredFeedbackOpen: !store.widget.state.isStoredFeedbackOpen })
+		store.widget.setState({ isStoredFeedbackOpen: !store.widget.state.isStoredFeedbackOpen, isMenuOpen: false })
 		setIsMinimized(false)
 	}
 
@@ -104,8 +126,8 @@ export const LauncherButton: Component = () => {
 					class="ucho-launcher-button"
 					data-hidden={store.widget.state.isOpen}
 					onClick={handleClick}
-					aria-label={store.chat ? store.widget.state.text.chat.openTitle : 'Open feedback form'}
-					aria-expanded={store.chat ? store.chat.state.isOpen : store.widget.state.isOpen}
+					aria-label={launcherLabel()}
+					aria-expanded={store.methods.hasMenu() ? isAnythingOpen() : store.chat ? store.chat.state.isOpen : store.widget.state.isOpen}
 				>
 					<Show when={store.widget.state.fancyIcon} fallback={<UchoIcon size={52} style={{ transform: isLeft() ? 'scaleX(-1)' : undefined }} />}>
 						<img src={uchoIconPng} alt="ucho icon" aria-hidden="true" width={52} height={72} style={{ transform: isLeft() ? 'scaleX(-1)' : undefined }} />
@@ -131,6 +153,7 @@ export const LauncherButton: Component = () => {
 					</button>
 				)}
 			</div>
+			<MenuPanel />
 			<StoredFeedback />
 			<ChatPanel />
 		</>

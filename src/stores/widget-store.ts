@@ -12,6 +12,11 @@ export type WidgetState = {
 		height: number
 	}
 	isStoredFeedbackOpen: boolean
+	/**
+	 * The signpost between chat and feedback. Only ever opened when both are configured —
+	 * with one route there is nothing to choose between and the launcher goes straight there.
+	 */
+	isMenuOpen: boolean
 	/** The drawing overlay is shared: it either submits feedback or hands a screenshot to chat. */
 	captureMode: 'feedback' | 'chat'
 	pagesCount: number
@@ -42,6 +47,7 @@ export const createWidgetStore = (config: FullConfig, currentPageKey: string): W
 			height: document.documentElement.scrollHeight,
 		},
 		isStoredFeedbackOpen: false,
+		isMenuOpen: false,
 		captureMode: 'feedback',
 		pagesCount: getStoredPagesCount(),
 		welcomeMessageIsClosing: false,

@@ -24,6 +24,16 @@ export const defaultText: TextConfig = {
 	drawingTooltip: {
 		text: 'Click & drag to draw',
 	},
+	menu: {
+		title: 'How can we help?',
+		openTitle: 'Open support and feedback',
+		closeTitle: 'Close menu',
+		backTitle: 'Back to menu',
+		chatTitle: 'Chat with us',
+		chatDescription: 'Ask a question and get an answer right here.',
+		feedbackTitle: 'Send feedback',
+		feedbackDescription: 'Report a problem or suggest an improvement.',
+	},
 	chat: {
 		title: 'Support',
 		placeholder: 'Write a message…',

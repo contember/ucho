@@ -1,6 +1,6 @@
 import { type Component, createEffect, createSignal, For, onCleanup, onMount, Show } from 'solid-js'
 import { Button } from '~/components/button'
-import { ImageIcon, PenIcon, SendIcon, XIcon } from '~/components/icons'
+import { ChevronLeftIcon, ImageIcon, SendIcon, XIcon } from '~/components/icons'
 import { useStore } from '~/contexts'
 import type { ChatAttachment, ChatMessage } from '~/types'
 import { registerWindowEventListener } from '~/utils/listeners'
@@ -54,12 +54,17 @@ export const ChatPanel: Component = () => {
 		},
 	})
 
-	// The launcher routes exclusively into chat once it is configured, so this is the
-	// only remaining way into the feedback form. It has to stay reachable from a full
+	// Without the signpost the launcher routes exclusively into chat, so this is the only
+	// remaining way into the feedback form. It has to stay reachable from a full
 	// conversation, not just from the empty state.
 	const openFeedback = () => {
 		chat.methods.close()
 		store.widget.setState({ isOpen: true })
+	}
+
+	const backToMenu = () => {
+		chat.methods.close()
+		store.widget.setState({ isMenuOpen: true })
 	}
 
 	const submit = async () => {
@@ -85,6 +90,17 @@ export const ChatPanel: Component = () => {
 		<Show when={chat.isAvailable() && chat.state.isOpen}>
 			<div class="ucho-popover ucho-chat" role="dialog" aria-label={store.widget.state.text.chat.title}>
 				<div class="ucho-chat-header">
+					<Show when={store.methods.hasMenu()}>
+						<Button
+							variant="secondary"
+							size="sm"
+							title={store.widget.state.text.menu.backTitle}
+							aria-label={store.widget.state.text.menu.backTitle}
+							onClick={backToMenu}
+						>
+							<ChevronLeftIcon size={18} />
+						</Button>
+					</Show>
 					<div class="ucho-chat-heading">
 						<h3>{store.widget.state.text.chat.title}</h3>
 						<Show when={chat.state.availability?.message}>
@@ -93,17 +109,6 @@ export const ChatPanel: Component = () => {
 							</p>
 						</Show>
 					</div>
-					<Show when={store.methods.hasFeedback()}>
-						<Button
-							variant="secondary"
-							size="sm"
-							title={store.widget.state.text.chat.feedbackLink}
-							aria-label={store.widget.state.text.chat.feedbackLink}
-							onClick={openFeedback}
-						>
-							<PenIcon size={18} />
-						</Button>
-					</Show>
 					<Button
 						variant="secondary"
 						size="sm"

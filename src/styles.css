@@ -281,6 +281,116 @@
     border-bottom-right-radius: var(--radius-lg);
 }
 
+/* Signpost — shown only when chat and feedback are both configured. Neither is the
+   default action, so both rows carry the same weight: same size, same icon treatment. */
+.ucho-menu {
+    width: 320px;
+    max-width: calc(100vw - 2 * var(--spacing-xl));
+}
+
+.ucho-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+}
+
+.ucho-menu-header h3 {
+    margin: 0;
+    font-size: var(--font-md);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.ucho-menu-options {
+    display: flex;
+    flex-direction: column;
+}
+
+.ucho-menu-option {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: var(--spacing-lg);
+    font: inherit;
+    text-align: left;
+    background: var(--background-color);
+    border: none;
+    border-bottom: 1px solid var(--border-color-light);
+    cursor: pointer;
+    transition: background var(--duration-base) var(--ease-smooth);
+}
+
+.ucho-menu-option:last-child {
+    border-bottom: none;
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+}
+
+.ucho-menu-option:hover,
+.ucho-menu-option:focus-visible {
+    background: var(--primary-color-lightest);
+    outline: none;
+}
+
+.ucho-menu-option-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--primary-color);
+    color: var(--primary-text-color);
+}
+
+.ucho-menu-option-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.ucho-menu-option-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.ucho-menu-option-description {
+    font-size: var(--font-xs);
+    line-height: 1.4;
+    color: var(--text-light);
+}
+
+.ucho-menu-option-badge {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-xs);
+    font-weight: 600;
+    color: var(--primary-text-color);
+    background: var(--error-color);
+    border-radius: 999px;
+}
+
+.ucho-menu-option-chevron {
+    flex-shrink: 0;
+    align-self: center;
+    color: var(--text-lighter);
+}
+
 /* Launcher */
 .ucho-launcher {
     position: fixed;
@@ -1702,6 +1812,9 @@ select.ucho-input-field {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    /* Takes the slack so the title stays put whether or not the back-to-menu button
+       is there — `space-between` alone would shunt it around as the header changes. */
+    flex: 1;
     min-width: 0;
 }
 

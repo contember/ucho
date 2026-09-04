@@ -17,6 +17,11 @@ export type Store = {
 		reset: () => void
 		/** Whether the host configured feedback. Read live, so `update()` can withdraw it. */
 		hasFeedback: () => boolean
+		/**
+		 * Whether chat and feedback are both on offer, and the launcher therefore has to
+		 * ask which one the user wants instead of picking for them.
+		 */
+		hasMenu: () => boolean
 		submit: (data: FeedbackPayload) => Promise<Response | void>
 		handlePageChange: (newPageKey: string) => void
 	}
@@ -127,6 +132,7 @@ export const createStore = (config: FullConfig): Store => {
 		methods: {
 			reset,
 			hasFeedback: () => !!config.onSubmit,
+			hasMenu: () => !!config.onSubmit && !!config.chat,
 			handlePageChange,
 			submit: async data => {
 				// Nothing to submit to. The form is not rendered in that case, so this only

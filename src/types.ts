@@ -189,6 +189,20 @@ export type TextConfig = {
 	drawingTooltip: {
 		text: string
 	}
+	/**
+	 * The signpost shown when both `onSubmit` and `chat` are configured. With only one
+	 * of them the launcher goes straight there and none of this is rendered.
+	 */
+	menu: {
+		title: string
+		openTitle: string
+		closeTitle: string
+		backTitle: string
+		chatTitle: string
+		chatDescription: string
+		feedbackTitle: string
+		feedbackDescription: string
+	}
 	chat: {
 		title: string
 		placeholder: string
