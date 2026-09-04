@@ -1,5 +1,16 @@
 import type { TextConfig } from '~/types'
 
+/**
+ * The launcher's opening line has to promise what is actually behind it: with chat
+ * configured the widget is no longer only "leave feedback", and with both routes it is
+ * neither one on its own. Still just a default — `textConfig.welcomeMessage` wins.
+ */
+export const getDefaultWelcomeText = (has: { feedback: boolean; chat: boolean }): string => {
+	if (has.chat && has.feedback) return 'Need help, or got feedback?'
+	if (has.chat) return 'Need help? Chat with us'
+	return 'Click here to leave feedback'
+}
+
 export const defaultText: TextConfig = {
 	welcomeMessage: {
 		text: 'Click here to leave feedback',

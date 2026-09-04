@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
 import { render } from 'solid-js/web'
 import { Ucho } from './components/ucho'
-import { defaultText } from './config/default-text'
+import { defaultText, getDefaultWelcomeText } from './config/default-text'
 import { Config, FullConfig } from './types'
 import { deepMerge } from './utils/common'
 import { validateOptions } from './utils/validators'
@@ -46,7 +46,16 @@ const normalizeConfig = (options: Config): FullConfig => ({
 	position: options.position ?? 'bottom-right',
 	primaryColor: options.primaryColor ?? '#1a1a1a',
 	onSubmit: options.onSubmit,
-	textConfig: deepMerge(defaultText, options.textConfig ?? {}),
+	textConfig: deepMerge(
+		{
+			...defaultText,
+			welcomeMessage: {
+				...defaultText.welcomeMessage,
+				text: getDefaultWelcomeText({ feedback: !!options.onSubmit, chat: !!options.chat }),
+			},
+		},
+		options.textConfig ?? {},
+	),
 	customInputs: options.customInputs ?? [],
 	disableMinimization: options.disableMinimization ?? false,
 	fancyIcon: options.fancyIcon ?? false,
