@@ -92,6 +92,34 @@ feedback nor hold a conversation has nothing to offer. Supply only `chat` for a 
 widget: the feedback form, its route from the launcher, and the unsubmitted-drafts list
 all disappear with `onSubmit`.
 
+### What the Launcher Opens
+
+With **one** of the two configured, the launcher opens it directly — there is nothing to
+choose between.
+
+With **both**, it opens a signpost instead. Getting an answer and putting a problem on
+record are different promises, and neither is the one the launcher gets to pick silently,
+so the two are offered side by side with the same weight — chat carrying its unread count
+and whatever `chat.availability()` reports, feedback its own line. The chat panel then
+keeps a back arrow to the signpost, and the welcome bubble opens it too. Every string is
+in `textConfig.menu`:
+
+```typescript
+init({
+	onSubmit: async (data) => {/* ... */},
+	chat: {/* ... */},
+	textConfig: {
+		menu: {
+			title: 'How can we help?',
+			chatTitle: 'Chat with us',
+			chatDescription: 'Ask a question and get an answer right here.',
+			feedbackTitle: 'Send feedback',
+			feedbackDescription: 'Report a problem or suggest an improvement.',
+		},
+	},
+})
+```
+
 ### Custom Inputs
 
 You can add custom form fields to the feedback form:
@@ -127,9 +155,10 @@ Supported input types: `text`, `textarea`, `select`, `radio`, `checkbox`.
 
 ## Support Chat
 
-Passing a `chat` adapter turns the launcher into a two-way support conversation, with
-the feedback form still reachable from the panel. Ucho never talks to a server itself —
-the host supplies the transport, exactly as it does for `onSubmit`.
+Passing a `chat` adapter adds a two-way support conversation. With `onSubmit` alongside it
+the launcher opens the signpost described above; on its own it opens the conversation
+directly. Ucho never talks to a server itself — the host supplies the transport, exactly as
+it does for `onSubmit`.
 
 ```typescript
 init({
