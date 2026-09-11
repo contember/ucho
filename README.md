@@ -206,6 +206,49 @@ Every outgoing message carries `page` (the current URL and path). The fuller `me
 attached a screenshot, since that is the deliberate act of reporting a problem. Strip
 anything sensitive in your own handler before forwarding it.
 
+### Emoji
+
+A message's `text` is rendered as plain text. Unicode emoji therefore need no handling at
+all — 🎉 typed into the composer reaches your backend as 🎉, and one coming back from an
+agent renders as 🎉.
+
+Slack is the case that needs work, because its API does not return Unicode: emoji sit in
+`text` in colon form, `:tada:`, whether they were picked, typed, or added as a reaction.
+Handed to ucho unchanged they display as the literal characters `:tada:`. Resolve them in
+the adapter, which is already where the Slack API is being called:
+
+```typescript
+// Any shortcode table will do — emojibase, node-emoji, your own JSON.
+import { shortcodes } from './shortcodes'
+
+const resolveEmoji = (text: string): string =>
+	text.replace(
+		/:([a-z0-9_+-]+):/gi,
+		(match, name: string) => shortcodes[name] ?? match,
+	)
+
+const read = async (response: Response) => {
+	const body = await response.json()
+	return {
+		messages: body.messages.map((message: ChatMessage) => ({
+			...message,
+			text: resolveEmoji(message.text),
+		})),
+	}
+}
+```
+
+A workspace's custom emoji — `:shipit:` and friends — are not in any table; they exist
+only as images, which `emoji.list` maps names to (following an `alias:name` entry once to
+reach the real one). There is nowhere for an image to go in a plain-text message, so the
+unresolved name is what shows, and that is the intended degradation rather than a gap:
+`text` is escaped precisely so that a compromised or careless backend cannot put markup
+into the widget. Rendering custom emoji properly means giving `ChatMessage` a structured
+body instead of a string — worth opening an issue for if your workspace leans on them.
+
+Nothing is needed in the outgoing direction. Slack accepts Unicode in message text, so
+whatever the user picks from their OS keyboard can be posted as-is.
+
 ### Connecting it to a backend
 
 The adapter is where ucho ends and your service begins. A polling integration usually
