@@ -62,5 +62,7 @@ export const defaultText: TextConfig = {
 		attachCancel: 'Cancel',
 		attachmentLabel: 'Screenshot attached',
 		removeAttachment: 'Remove screenshot',
+		expandTitle: 'Open at full size',
+		closeImageTitle: 'Close the screenshot',
 	},
 }

@@ -50,7 +50,12 @@ export const ChatPanel: Component = () => {
 	registerWindowEventListener({
 		event: 'keydown',
 		callback: (event: KeyboardEvent) => {
-			if (event.key === 'Escape' && chat.state.isOpen) chat.methods.close()
+			if (event.key !== 'Escape') return
+			// The screenshot viewer is a modal dialog and takes Escape for itself. Without
+			// this the one keypress would dismiss the panel behind it as well, and closing an
+			// image would cost the user the conversation.
+			if (chat.state.viewedImage) return
+			if (chat.state.isOpen) chat.methods.close()
 		},
 	})
 
@@ -168,7 +173,23 @@ export const ChatPanel: Component = () => {
 																	</a>
 																}
 															>
-																<img class="ucho-chat-shot" src={href!} alt={label()} />
+																<a
+																	class="ucho-chat-shot-link"
+																	href={href!}
+																	target="_blank"
+																	rel="noreferrer noopener"
+																	title={store.widget.state.text.chat.expandTitle}
+																	onClick={event => {
+																		// A modifier or middle click belongs to the browser: a new tab, a new
+																		// window, a download. Only a plain click meant "show me this bigger",
+																		// and the href is what makes the other three work at all.
+																		if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return
+																		event.preventDefault()
+																		chat.methods.viewImage({ url: href!, label: label() })
+																	}}
+																>
+																	<img class="ucho-chat-shot" src={href!} alt={label()} />
+																</a>
 															</Show>
 														</Show>
 													)
