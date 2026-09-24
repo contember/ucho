@@ -1649,6 +1649,14 @@ select.ucho-input-field {
     overflow: hidden;
 }
 
+/* The whole height above the launcher, and as wide as a line of text stays comfortable to
+   read. A fixed height rather than a cap, so the panel does not jump as answers arrive. */
+.ucho-chat[data-expanded="true"] {
+    width: 720px;
+    height: calc(100vh - 52px - var(--spacing-lg) - 2 * var(--spacing-xl));
+    max-height: none;
+}
+
 .ucho-chat-header {
     display: flex;
     align-items: center;
@@ -1768,7 +1776,9 @@ select.ucho-input-field {
 .ucho-chat-input {
     flex: 1;
     resize: none;
-    max-height: 120px;
+    /* Grown by script to fit the draft. The cap leaves the transcript most of the panel,
+       so what is being answered stays in sight while the answer is written. */
+    max-height: min(200px, 30vh);
     padding: var(--spacing-sm) var(--spacing-md);
     font: inherit;
     font-size: var(--font-sm);
@@ -1777,6 +1787,10 @@ select.ucho-input-field {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     outline: none;
+}
+
+.ucho-chat[data-expanded="true"] .ucho-chat-input {
+    max-height: min(360px, 40vh);
 }
 
 .ucho-chat-input:focus {
@@ -1940,7 +1954,8 @@ select.ucho-input-field {
     box-shadow: var(--shadow-black-lightened-lg);
 }
 
-.ucho-lightbox-close {    position: absolute;
+.ucho-lightbox-close {
+    position: absolute;
     top: var(--spacing-sm);
     right: var(--spacing-sm);
     /* It sits on the screenshot, which can be any colour at that corner. */

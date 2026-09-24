@@ -1,6 +1,9 @@
 import { createStore } from 'solid-js/store'
 import type { ChatAvailability, ChatMessage, ChatTranscript, FullConfig, Screenshot } from '~/types'
 import { collectLocationInfo, collectMetadata } from '~/utils/metadata'
+import { getFromStorage, setToStorage } from '~/utils/storage'
+
+const EXPANDED_KEY = 'chat_expanded'
 
 /** The attachment the viewer is showing, if any. */
 export type ChatImageView = {
@@ -23,6 +26,16 @@ export type ChatState = {
 	pendingScreenshot?: Screenshot
 	/** An attachment opened out of the transcript, shown at the size it was taken. */
 	viewedImage: ChatImageView | null
+	/**
+	 * The panel at the size of the viewport rather than a corner of it. Remembered across
+	 * page loads: whoever needed room to read one long answer will need it for the next.
+	 */
+	isExpanded: boolean
+	/**
+	 * The oldest answer that was unread when the panel was last opened, so the panel can
+	 * start there. Opening clears the count, which is the only other record of it.
+	 */
+	firstUnreadId: string | null
 	availability: ChatAvailability | null
 }
 
@@ -43,6 +56,7 @@ export type ChatStore = {
 		clearAttachment: () => void
 		viewImage: (image: ChatImageView) => void
 		closeImage: () => void
+		toggleExpanded: () => void
 		send: (text: string) => Promise<void>
 		loadHistory: () => Promise<void>
 		/** Asked separately by the menu, which advertises response times without opening the panel. */
@@ -92,6 +106,8 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 		unreadCount: 0,
 		pendingScreenshot: undefined,
 		viewedImage: null,
+		isExpanded: getFromStorage(EXPANDED_KEY, false),
+		firstUnreadId: null,
 		availability: null,
 	})
 
@@ -156,7 +172,10 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 	}
 
 	const open = () => {
-		setState({ isOpen: true, unreadCount: 0 })
+		// Unread answers are the ones that arrived last, so the count says where they start.
+		const answers = state.messages.filter(message => !message.author.isCustomer)
+		const firstUnread = state.unreadCount > 0 ? answers[Math.max(0, answers.length - state.unreadCount)] : undefined
+		setState({ isOpen: true, unreadCount: 0, firstUnreadId: firstUnread?.id ?? null })
 		if (!state.hasLoaded) void loadHistory()
 		void loadAvailability()
 	}
@@ -225,6 +244,11 @@ export const createChatStore = (config: FullConfig): ChatStore => {
 			clearAttachment: () => setState({ pendingScreenshot: undefined }),
 			viewImage: image => setState({ viewedImage: image }),
 			closeImage: () => setState({ viewedImage: null }),
+			toggleExpanded: () => {
+				const isExpanded = !state.isExpanded
+				setState({ isExpanded })
+				setToStorage(EXPANDED_KEY, isExpanded)
+			},
 			send,
 			loadHistory,
 			loadAvailability,

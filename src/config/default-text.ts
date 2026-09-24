@@ -64,5 +64,7 @@ export const defaultText: TextConfig = {
 		removeAttachment: 'Remove screenshot',
 		expandTitle: 'Open at full size',
 		closeImageTitle: 'Close the screenshot',
+		expandPanelTitle: 'Make the chat bigger',
+		shrinkPanelTitle: 'Make the chat smaller',
 	},
 }
