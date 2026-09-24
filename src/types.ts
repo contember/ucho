@@ -220,6 +220,10 @@ export type TextConfig = {
 		attachCancel: string
 		attachmentLabel: string
 		removeAttachment: string
+		expandTitle: string
+		closeImageTitle: string
+		expandPanelTitle: string
+		shrinkPanelTitle: string
 	}
 }
 

@@ -1649,6 +1649,14 @@ select.ucho-input-field {
     overflow: hidden;
 }
 
+/* The whole height above the launcher, and as wide as a line of text stays comfortable to
+   read. A fixed height rather than a cap, so the panel does not jump as answers arrive. */
+.ucho-chat[data-expanded="true"] {
+    width: 720px;
+    height: calc(100vh - 52px - var(--spacing-lg) - 2 * var(--spacing-xl));
+    max-height: none;
+}
+
 .ucho-chat-header {
     display: flex;
     align-items: center;
@@ -1768,7 +1776,9 @@ select.ucho-input-field {
 .ucho-chat-input {
     flex: 1;
     resize: none;
-    max-height: 120px;
+    /* Grown by script to fit the draft. The cap leaves the transcript most of the panel,
+       so what is being answered stays in sight while the answer is written. */
+    max-height: min(200px, 30vh);
     padding: var(--spacing-sm) var(--spacing-md);
     font: inherit;
     font-size: var(--font-sm);
@@ -1777,6 +1787,10 @@ select.ucho-input-field {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     outline: none;
+}
+
+.ucho-chat[data-expanded="true"] .ucho-chat-input {
+    max-height: min(360px, 40vh);
 }
 
 .ucho-chat-input:focus {
@@ -1842,6 +1856,14 @@ select.ucho-input-field {
     border: 1px solid var(--border-color-light);
 }
 
+.ucho-chat-shot-link {
+    display: block;
+    /* Only as wide as the screenshot, so the rest of the bubble is not a click target. */
+    width: fit-content;
+    max-width: 100%;
+    cursor: zoom-in;
+}
+
 .ucho-chat-file {
     display: inline-block;
     margin-top: var(--spacing-xs);
@@ -1871,6 +1893,73 @@ select.ucho-input-field {
     flex: 1;
     font-size: var(--font-xs);
     color: var(--text-light);
+}
+
+/* Screenshot viewer. A modal dialog, so it is drawn in the top layer and needs nothing
+   from the widget's own z-index scale to clear the host page. */
+.ucho-lightbox {
+    /* Pinned by its insets rather than sized in viewport units: 100vw includes a classic
+       scrollbar and 100vh the space behind a mobile browser's toolbars, and either would put
+       the picture off centre or partly out of sight. The dialog's own UA caps go too. */
+    position: fixed;
+    inset: 0;
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    /* The image is capped against this box, which is exactly the area it can use. */
+    container-type: size;
+    padding: var(--spacing-xl);
+    border: none;
+    background: transparent;
+    /* A dialog is `display: none` until it is open, and naming a display here would open it
+       permanently, so the closed state has to be restored explicitly below. */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* The root is click-through so the host page keeps working around the widget. */
+    pointer-events: auto;
+}
+
+.ucho-lightbox:not([open]) {
+    display: none;
+}
+
+.ucho-lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.72);
+}
+
+.ucho-lightbox-frame {
+    position: relative;
+    display: block;
+    margin: 0;
+}
+
+/* Sized against the dialog through container units rather than against the parent:
+   percentages here would have to resolve against a frame that is itself sizing to this
+   image. Both axes are capped and neither is set, so the image keeps its own ratio and the
+   frame shrink-wraps it. That is what puts the close button on the picture's corner instead
+   of somewhere out in the backdrop. */
+.ucho-lightbox-image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100cqw;
+    max-height: 100cqh;
+    border-radius: var(--radius-sm);
+    /* A screenshot of a page that is white itself would otherwise bleed into the backdrop
+       and lose its own edges; a transparent PNG would show the backdrop through it. */
+    background: var(--background-color);
+    box-shadow: var(--shadow-black-lightened-lg);
+}
+
+.ucho-lightbox-close {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    /* It sits on the screenshot, which can be any colour at that corner. */
+    box-shadow: var(--shadow-black-lightened-lg);
 }
 
 /* Sits where the feedback form would, so the drawing surface stays clear. */

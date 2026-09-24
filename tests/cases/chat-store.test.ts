@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import { mergeMessages } from '~/stores/chat-store'
-import type { ChatMessage } from '~/types'
+import { createChatStore, mergeMessages } from '~/stores/chat-store'
+import type { ChatMessage, ChatTranscript, FullConfig } from '~/types'
 
 const message = (id: string, createdAt: string, isCustomer = false): ChatMessage => ({
 	id,
@@ -109,5 +109,41 @@ describe('mergeMessages', () => {
 		const sameInstant = '2026-01-01T10:00:00Z'
 		const merged = mergeMessages([], [message('b', sameInstant), message('a', sameInstant)])
 		expect(merged.map(m => m.id)).toEqual(['a', 'b'])
+	})
+})
+
+describe('firstUnreadId', () => {
+	const setup = () => {
+		let push: (transcript: ChatTranscript) => void = () => {}
+		const chat = createChatStore({
+			chat: {
+				history: async () => ({ messages: [] }),
+				send: async () => ({ messages: [] }),
+				subscribe: onTranscript => {
+					push = onTranscript
+					return () => {}
+				},
+			},
+		} as unknown as FullConfig)
+		chat.methods.start()
+		return { chat, push: (messages: ChatMessage[]) => push({ messages }) }
+	}
+
+	test('points at the oldest answer that arrived while the panel was shut', () => {
+		const { chat, push } = setup()
+		push([message('a', '2026-01-01T10:00:00Z'), message('b', '2026-01-01T10:01:00Z', true)])
+		push([message('c', '2026-01-01T10:02:00Z'), message('d', '2026-01-01T10:03:00Z')])
+
+		chat.methods.open()
+		expect(chat.state.firstUnreadId).toBe('c')
+		expect(chat.state.unreadCount).toBe(0)
+	})
+
+	test('is empty when nothing is unread', () => {
+		const { chat, push } = setup()
+		push([message('a', '2026-01-01T10:00:00Z')])
+
+		chat.methods.open()
+		expect(chat.state.firstUnreadId).toBeNull()
 	})
 })

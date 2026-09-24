@@ -3,6 +3,7 @@ import uchoIconPng from '~/assets/ucho-icon.png'
 import { UchoIcon } from '~/components/icons'
 import { useStore } from '~/contexts'
 import { getFromStorage, setToStorage } from '~/utils'
+import { ChatLightbox } from './chat-lightbox'
 import { ChatPanel } from './chat-panel'
 import { MenuPanel } from './menu-panel'
 import { StoredFeedback } from './stored-feedback'
@@ -156,6 +157,7 @@ export const LauncherButton: Component = () => {
 			<MenuPanel />
 			<StoredFeedback />
 			<ChatPanel />
+			<ChatLightbox />
 		</>
 	)
 }

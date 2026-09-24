@@ -197,6 +197,21 @@ transcript does not re-send megabytes on every poll. Images render inline; anyth
 is offered as a link. The outgoing `screenshot` is still a `data:` URL, because that is
 what the widget captures.
 
+An inline image opens at full size when it is clicked. The panel is 360px wide and an
+annotated screenshot is usually a whole viewport, so in the transcript it is a thumbnail
+of the thing it is pointing at. The viewer closes on Escape, on the backdrop, or on its
+own button, and the conversation stays open behind it. It is a link as well as a viewer,
+so a middle click or a modifier click opens the original in a new tab, as it does for any
+other attachment.
+
+Long messages are expected in both directions. The composer grows with the draft up to a
+cap and scrolls past it. A new answer taller than the transcript is shown from its first
+line rather than its last, unless the user has scrolled up to reread something, in which
+case they are left where they are. Opening the panel with unread answers lands on the
+oldest of them the same way. The header has a button that enlarges the panel to the
+full height above the launcher and up to 720px wide; the choice is remembered in
+`localStorage`. Its labels are `textConfig.chat.expandPanelTitle` and `shrinkPanelTitle`.
+
 Deletions must be named in `removed`. A message simply missing from a payload is never
 treated as deleted, because that is indistinguishable from a delta that does not mention
 it. Retracting an unread answer also takes it back off the unread badge.
