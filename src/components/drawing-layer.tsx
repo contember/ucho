@@ -1,5 +1,6 @@
-import { type Component, createEffect, For, on, onCleanup, onMount } from 'solid-js'
+import { type Component, createEffect, createMemo, For, on, onCleanup, onMount } from 'solid-js'
 import { useStore } from '~/contexts'
+import type { Point } from '~/types'
 import { getRectFromPoints } from '~/utils/geometry'
 import { DrawingTooltip } from './drawing-tooltip'
 import { Shape } from './shape'
@@ -9,6 +10,22 @@ export const DrawingLayer: Component = () => {
 	const store = useStore()
 	let drawingLayerContainerRef: HTMLDivElement | undefined
 	let canvasRef: HTMLCanvasElement | undefined
+
+	// The rectangles cut out of the dimmed canvas. Only these affect it, so the canvas is
+	// redrawn when they change and not on every other shape update: drawing a freehand path
+	// or dragging one rewrites `shapes` on every frame and would otherwise repaint a canvas
+	// the size of the whole page each time. A shape that did not move keeps its `points`
+	// array, which is what the comparison relies on.
+	const cutouts = createMemo(
+		() => {
+			const rects = store.drawing.state.shapes.filter(shape => shape.type === 'rectangle').map(shape => shape.points)
+			const current = store.drawing.state.currentPoints
+			if (store.drawing.state.selectedTool === 'rectangle' && current.length === 2) rects.push(current)
+			return rects
+		},
+		[] as Point[][],
+		{ equals: (a, b) => a.length === b.length && a.every((points, i) => points === b[i]) },
+	)
 
 	const drawOverlay = () => {
 		const canvas = canvasRef
@@ -37,44 +54,22 @@ export const DrawingLayer: Component = () => {
 		// Cut out rectangle shapes
 		ctx.globalCompositeOperation = 'destination-out'
 
-		// Cut out existing rectangle shapes
-		for (const shape of store.drawing.state.shapes) {
-			if (shape.type !== 'rectangle') continue
-			const r = getRectFromPoints(shape.points)
-			if (r) {
-				ctx.fillStyle = 'rgba(0, 0, 0, 1)'
-				ctx.fillRect(r.x, r.y, r.width, r.height)
-			}
-		}
-
-		// Cut out current drawing (if rectangle with 2 points)
-		if (store.drawing.state.currentPoints.length === 2 && store.drawing.state.selectedTool === 'rectangle') {
-			const r = getRectFromPoints(store.drawing.state.currentPoints)
-			if (r) {
-				ctx.fillStyle = 'rgba(0, 0, 0, 1)'
-				ctx.fillRect(r.x, r.y, r.width, r.height)
-			}
+		// Cut out the rectangles, including the one being drawn
+		ctx.fillStyle = 'rgba(0, 0, 0, 1)'
+		for (const points of cutouts()) {
+			const r = getRectFromPoints(points)
+			if (r) ctx.fillRect(r.x, r.y, r.width, r.height)
 		}
 
 		ctx.globalCompositeOperation = 'source-over'
 	}
 
-	createEffect(on(
-		() => [
-			store.drawing.state.shapes,
-			store.drawing.state.currentPoints,
-			store.drawing.state.selectedTool,
-			store.widget.state.dimensions,
-		],
-		() => {
-			drawOverlay()
-		},
-	))
+	// Also runs once on mount, which is the first paint of the canvas.
+	createEffect(on([cutouts, () => store.widget.state.dimensions], drawOverlay))
 
 	onMount(() => {
 		drawingLayerContainerRef?.addEventListener('touchmove', store.drawing.methods.handleMove, { passive: false })
 		drawingLayerContainerRef?.addEventListener('touchend', store.drawing.methods.handleEnd)
-		drawOverlay()
 	})
 
 	onCleanup(() => {
