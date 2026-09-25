@@ -42,6 +42,8 @@ export type DrawingStore = {
 		handleEnd: (e: MouseEvent | TouchEvent) => void
 		handleEnter: (e: MouseEvent | TouchEvent) => void
 		handleLeave: (e: MouseEvent | TouchEvent) => void
+		/** Drops the gesture in progress without committing it. */
+		cancelGesture: () => void
 		startResize: (anchor: Point) => void
 		stopResize: () => void
 		startDrag: (point: Point) => void
@@ -285,6 +287,23 @@ export const createDrawingStore = (
 			if (e.target === e.currentTarget) {
 				wrappedSetState({ showTooltip: false })
 			}
+		},
+		cancelGesture: () => {
+			if (drawingRafId !== undefined) cancelAnimationFrame(drawingRafId)
+			drawingRafId = undefined
+			pendingDrawPoint = undefined
+			// A drag or resize already applied is kept where it got to; only the shape still
+			// being drawn is thrown away, since it was never part of the drawing.
+			wrappedSetState({
+				isDrawing: false,
+				currentPoints: [],
+				isResizing: false,
+				resizeAnchor: null,
+				isDragging: false,
+				dragStartPos: null,
+				dragOffset: null,
+				initialClickPos: null,
+			})
 		},
 		startResize: (anchor: Point) => {
 			wrappedSetState({

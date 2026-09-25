@@ -715,6 +715,9 @@
 
 .ucho-drawing-layer-container svg {
     pointer-events: auto;
+    /* One finger draws, so the browser must not pan with it; two fingers still pan and zoom
+       the page, which is how a phone user reaches what is below the fold. */
+    touch-action: pinch-zoom;
 }
 
 /* Drawing Toolbar */

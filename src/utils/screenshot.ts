@@ -56,8 +56,15 @@ export const captureScreenshot = async (): Promise<Screenshot | undefined> => {
 		const result = await snapdom(document.body, {
 			scale: 1,
 			dpr: 1,
-			filter: (el: Element) => !el.hasAttribute('data-hide-when-drawing'),
-			filterMode: 'hide',
+			// The same test as the stylesheet's `[data-hide-when-drawing="true"]`: an element
+			// marked "false" is on the page and belongs in the screenshot.
+			filter: (el: Element) => el.getAttribute('data-hide-when-drawing') !== 'true',
+			// Omitting the subtrees avoids cloning and serializing UI that never appears in the
+			// screenshot. That is only safe because every element tagged with the attribute is
+			// `position: fixed` (toolbar, form, shape actions, tooltip, chat attach bar). An
+			// in-flow element would take its box out of the clone and shift everything below
+			// it away from the annotations, which are stored in page coordinates.
+			filterMode: 'remove',
 			plugins: [stripLayersPlugin],
 		})
 
