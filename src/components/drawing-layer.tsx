@@ -1,4 +1,4 @@
-import { type Component, createEffect, createMemo, For, on, onCleanup, onMount } from 'solid-js'
+import { type Component, createEffect, createMemo, For, on, onCleanup } from 'solid-js'
 import { useStore } from '~/contexts'
 import type { Point } from '~/types'
 import { getRectFromPoints } from '~/utils/geometry'
@@ -8,7 +8,6 @@ import { ShapeActions } from './shape-actions'
 
 export const DrawingLayer: Component = () => {
 	const store = useStore()
-	let drawingLayerContainerRef: HTMLDivElement | undefined
 	let canvasRef: HTMLCanvasElement | undefined
 
 	// The rectangles cut out of the dimmed canvas. Only these affect it, so the canvas is
@@ -67,19 +66,65 @@ export const DrawingLayer: Component = () => {
 	// Also runs once on mount, which is the first paint of the canvas.
 	createEffect(on([cutouts, () => store.widget.state.dimensions], drawOverlay))
 
-	onMount(() => {
-		drawingLayerContainerRef?.addEventListener('touchmove', store.drawing.methods.handleMove, { passive: false })
-		drawingLayerContainerRef?.addEventListener('touchend', store.drawing.methods.handleEnd)
-	})
+	// One finger draws; two pan and zoom the page, which `touch-action: pinch-zoom` on the
+	// svg hands to the browser. So nothing here cancels a touch to stop scrolling, and a
+	// second finger abandons whatever the first one started instead of drawing with it.
+	//
+	// The rest of a touch is followed on the element it started on, not on the svg. A touch
+	// keeps its target for its whole life, and dragging a shape replaces that shape's
+	// element on the first frame: from then on the events go to a detached node and never
+	// bubble up, so a listener on the svg would lose the drag and never see it end.
+	let stopFollowing: (() => void) | undefined
 
-	onCleanup(() => {
-		drawingLayerContainerRef?.removeEventListener('touchmove', store.drawing.methods.handleMove)
-		drawingLayerContainerRef?.removeEventListener('touchend', store.drawing.methods.handleEnd)
-	})
+	const followTouch = (target: EventTarget, touchId: number) => {
+		const ownsTouch = (e: TouchEvent) => [...e.changedTouches].some(touch => touch.identifier === touchId)
+
+		const move = (e: TouchEvent) => {
+			if (e.touches.length > 1) return
+			store.drawing.methods.handleMove(e)
+		}
+		const end = (e: TouchEvent) => {
+			if (!ownsTouch(e)) return
+			// A tap is otherwise followed by emulated mouse events, which would run the start
+			// and end of the same gesture a second time through the mouse handlers.
+			e.preventDefault()
+			stop()
+			store.drawing.setState({ showTooltip: false })
+			store.drawing.methods.handleEnd(e)
+		}
+		const cancel = (e: TouchEvent) => {
+			if (!ownsTouch(e)) return
+			stop()
+			store.drawing.methods.cancelGesture()
+		}
+		const stop = () => {
+			target.removeEventListener('touchmove', move as EventListener)
+			target.removeEventListener('touchend', end as EventListener)
+			target.removeEventListener('touchcancel', cancel as EventListener)
+			stopFollowing = undefined
+		}
+
+		target.addEventListener('touchmove', move as EventListener)
+		target.addEventListener('touchend', end as EventListener)
+		target.addEventListener('touchcancel', cancel as EventListener)
+		stopFollowing = stop
+	}
+
+	const handleTouchStart = (e: TouchEvent) => {
+		if (e.touches.length > 1) {
+			store.drawing.methods.cancelGesture()
+			return
+		}
+		stopFollowing?.()
+		if (e.target) followTouch(e.target, e.changedTouches[0].identifier)
+		store.drawing.methods.handleStart(e)
+		store.drawing.setState({ showTooltip: false, hasDrawn: true })
+	}
+
+	onCleanup(() => stopFollowing?.())
 
 	return (
 		<div
-			ref={drawingLayerContainerRef}
 			class="ucho-drawing-layer-container"
 			style={{
 				cursor: store.drawing.state.cursor,
@@ -107,21 +152,11 @@ export const DrawingLayer: Component = () => {
 					store.drawing.methods.handleStart(e)
 					store.drawing.setState({ showTooltip: false, hasDrawn: true })
 				}}
-				onTouchStart={e => {
-					e.preventDefault() // Prevent scrolling while drawing
-					store.drawing.methods.handleStart(e)
-					store.drawing.methods.handleEnter(e)
-					store.drawing.setState({ showTooltip: false, hasDrawn: true })
-				}}
+				on:touchstart={handleTouchStart}
 				onMouseMove={store.drawing.methods.handleMove}
-				onTouchMove={e => {
-					e.preventDefault() // Prevent scrolling while drawing
-					store.drawing.methods.handleMove(e)
-				}}
 				onMouseUp={store.drawing.methods.handleEnd}
 				onMouseEnter={store.drawing.methods.handleEnter}
 				onMouseLeave={store.drawing.methods.handleLeave}
-				onTouchEnd={store.drawing.methods.handleLeave}
 			>
 				{/* already drawn shapes */}
 				<For each={store.drawing.state.shapes}>
