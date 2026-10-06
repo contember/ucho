@@ -6,6 +6,8 @@
 
 A lightweight tool for capturing user feedback with screenshots, annotations, and debug information. Built with Solid.js and designed to seamlessly integrate into any web application.
 
+The client-side Solid.js runtime is bundled into Ucho. Applications using `ucho-js` do not need to install Solid.js or its server-side serialization dependencies. Solid.js is a development dependency of this repository; the Seroval override keeps that development dependency tree patched until Solid updates its supported version range.
+
 ## Features
 
 - **Screenshot Capture**: Automatically capture the current page state

@@ -14,7 +14,8 @@ export default defineConfig({
 			fileName: () => 'ucho.js',
 		},
 		rollupOptions: {
-			external: ['solid-js', '@zumer/snapdom'],
+			// Bundle the browser-only Solid runtime so consumers do not install its SSR dependencies.
+			external: ['@zumer/snapdom'],
 		},
 	},
 })

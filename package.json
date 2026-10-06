@@ -1,7 +1,7 @@
 {
 	"name": "ucho-js",
 	"license": "Apache-2.0",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"type": "module",
 	"repository": {
 		"type": "git",
@@ -37,13 +37,16 @@
 		"test": "bun test"
 	},
 	"dependencies": {
-		"@zumer/snapdom": "^2.5.0",
-		"solid-js": "^1"
+		"@zumer/snapdom": "^2.5.0"
+	},
+	"overrides": {
+		"seroval": "1.6.8"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",
 		"@types/node": "^25.5.0",
 		"dprint": "^0.53.0",
+		"solid-js": "^1",
 		"typescript": "^5",
 		"vite": "^8.0.0",
 		"vite-plugin-solid": "^2.11.11",
