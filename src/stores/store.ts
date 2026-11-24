@@ -22,7 +22,13 @@ export type Store = {
 		 * ask which one the user wants instead of picking for them.
 		 */
 		hasMenu: () => boolean
-		submit: (data: FeedbackPayload) => Promise<Response | void>
+		/**
+		 * Collects the feedback and hands it to `onSubmit`, one submission at a time: a
+		 * press while one is on its way is ignored, since the host cannot tell the two
+		 * apart and would receive the feedback twice. `collect` runs inside that span, so
+		 * the screenshot it takes counts as part of the submission.
+		 */
+		submit: (collect: () => Promise<FeedbackPayload>) => Promise<Response | void>
 		handlePageChange: (newPageKey: string) => void
 	}
 }
@@ -134,13 +140,15 @@ export const createStore = (config: FullConfig): Store => {
 			hasFeedback: () => !!config.onSubmit,
 			hasMenu: () => !!config.onSubmit && !!config.chat,
 			handlePageChange,
-			submit: async data => {
+			submit: async collect => {
 				// Nothing to submit to. The form is not rendered in that case, so this only
 				// guards against feedback being withdrawn while the overlay is open.
 				if (!config.onSubmit) return
+				if (feedback.state.isSubmitting) return
+				feedback.setState({ isSubmitting: true })
 
 				try {
-					const response = await config.onSubmit(data)
+					const response = await config.onSubmit(await collect())
 
 					if (response instanceof Response && !response.ok) {
 						notifications.show({ type: 'error', message: 'Submission failed' })
@@ -153,6 +161,8 @@ export const createStore = (config: FullConfig): Store => {
 					return response
 				} catch (error) {
 					notifications.show({ type: 'error', message: 'Submission failed' })
+				} finally {
+					feedback.setState({ isSubmitting: false })
 				}
 			},
 		},

@@ -175,6 +175,12 @@ export type TextConfig = {
 		placeholder: string
 		screenshotAlt: string
 		submitButton: string
+		/**
+		 * The submit button's label while the feedback is on its way. Optional, so a host
+		 * that translates `feedbackForm` keeps compiling; without it the button keeps
+		 * `submitButton`.
+		 */
+		submittingButton?: string
 		minimizeTitle: string
 		expandTitle: string
 		closeTitle: string
