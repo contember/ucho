@@ -1228,6 +1228,13 @@
     transform: translateY(0);
 }
 
+/* A button whose action is on its way: it waits, and a press does nothing. */
+.ucho-button[aria-busy='true'] {
+    opacity: 0.7;
+    cursor: progress;
+    transform: none;
+}
+
 .ucho-button-secondary {
     background: transparent;
     color: var(--text-light);

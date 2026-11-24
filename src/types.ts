@@ -175,6 +175,8 @@ export type TextConfig = {
 		placeholder: string
 		screenshotAlt: string
 		submitButton: string
+		/** The submit button's label while the feedback is on its way. */
+		submittingButton: string
 		minimizeTitle: string
 		expandTitle: string
 		closeTitle: string

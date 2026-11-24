@@ -7,6 +7,8 @@ export type FeedbackState = {
 	screenshot?: Screenshot
 	isCapturing: boolean
 	isMinimized: boolean
+	/** From the press of the submit button until `onSubmit` settles. */
+	isSubmitting: boolean
 	customInputValues: Record<string, CustomInputValue>
 	hasUserInteracted: boolean
 }
@@ -54,12 +56,13 @@ export const createFeedbackStore = (
 		screenshot: undefined,
 		isCapturing: false,
 		isMinimized: false,
+		isSubmitting: false,
 		customInputValues: initialCustomValues,
 		hasUserInteracted: false,
 	})
 
 	const wrappedSetState = (newState: Partial<FeedbackState>, isClearing = false) => {
-		const isSystemChange = 'isCapturing' in newState || 'isMinimized' in newState || isClearing
+		const isSystemChange = 'isCapturing' in newState || 'isMinimized' in newState || 'isSubmitting' in newState || isClearing
 
 		if (!isSystemChange && !state.hasUserInteracted) {
 			setState({ hasUserInteracted: true })

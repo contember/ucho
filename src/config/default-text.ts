@@ -21,6 +21,7 @@ export const defaultText: TextConfig = {
 		placeholder: "What's on your mind? We'd love to hear your feedback...",
 		screenshotAlt: 'Screenshot Preview',
 		submitButton: 'Send Feedback',
+		submittingButton: 'Sending…',
 		minimizeTitle: 'Minimize',
 		expandTitle: 'Expand',
 		closeTitle: 'Close',

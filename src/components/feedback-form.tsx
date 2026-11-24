@@ -15,16 +15,15 @@ export const FeedbackForm: Component = () => {
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault()
 
-		const screenshot = await captureScreenshot()
-
-		const data: FeedbackPayload = {
-			message: store.feedback.state.message,
-			screenshot: screenshot,
-			metadata: collectMetadata(),
-			customInputs: store.feedback.state.customInputValues,
-		}
-
-		await store.methods.submit(data)
+		await store.methods.submit(async (): Promise<FeedbackPayload> => {
+			const screenshot = await captureScreenshot()
+			return {
+				message: store.feedback.state.message,
+				screenshot: screenshot,
+				metadata: collectMetadata(),
+				customInputs: store.feedback.state.customInputValues,
+			}
+		})
 	}
 
 	const minimize = (e: MouseEvent) => {
@@ -109,8 +108,18 @@ export const FeedbackForm: Component = () => {
 				</Show>
 
 				<footer class="ucho-feedback-footer">
-					<Button type="submit" variant="primary" size="lg" style={{ width: '100%' }} aria-label="Submit feedback">
-						{store.widget.state.text.feedbackForm.submitButton}
+					<Button
+						type="submit"
+						variant="primary"
+						size="lg"
+						style={{ width: '100%' }}
+						aria-label="Submit feedback"
+						disabled={store.feedback.state.isSubmitting}
+						aria-busy={store.feedback.state.isSubmitting}
+					>
+						{store.feedback.state.isSubmitting
+							? store.widget.state.text.feedbackForm.submittingButton
+							: store.widget.state.text.feedbackForm.submitButton}
 					</Button>
 				</footer>
 			</form>
