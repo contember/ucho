@@ -91,6 +91,20 @@ describe('submitting feedback', () => {
 		expect([collected, sent]).toEqual([1, 1])
 	})
 
+	test('an onSubmit that throws leaves the form ready to send again', async () => {
+		let sent = 0
+		const store = createStore(configWith(async () => {
+			sent += 1
+			throw new Error('network down')
+		}))
+
+		await store.methods.submit(async () => payload)
+		expect(store.feedback.state.isSubmitting).toBe(false)
+		await store.methods.submit(async () => payload)
+
+		expect(sent).toBe(2)
+	})
+
 	test('feedback that failed can be sent again', async () => {
 		let sent = 0
 		const store = createStore(configWith(async () => {

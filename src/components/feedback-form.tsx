@@ -118,7 +118,7 @@ export const FeedbackForm: Component = () => {
 						aria-busy={store.feedback.state.isSubmitting}
 					>
 						{store.feedback.state.isSubmitting
-							? store.widget.state.text.feedbackForm.submittingButton
+							? (store.widget.state.text.feedbackForm.submittingButton ?? store.widget.state.text.feedbackForm.submitButton)
 							: store.widget.state.text.feedbackForm.submitButton}
 					</Button>
 				</footer>
