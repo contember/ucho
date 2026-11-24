@@ -1,4 +1,5 @@
 import type { TextConfig } from '~/types'
+import { deepMerge } from '~/utils/common'
 
 /**
  * The launcher's opening line has to promise what is actually behind it: with chat
@@ -69,3 +70,21 @@ export const defaultText: TextConfig = {
 		shrinkPanelTitle: 'Make the chat smaller',
 	},
 }
+
+/**
+ * The texts the widget shows: the defaults under the host's `textConfig`. The default
+ * busy label is English, so a host that translated the submit label but set no busy
+ * label keeps its own submit label while sending, never an English word in its form.
+ */
+export const resolveTextConfig = (overrides: Partial<TextConfig> | undefined, has: { feedback: boolean; chat: boolean }): TextConfig =>
+	deepMerge(
+		{
+			...defaultText,
+			welcomeMessage: { ...defaultText.welcomeMessage, text: getDefaultWelcomeText(has) },
+			feedbackForm: {
+				...defaultText.feedbackForm,
+				submittingButton: overrides?.feedbackForm?.submitButton ?? defaultText.feedbackForm.submittingButton,
+			},
+		},
+		overrides ?? {},
+	)
